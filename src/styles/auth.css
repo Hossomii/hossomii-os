@@ -1,0 +1,1592 @@
+/* =========================================================
+   HOSSOMII OS
+   Authentication / Remote Access / Boot
+   Windows XP inspired visual language
+   ========================================================= */
+
+
+/* =========================================================
+   1. AUTHENTICATION BACKGROUND
+   ========================================================= */
+
+.auth-screen {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 32px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(circle at 50% 28%,
+      #315d91 0%,
+      #17385f 34%,
+      #0b1c31 66%,
+      #040912 100%);
+
+  color: #1b1b1b;
+
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+}
+
+
+/* Subtle monitor texture */
+
+.auth-screen::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(to bottom,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 255, 255, 0.012) 4px);
+
+  opacity: 0.55;
+}
+
+
+/* Ambient screen glow */
+
+.auth-screen::after {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 46%;
+
+  width: 900px;
+  height: 620px;
+
+  transform: translate(-50%, -50%);
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(circle,
+      rgba(92, 163, 255, 0.15),
+      transparent 65%);
+
+  filter: blur(38px);
+}
+
+
+/* =========================================================
+   2. REMOTE ACCESS WINDOW
+   ========================================================= */
+
+.access-window {
+  position: relative;
+  z-index: 1;
+
+  width: min(1040px, 100%);
+
+  overflow: hidden;
+
+  border: 2px solid #174d9b;
+  border-radius: 8px 8px 3px 3px;
+
+  background: #ece9d8;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 22px 70px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================================================
+   3. XP-STYLE TITLE BAR
+   ========================================================= */
+
+.access-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 38px;
+
+  padding: 0 5px 0 8px;
+
+  background:
+    linear-gradient(to bottom,
+      #4d98ef 0%,
+      #1464d2 12%,
+      #0755c3 52%,
+      #0846a6 87%,
+      #2b6fd1 100%);
+
+  border-bottom: 1px solid #003c98;
+
+  color: #ffffff;
+
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.55);
+
+  user-select: none;
+}
+
+.titlebar-left {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.titlebar-icon {
+  display: grid;
+  place-items: center;
+
+  width: 18px;
+  height: 18px;
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  background:
+    linear-gradient(145deg,
+      #ffffff,
+      #94b9ee);
+
+  color: #0754ba;
+
+  font-size: 10px;
+
+  text-shadow: none;
+}
+
+.titlebar-controls {
+  display: flex;
+
+  gap: 2px;
+}
+
+.titlebar-controls span {
+  display: grid;
+  place-items: center;
+
+  width: 23px;
+  height: 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 3px;
+
+  background:
+    linear-gradient(145deg,
+      #67a6f2,
+      #1e64c5);
+
+  box-shadow:
+    inset 1px 1px rgba(255, 255, 255, 0.3);
+
+  color: white;
+
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.titlebar-controls span:last-child {
+  background:
+    linear-gradient(145deg,
+      #f48a6a,
+      #c53923);
+}
+
+
+/* =========================================================
+   4. WINDOW CONTENT
+   ========================================================= */
+
+.access-content {
+  display: grid;
+
+  grid-template-columns: 0.9fr 1.1fr;
+
+  min-height: 530px;
+
+  background: #ece9d8;
+}
+
+
+/* =========================================================
+   5. MACHINE PANEL
+   ========================================================= */
+
+.machine-info {
+  display: flex;
+  flex-direction: column;
+
+  padding: 46px 52px;
+
+  border-right: 1px solid #aca899;
+
+  background:
+    linear-gradient(to right,
+      #f8f7ee,
+      #ece9d8);
+}
+
+.machine-section-title {
+  margin: 0 0 34px;
+
+  color: #316ac5;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 0.04em;
+}
+
+
+/* =========================================================
+   6. COMPUTER VISUAL
+   ========================================================= */
+
+.computer-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 0 auto 24px;
+
+  user-select: none;
+}
+
+.computer-screen {
+  position: relative;
+
+  width: 210px;
+  height: 142px;
+
+  padding: 9px;
+
+  border: 3px solid #7e8282;
+  border-radius: 8px;
+
+  background:
+    linear-gradient(145deg,
+      #d6d6d4,
+      #858a8e);
+
+  box-shadow:
+    inset 1px 1px #ffffff,
+    inset -1px -1px #55595b,
+    0 10px 20px rgba(0, 0, 0, 0.22);
+}
+
+.computer-screen-desktop {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  border: 2px solid #22272c;
+
+  background:
+    linear-gradient(to bottom,
+      #4d99e8 0%,
+      #76b7f0 55%,
+      #60a84e 56%,
+      #3d8f35 100%);
+}
+
+.desktop-hill {
+  position: absolute;
+
+  width: 150%;
+  height: 80px;
+
+  left: -22%;
+  bottom: 14px;
+
+  border-radius: 50% 55% 0 0;
+
+  background:
+    linear-gradient(to bottom,
+      #73c75f,
+      #338b32);
+
+  transform: rotate(-5deg);
+}
+
+.desktop-cloud {
+  position: absolute;
+
+  width: 36px;
+  height: 8px;
+
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.83);
+}
+
+.desktop-cloud::before,
+.desktop-cloud::after {
+  content: "";
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background: inherit;
+}
+
+.desktop-cloud::before {
+  width: 15px;
+  height: 15px;
+
+  left: 7px;
+  bottom: 0;
+}
+
+.desktop-cloud::after {
+  width: 20px;
+  height: 20px;
+
+  left: 17px;
+  bottom: 0;
+}
+
+.desktop-cloud-one {
+  top: 20px;
+  left: 34px;
+}
+
+.desktop-cloud-two {
+  top: 37px;
+  right: 28px;
+
+  transform: scale(0.7);
+}
+
+.desktop-taskbar {
+  position: absolute;
+
+  display: flex;
+  align-items: center;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 17px;
+
+  background:
+    linear-gradient(to bottom,
+      #2d7ee8,
+      #1457bd);
+
+  color: white;
+
+  font-size: 6px;
+}
+
+.desktop-taskbar span {
+  display: flex;
+  align-items: center;
+
+  height: 100%;
+
+  padding: 0 8px;
+
+  border-radius: 0 8px 8px 0;
+
+  background:
+    linear-gradient(to bottom,
+      #5eb85c,
+      #238632);
+
+  font-style: italic;
+}
+
+.computer-stand {
+  position: relative;
+
+  width: 64px;
+  height: 27px;
+
+  border-bottom: 6px solid #999b99;
+}
+
+.computer-stand::before {
+  content: "";
+
+  position: absolute;
+
+  left: 50%;
+  top: 0;
+
+  width: 9px;
+  height: 23px;
+
+  transform: translateX(-50%);
+
+  background:
+    linear-gradient(to right,
+      #777b7c,
+      #babdbc,
+      #777b7c);
+}
+
+
+/* =========================================================
+   7. MACHINE STATUS
+   ========================================================= */
+
+.machine-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  margin-bottom: 38px;
+
+  color: #4e4e4e;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status-indicator {
+  width: 9px;
+  height: 9px;
+
+  border: 1px solid #247120;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 35% 30%,
+      #a5f79d,
+      #44b43d 50%,
+      #1c7b20 100%);
+
+  box-shadow:
+    0 0 5px rgba(60, 180, 50, 0.38);
+}
+
+
+/* =========================================================
+   8. MACHINE DETAILS
+   ========================================================= */
+
+.machine-details {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+
+  margin: 0;
+}
+
+.machine-details div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.machine-details dt,
+.field-label,
+.connection-eyebrow {
+  color: #707070;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.machine-details dd {
+  margin: 0;
+
+  color: #2d2d2d;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   9. CONNECTION PANEL
+   ========================================================= */
+
+.connection-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: 54px 60px;
+
+  background:
+    linear-gradient(to bottom,
+      #ffffff 0%,
+      #f9f8f1 100%);
+}
+
+.connection-heading {
+  margin-bottom: 34px;
+}
+
+.connection-eyebrow {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #316ac5;
+}
+
+.connection-heading h1 {
+  margin: 0 0 10px;
+
+  color: #163c72;
+
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 400;
+}
+
+.connection-heading p {
+  max-width: 430px;
+
+  margin: 0;
+
+  color: #555555;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   10. USER ACCOUNT CARD
+   ========================================================= */
+
+.user-card {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  width: 100%;
+
+  margin-bottom: 27px;
+
+  padding: 10px;
+
+  border: 1px solid #aca899;
+
+  background:
+    linear-gradient(to bottom,
+      #ffffff,
+      #f1f0e8);
+
+  box-shadow:
+    inset 1px 1px #ffffff;
+}
+
+.user-avatar {
+  width: 54px;
+  height: 54px;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border: 2px solid white;
+  border-radius: 3px;
+
+  outline: 1px solid #7d9bc1;
+
+  background: #d8e8f5;
+}
+
+.user-information {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.user-information strong {
+  color: #133f79;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.user-status {
+  color: #777;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   11. PASSWORD
+   ========================================================= */
+
+.connection-form {
+  width: 100%;
+
+  margin: 0;
+}
+
+.connection-form>.field-label {
+  display: block;
+
+  margin-bottom: 6px;
+}
+
+.password-field {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+
+  overflow: hidden;
+
+  border: 1px solid #7f9db9;
+
+  background: #ffffff;
+
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.password-field:focus-within {
+  border-color: #316ac5;
+
+  box-shadow:
+    0 0 0 1px rgba(49, 106, 197, 0.14);
+}
+
+.password-field input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 9px 10px;
+
+  border: 0;
+  outline: 0;
+
+  background: white;
+
+  color: #151515;
+
+  caret-color: #111;
+
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 13px;
+
+  letter-spacing: 0.12em;
+}
+
+.password-field input::selection {
+  background: #316ac5;
+
+  color: white;
+}
+
+.password-enter {
+  align-self: stretch;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 13px;
+
+  border: 0;
+  border-left: 1px solid #aca899;
+
+  background:
+    linear-gradient(to bottom,
+      #ffffff 0%,
+      #f4f3ec 45%,
+      #dedbd0 100%);
+
+  color: #333;
+
+  font-family:
+    Tahoma,
+    Verdana,
+    sans-serif;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+.password-enter:hover {
+  background:
+    linear-gradient(to bottom,
+      #ffffff,
+      #e8f0fb);
+}
+
+.password-enter:active {
+  padding-top: 1px;
+
+  background:
+    linear-gradient(to bottom,
+      #d8d6cc,
+      #f5f4ed);
+
+  box-shadow:
+    inset 1px 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+.password-enter:focus-visible {
+  outline: 1px dotted #000;
+  outline-offset: -4px;
+}
+
+.connection-help {
+  min-height: 15px;
+
+  margin: 7px 0 0;
+
+  color: #666;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   12. INFORMATION NOTICE
+   ========================================================= */
+
+.connection-notice {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 9px;
+
+  margin-top: 30px;
+
+  padding-top: 18px;
+
+  border-top: 1px solid #ddd9cb;
+}
+
+.connection-notice-icon {
+  display: grid;
+  place-items: center;
+
+  width: 17px;
+  height: 17px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #316ac5;
+
+  color: #ffffff;
+
+  font-family: Georgia, serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.connection-notice p {
+  margin: 0;
+
+  color: #777;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   13. STATUS BAR
+   ========================================================= */
+
+.access-footer {
+  display: flex;
+  align-items: center;
+
+  gap: 28px;
+
+  min-height: 29px;
+
+  padding: 0 10px;
+
+  border-top: 1px solid #aca899;
+
+  background: #ece9d8;
+
+  color: #555;
+
+  font-size: 9px;
+
+  user-select: none;
+}
+
+.access-footer span:first-child {
+  color: #247c27;
+}
+
+
+/* =========================================================
+   14. XP SESSION / AUTHENTICATION / WELCOME
+   ========================================================= */
+
+.xp-session-screen {
+  padding: 0;
+
+  background: #003399;
+
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+}
+
+.xp-session-screen::before {
+  opacity: 0.2;
+}
+
+.xp-session-shell {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(to bottom,
+      #003399 0%,
+      #003399 10%,
+      #5b7edc 10%,
+      #5b7edc 90%,
+      #003399 90%,
+      #003399 100%);
+
+  color: white;
+}
+
+.xp-top-band {
+  height: 10vh;
+  min-height: 58px;
+
+  flex-shrink: 0;
+
+  border-bottom: 2px solid rgba(255, 255, 255, 0.55);
+
+  background:
+    linear-gradient(to bottom,
+      #002d91,
+      #003399);
+}
+
+.xp-session-content {
+  display: grid;
+
+  grid-template-columns:
+    minmax(260px, 0.9fr) 1px minmax(420px, 1.1fr);
+
+  align-items: center;
+
+  flex: 1;
+
+  width: min(1050px, calc(100% - 64px));
+
+  margin: 0 auto;
+
+  padding: 60px 0;
+}
+
+.xp-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 16px;
+
+  padding-right: 56px;
+}
+
+.xp-brand-mark {
+  display: grid;
+  place-items: center;
+
+  width: 70px;
+  height: 70px;
+
+  border: 2px solid rgba(255, 255, 255, 0.75);
+
+  border-radius: 8px;
+
+  background:
+    linear-gradient(145deg,
+      #ffffff,
+      #c5d7ff 45%,
+      #7aa0ec);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.18);
+
+  color: #174da8;
+
+  font-size: 35px;
+  font-weight: 700;
+
+  text-shadow: none;
+}
+
+.xp-brand div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  text-align: right;
+}
+
+.xp-brand strong {
+  color: white;
+
+  font-size: 28px;
+  font-weight: 400;
+
+  text-shadow:
+    1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.xp-brand div span {
+  color: #d7e2ff;
+
+  font-size: 12px;
+}
+
+.xp-session-divider {
+  width: 1px;
+  height: 280px;
+
+  background:
+    linear-gradient(to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.7),
+      transparent);
+}
+
+.xp-account-area {
+  display: flex;
+  flex-direction: column;
+
+  padding-left: 56px;
+}
+
+.xp-user-row {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-bottom: 40px;
+}
+
+.xp-session-avatar {
+  width: 64px;
+  height: 64px;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  border: 3px solid white;
+  border-radius: 4px;
+
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.xp-session-user {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.xp-session-user span {
+  color: white;
+
+  font-size: 21px;
+
+  text-shadow:
+    1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.xp-session-user small {
+  color: #dbe5ff;
+
+  font-size: 11px;
+}
+
+.xp-auth-message {
+  max-width: 480px;
+
+  animation:
+    xp-message-enter 180ms ease-out;
+}
+
+.xp-auth-message h1 {
+  margin: 0 0 9px;
+
+  color: white;
+
+  font-size: 21px;
+  font-weight: 400;
+
+  text-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.xp-auth-message p {
+  margin: 0;
+
+  color: #e4ebff;
+
+  font-size: 12px;
+
+  line-height: 1.55;
+}
+
+.xp-auth-error h1 {
+  color: #fff2dc;
+}
+
+.xp-auth-success h1 {
+  color: #ffffff;
+}
+
+@keyframes xp-message-enter {
+  from {
+    opacity: 0;
+
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   15. XP MOVING BLOCK LOADER
+   ========================================================= */
+
+.xp-loader {
+  width: 136px;
+  height: 18px;
+
+  margin-top: 22px;
+
+  padding: 3px;
+
+  overflow: hidden;
+
+  border: 1px solid #163c92;
+  border-radius: 2px;
+
+  background: white;
+
+  box-shadow:
+    inset 1px 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.xp-loader-track {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+}
+
+.xp-loader-track span {
+  position: absolute;
+
+  top: 0;
+
+  width: 9px;
+  height: 10px;
+
+  border-radius: 1px;
+
+  background:
+    linear-gradient(to right,
+      #245fd2,
+      #77a6ff,
+      #245fd2);
+
+  animation:
+    xp-loader-move 1.45s linear infinite;
+}
+
+.xp-loader-track span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.xp-loader-track span:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.xp-loader-track span:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+@keyframes xp-loader-move {
+  0% {
+    left: -20px;
+  }
+
+  100% {
+    left: 135px;
+  }
+}
+
+
+/* =========================================================
+   16. WATCH DOGS / SYSTEM RECOVERY INTERRUPTION
+   ========================================================= */
+
+.xp-recovery-message {
+  display: inline-block;
+
+  margin-top: 22px;
+
+  padding: 7px 10px;
+
+  border-left: 2px solid rgba(255, 255, 255, 0.75);
+
+  background: rgba(0, 32, 80, 0.35);
+
+  color: #ffffff;
+
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
+
+  font-size: 10px;
+
+  letter-spacing: 0.04em;
+
+  animation:
+    xp-recovery-glitch 120ms steps(2) 3;
+}
+
+@keyframes xp-recovery-glitch {
+  0% {
+    transform: translateX(0);
+  }
+
+  33% {
+    transform: translateX(-2px);
+  }
+
+  66% {
+    transform: translateX(2px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+
+/* =========================================================
+   17. XP WELCOME
+   ========================================================= */
+
+.xp-welcome-area {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding-left: 56px;
+}
+
+.xp-welcome-avatar {
+  width: 72px;
+  height: 72px;
+}
+
+.xp-welcome-message {
+  display: flex;
+  flex-direction: column;
+}
+
+.xp-welcome-message>span {
+  margin-bottom: 3px;
+
+  color: #dfe8ff;
+
+  font-size: 12px;
+}
+
+.xp-welcome-message h1 {
+  margin: 0;
+
+  color: white;
+
+  font-size: 31px;
+  font-weight: 400;
+
+  font-style: italic;
+
+  text-shadow:
+    1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.xp-welcome-message p {
+  margin: 8px 0 0;
+
+  color: #e3ebff;
+
+  font-size: 11px;
+}
+
+.xp-welcome-loader {
+  margin-top: 18px;
+}
+
+
+/* =========================================================
+   18. XP BOTTOM BAND
+   ========================================================= */
+
+.xp-bottom-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  height: 10vh;
+  min-height: 58px;
+
+  flex-shrink: 0;
+
+  padding:
+    0 max(32px, calc((100vw - 1050px) / 2));
+
+  border-top:
+    2px solid rgba(255, 255, 255, 0.45);
+
+  background:
+    linear-gradient(to bottom,
+      #003399,
+      #002979);
+
+  color: #cbd9ff;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   19. TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .machine-info {
+    padding: 42px 34px;
+  }
+
+  .connection-panel {
+    padding: 48px 40px;
+  }
+}
+
+
+/* =========================================================
+   20. MOBILE LOGIN
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .auth-screen {
+    align-items: flex-start;
+
+    padding: 10px;
+
+    overflow-y: auto;
+  }
+
+  .access-window {
+    margin: auto 0;
+  }
+
+  .access-titlebar {
+    font-size: 10px;
+  }
+
+  .titlebar-controls span {
+    width: 21px;
+    height: 20px;
+  }
+
+  .access-content {
+    grid-template-columns: 1fr;
+
+    min-height: auto;
+  }
+
+  .machine-info {
+    padding: 30px 24px;
+
+    border-right: 0;
+    border-bottom: 1px solid #aca899;
+  }
+
+  .machine-section-title {
+    margin-bottom: 23px;
+  }
+
+  .computer-screen {
+    width: 150px;
+    height: 101px;
+  }
+
+  .machine-details {
+    display: none;
+  }
+
+  .machine-status {
+    margin-bottom: 0;
+  }
+
+  .connection-panel {
+    padding: 34px 24px 38px;
+  }
+
+  .connection-heading {
+    margin-bottom: 27px;
+  }
+
+  .connection-heading h1 {
+    font-size: 26px;
+  }
+
+  .password-field input {
+    padding: 12px 10px;
+
+    font-size: 16px;
+  }
+
+  .access-footer {
+    justify-content: space-between;
+
+    gap: 8px;
+  }
+
+  .access-footer span:nth-child(2) {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   21. MOBILE XP SESSION
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .xp-session-content {
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    width: calc(100% - 48px);
+
+    padding: 40px 0;
+  }
+
+  .xp-brand {
+    justify-content: flex-start;
+
+    width: 100%;
+
+    padding: 0 0 34px;
+  }
+
+  .xp-brand div {
+    text-align: left;
+  }
+
+  .xp-brand-mark {
+    width: 54px;
+    height: 54px;
+
+    font-size: 27px;
+  }
+
+  .xp-brand strong {
+    font-size: 22px;
+  }
+
+  .xp-session-divider {
+    width: 100%;
+    height: 1px;
+
+    margin-bottom: 34px;
+
+    background:
+      linear-gradient(to right,
+        transparent,
+        rgba(255, 255, 255, 0.65),
+        transparent);
+  }
+
+  .xp-account-area,
+  .xp-welcome-area {
+    width: 100%;
+
+    padding-left: 0;
+  }
+
+  .xp-user-row {
+    margin-bottom: 28px;
+  }
+
+  .xp-session-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .xp-welcome-area {
+    align-items: center;
+  }
+
+  .xp-bottom-band {
+    padding: 0 24px;
+  }
+}
+
+
+/* =========================================================
+   22. VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+  .auth-screen {
+    padding: 0;
+  }
+
+  .access-window {
+    width: 100%;
+
+    border-left: 0;
+    border-right: 0;
+
+    border-radius: 0;
+  }
+
+  .access-titlebar {
+    height: 34px;
+  }
+
+  .machine-info {
+    padding: 25px 20px;
+  }
+
+  .connection-panel {
+    padding: 30px 20px 34px;
+  }
+
+  .connection-heading h1 {
+    font-size: 23px;
+  }
+
+  .password-enter {
+    padding: 0 10px;
+
+    font-size: 8px;
+  }
+
+  .access-footer span:last-child {
+    display: none;
+  }
+
+  .xp-session-content {
+    width: calc(100% - 32px);
+  }
+
+  .xp-brand-mark {
+    width: 46px;
+    height: 46px;
+
+    font-size: 22px;
+  }
+
+  .xp-brand strong {
+    font-size: 19px;
+  }
+
+  .xp-session-user span {
+    font-size: 18px;
+  }
+
+  .xp-auth-message h1 {
+    font-size: 18px;
+  }
+
+  .xp-welcome-message h1 {
+    font-size: 27px;
+  }
+
+  .xp-bottom-band span:last-child {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   23. ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .xp-auth-message,
+  .xp-recovery-message,
+  .xp-loader-track span {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
