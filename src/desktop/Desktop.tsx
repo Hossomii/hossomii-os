@@ -1,6 +1,9 @@
 import { useState } from "react";
 
 import { useSystemStore } from "../stores/systemStore";
+import { useWindowStore } from "../stores/windowStore";
+
+import type { WindowAppId } from "../types/window";
 
 import computerIcon from "../assets/icons/computer.webp";
 import projectsIcon from "../assets/icons/projects.webp";
@@ -8,9 +11,12 @@ import documentsIcon from "../assets/icons/documents.webp";
 import terminalIcon from "../assets/icons/terminal.webp";
 import emptyTrashIcon from "../assets/icons/empty-trash.webp";
 
+import { ComputerApp } from "../applications/computer/ComputerApp";
+
 import { DesktopIcon } from "./components/DesktopIcon";
 import { StartMenu } from "./components/StartMenu";
 import { Taskbar } from "./components/Taskbar";
+import { WindowFrame } from "./components/WindowFrame";
 
 import "../styles/desktop.css";
 
@@ -40,11 +46,27 @@ const desktopItems = [
     label: "Lixeira",
     icon: emptyTrashIcon,
   },
-];
+] as const;
 
 export function Desktop() {
   const resetSystem = useSystemStore(
     (state) => state.resetSystem
+  );
+
+  const windows = useWindowStore(
+    (state) => state.windows
+  );
+
+  const openWindow = useWindowStore(
+    (state) => state.openWindow
+  );
+
+  const restoreWindow = useWindowStore(
+    (state) => state.restoreWindow
+  );
+
+  const focusWindow = useWindowStore(
+    (state) => state.focusWindow
   );
 
   const [selectedIcon, setSelectedIcon] =
@@ -58,8 +80,39 @@ export function Desktop() {
     setStartMenuOpen(false);
   }
 
-  function handleOpenItem(id: string) {
+  function handleOpenItem(id: WindowAppId) {
+    setStartMenuOpen(false);
+
+    if (id === "computer") {
+      openWindow({
+        appId: "computer",
+        title: "Meu Computador",
+        icon: computerIcon,
+      });
+
+      return;
+    }
+
     console.log(`Abrindo: ${id}`);
+  }
+
+  function handleTaskbarWindowClick(
+    id: (typeof windows)[number]["id"]
+  ) {
+    const windowItem = windows.find(
+      (item) => item.id === id
+    );
+
+    if (!windowItem) {
+      return;
+    }
+
+    if (windowItem.minimized) {
+      restoreWindow(id);
+      return;
+    }
+
+    focusWindow(id);
   }
 
   return (
@@ -74,16 +127,38 @@ export function Desktop() {
             id={item.id}
             label={item.label}
             icon={item.icon}
-            selected={selectedIcon === item.id}
+            selected={
+              selectedIcon === item.id
+            }
             onSelect={setSelectedIcon}
-            onOpen={() => handleOpenItem(item.id)}
+            onOpen={() =>
+              handleOpenItem(item.id)
+            }
           />
         ))}
       </div>
 
+      {windows.map((windowItem) => {
+        if (
+          windowItem.appId === "computer"
+        ) {
+          return (
+            <WindowFrame
+              key={windowItem.id}
+              windowItem={windowItem}
+            >
+              <ComputerApp />
+            </WindowFrame>
+          );
+        }
+
+        return null;
+      })}
+
       <StartMenu
         open={startMenuOpen}
         onRestart={resetSystem}
+        onOpenItem={handleOpenItem}
       />
 
       <Taskbar
@@ -92,6 +167,10 @@ export function Desktop() {
           setStartMenuOpen(
             (currentState) => !currentState
           )
+        }
+        windows={windows}
+        onWindowClick={
+          handleTaskbarWindowClick
         }
       />
     </main>
