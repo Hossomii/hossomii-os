@@ -22,6 +22,8 @@ type WindowStore = {
 
   focusWindow: (id: OSWindow["id"]) => void;
 
+  resetWindows: () => void;
+
   moveWindow: (
     id: OSWindow["id"],
     x: number,
@@ -215,6 +217,13 @@ export const useWindowStore =
               : windowItem
         ),
       }));
+    },
+
+    resetWindows: () => {
+      set({
+        windows: [],
+        topZIndex: 100,
+      });
     },
 
     toggleMaximizeWindow: (id) => {

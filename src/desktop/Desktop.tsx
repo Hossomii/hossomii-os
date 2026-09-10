@@ -69,11 +69,30 @@ export function Desktop() {
     (state) => state.focusWindow
   );
 
+  const minimizeWindow = useWindowStore(
+    (state) => state.minimizeWindow
+  );
+
+  const resetWindows = useWindowStore(
+    (state) => state.resetWindows
+  );
+
   const [selectedIcon, setSelectedIcon] =
     useState<string | null>(null);
 
   const [startMenuOpen, setStartMenuOpen] =
     useState(false);
+
+  const activeWindow =
+    windows
+      .filter(
+        (windowItem) =>
+          !windowItem.minimized
+      )
+      .sort(
+        (a, b) =>
+          b.zIndex - a.zIndex
+      )[0] ?? null;
 
   function handleDesktopClick() {
     setSelectedIcon(null);
@@ -112,7 +131,20 @@ export function Desktop() {
       return;
     }
 
+    if (activeWindow?.id === id) {
+      minimizeWindow(id);
+      return;
+    }
+
     focusWindow(id);
+  }
+
+  function handleRestart() {
+    setStartMenuOpen(false);
+    setSelectedIcon(null);
+
+    resetWindows();
+    resetSystem();
   }
 
   return (
@@ -157,18 +189,22 @@ export function Desktop() {
 
       <StartMenu
         open={startMenuOpen}
-        onRestart={resetSystem}
+        onRestart={handleRestart}
         onOpenItem={handleOpenItem}
       />
 
       <Taskbar
         startMenuOpen={startMenuOpen}
+        windows={windows}
+        activeWindowId={
+          activeWindow?.id ?? null
+        }
         onStartToggle={() =>
           setStartMenuOpen(
-            (currentState) => !currentState
+            (currentState) =>
+              !currentState
           )
         }
-        windows={windows}
         onWindowClick={
           handleTaskbarWindowClick
         }
