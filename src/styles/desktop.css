@@ -1312,3 +1312,93 @@
     width: 110px;
   }
 }
+
+.explorer-empty-state {
+  margin: 18px 8px;
+  color: #555;
+  font-family: Tahoma, Verdana, sans-serif;
+  font-size: 12px;
+}
+
+.explorer-generic-icon {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 34px;
+}
+
+/* Pasta temporária em CSS.
+   Depois podemos substituir por um asset próprio. */
+.explorer-folder-icon {
+  width: 36px;
+  height: 27px;
+  margin-top: 5px;
+  border: 1px solid #b88a16;
+  border-radius: 2px;
+  background:
+    linear-gradient(
+      to bottom,
+      #ffe785 0%,
+      #f6c93e 45%,
+      #dda51d 100%
+    );
+  box-shadow:
+    inset 1px 1px 0
+      rgba(255, 255, 255, 0.65);
+}
+
+.explorer-folder-icon::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 2px;
+  width: 15px;
+  height: 7px;
+  border: 1px solid #b88a16;
+  border-bottom: 0;
+  border-radius: 2px 2px 0 0;
+  background: #f5c841;
+}
+
+.explorer-file-icon {
+  width: 27px;
+  height: 34px;
+  border: 1px solid #8b8b8b;
+  background:
+    linear-gradient(
+      to bottom right,
+      #ffffff,
+      #e9edf3
+    );
+  color: #31558a;
+  font-family: Tahoma, sans-serif;
+  font-size: 7px;
+  font-weight: 700;
+  box-shadow:
+    inset 1px 1px 0 #ffffff;
+}
+
+.explorer-application-icon {
+  width: 36px;
+  height: 30px;
+  border: 2px solid #555;
+  border-radius: 2px;
+  background: #101010;
+  color: #e5e5e5;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.explorer-shortcut-icon {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #7c7c7c;
+  background: #f4f4f4;
+  color: #1455b8;
+  font-family: Tahoma, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+}

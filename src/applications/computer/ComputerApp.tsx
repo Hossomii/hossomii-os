@@ -1,13 +1,393 @@
+import { useState } from "react";
+
+import { useFileSystemStore } from "../../stores/filesystemStore";
+
+import type { FileSystemItem } from "../../types/filesystem";
+
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
+type ExplorerLocation =
+  | "computer"
+  | string;
+
 export function ComputerApp() {
+  const items = useFileSystemStore(
+    (state) => state.items
+  );
+
+  const getItem = useFileSystemStore(
+    (state) => state.getItem
+  );
+
+  const getChildren = useFileSystemStore(
+    (state) => state.getChildren
+  );
+
+  const getPath = useFileSystemStore(
+    (state) => state.getPath
+  );
+
+  const [currentLocation, setCurrentLocation] =
+    useState<ExplorerLocation>("computer");
+
+  const [history, setHistory] =
+    useState<ExplorerLocation[]>([]);
+
+  /*
+   * "items" também é utilizado para fazer o componente
+   * reagir quando o filesystem mudar futuramente.
+   */
+  void items;
+
+  const documentItems =
+    getChildren("documents");
+
+  const projectItems =
+    getChildren("projects");
+
+  const currentItem =
+    currentLocation === "computer"
+      ? undefined
+      : getItem(currentLocation);
+
+  const currentChildren =
+    currentLocation === "computer"
+      ? []
+      : getChildren(currentLocation);
+
+  function navigateTo(
+    location: ExplorerLocation
+  ) {
+    if (location === currentLocation) {
+      return;
+    }
+
+    setHistory((currentHistory) => [
+      ...currentHistory,
+      currentLocation,
+    ]);
+
+    setCurrentLocation(location);
+  }
+
+  function handleBack() {
+    if (history.length === 0) {
+      return;
+    }
+
+    const previousLocation =
+      history[history.length - 1];
+
+    setHistory((currentHistory) =>
+      currentHistory.slice(0, -1)
+    );
+
+    setCurrentLocation(
+      previousLocation
+    );
+  }
+
+  function handleOpenItem(
+    item: FileSystemItem
+  ) {
+    if (item.type === "directory") {
+      navigateTo(item.id);
+      return;
+    }
+
+    if (item.type === "shortcut") {
+      const targetItem =
+        getItem(item.targetId);
+
+      if (!targetItem) {
+        return;
+      }
+
+      handleOpenItem(targetItem);
+      return;
+    }
+
+    if (item.type === "application") {
+      console.log(
+        `Aplicativo solicitado: ${item.appId}`
+      );
+
+      return;
+    }
+
+    if (item.type === "file") {
+      console.log(
+        `Arquivo solicitado: ${item.name}`
+      );
+    }
+  }
+
+  function getAddress() {
+    if (
+      currentLocation === "computer"
+    ) {
+      return "Meu Computador";
+    }
+
+    return getPath(currentLocation)
+      .map((item) => item.name)
+      .join("\\");
+  }
+
+  function getItemDescription(
+    item: FileSystemItem
+  ) {
+    if (item.type === "directory") {
+      const children =
+        getChildren(item.id);
+
+      return `${children.length} ${
+        children.length === 1
+          ? "item"
+          : "itens"
+      }`;
+    }
+
+    if (item.type === "file") {
+      return `Arquivo ${item.extension.toUpperCase()}`;
+    }
+
+    if (item.type === "application") {
+      return "Aplicativo";
+    }
+
+    return "Atalho";
+  }
+
+  function renderItemIcon(
+    item: FileSystemItem
+  ) {
+    if (item.id === "documents") {
+      return (
+        <img
+          src={documentsIcon}
+          alt=""
+        />
+      );
+    }
+
+    if (
+      item.id === "projects" ||
+      item.parentId === "projects"
+    ) {
+      return (
+        <img
+          src={projectsIcon}
+          alt=""
+        />
+      );
+    }
+
+    if (item.type === "directory") {
+      return (
+        <span
+          className="explorer-generic-icon explorer-folder-icon"
+          aria-hidden="true"
+        />
+      );
+    }
+
+    if (item.type === "file") {
+      return (
+        <span
+          className="explorer-generic-icon explorer-file-icon"
+          aria-hidden="true"
+        >
+          {item.extension.toUpperCase()}
+        </span>
+      );
+    }
+
+    if (
+      item.type === "application"
+    ) {
+      return (
+        <span
+          className="explorer-generic-icon explorer-application-icon"
+          aria-hidden="true"
+        >
+          &gt;_
+        </span>
+      );
+    }
+
+    return (
+      <span
+        className="explorer-generic-icon explorer-shortcut-icon"
+        aria-hidden="true"
+      >
+        ↗
+      </span>
+    );
+  }
+
+  function renderComputerHome() {
+    return (
+      <>
+        <section className="computer-section">
+          <h2>
+            Arquivos armazenados neste
+            computador
+          </h2>
+
+          <div className="computer-items">
+            <button
+              type="button"
+              onDoubleClick={() =>
+                navigateTo("documents")
+              }
+              title="Clique duas vezes para abrir"
+            >
+              <img
+                src={documentsIcon}
+                alt=""
+              />
+
+              <span>
+                <strong>
+                  Meus Documentos
+                </strong>
+
+                <small>
+                  {documentItems.length}{" "}
+                  {documentItems.length === 1
+                    ? "item"
+                    : "itens"}
+                </small>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onDoubleClick={() =>
+                navigateTo("projects")
+              }
+              title="Clique duas vezes para abrir"
+            >
+              <img
+                src={projectsIcon}
+                alt=""
+              />
+
+              <span>
+                <strong>
+                  Meus Projetos
+                </strong>
+
+                <small>
+                  {projectItems.length}{" "}
+                  {projectItems.length === 1
+                    ? "projeto"
+                    : "projetos"}
+                </small>
+              </span>
+            </button>
+          </div>
+        </section>
+
+        <section className="computer-section">
+          <h2>
+            Unidades de disco rígido
+          </h2>
+
+          <div className="computer-items">
+            <button
+              type="button"
+              onDoubleClick={() =>
+                navigateTo("drive-c")
+              }
+              title="Clique duas vezes para abrir"
+            >
+              <span className="hard-drive-icon">
+                <span />
+              </span>
+
+              <span>
+                <strong>
+                  Disco local (C:)
+                </strong>
+
+                <small>
+                  Sistema HOSSOMII
+                </small>
+              </span>
+            </button>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  function renderDirectory() {
+    if (
+      !currentItem ||
+      currentItem.type !== "directory"
+    ) {
+      return (
+        <p className="explorer-empty-state">
+          Não foi possível abrir este
+          local.
+        </p>
+      );
+    }
+
+    return (
+      <section className="computer-section">
+        <h2>{currentItem.name}</h2>
+
+        {currentChildren.length === 0 ? (
+          <p className="explorer-empty-state">
+            Esta pasta está vazia.
+          </p>
+        ) : (
+          <div className="computer-items">
+            {currentChildren.map(
+              (item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onDoubleClick={() =>
+                    handleOpenItem(item)
+                  }
+                  title="Clique duas vezes para abrir"
+                >
+                  {renderItemIcon(item)}
+
+                  <span>
+                    <strong>
+                      {item.name}
+                    </strong>
+
+                    <small>
+                      {getItemDescription(
+                        item
+                      )}
+                    </small>
+                  </span>
+                </button>
+              )
+            )}
+          </div>
+        )}
+      </section>
+    );
+  }
+
   return (
     <div className="computer-app">
       <div className="explorer-toolbar">
         <button
           type="button"
-          disabled
+          disabled={
+            history.length === 0
+          }
+          onClick={handleBack}
         >
           ← Voltar
         </button>
@@ -19,17 +399,20 @@ export function ComputerApp() {
         </span>
 
         <div className="explorer-address">
-          Meu Computador
+          {getAddress()}
         </div>
       </div>
 
       <div className="computer-app-content">
         <aside className="computer-sidebar">
           <section>
-            <h2>Tarefas do sistema</h2>
+            <h2>
+              Tarefas do sistema
+            </h2>
 
             <button type="button">
-              Exibir informações do sistema
+              Exibir informações do
+              sistema
             </button>
 
             <button type="button">
@@ -40,81 +423,40 @@ export function ComputerApp() {
           <section>
             <h2>Outros locais</h2>
 
-            <button type="button">
+            <button
+              type="button"
+              onClick={() =>
+                navigateTo("computer")
+              }
+            >
+              Meu Computador
+            </button>
+
+            <button
+              type="button"
+              onClick={() =>
+                navigateTo("documents")
+              }
+            >
               Meus Documentos
             </button>
 
-            <button type="button">
+            <button
+              type="button"
+              onClick={() =>
+                navigateTo("projects")
+              }
+            >
               Meus Projetos
             </button>
           </section>
         </aside>
 
         <div className="computer-main">
-          <section className="computer-section">
-            <h2>
-              Arquivos armazenados neste
-              computador
-            </h2>
-
-            <div className="computer-items">
-              <button type="button">
-                <img
-                  src={documentsIcon}
-                  alt=""
-                />
-
-                <span>
-                  <strong>
-                    Meus Documentos
-                  </strong>
-
-                  <small>
-                    Documentos de Anthony
-                  </small>
-                </span>
-              </button>
-
-              <button type="button">
-                <img
-                  src={projectsIcon}
-                  alt=""
-                />
-
-                <span>
-                  <strong>
-                    Meus Projetos
-                  </strong>
-
-                  <small>
-                    Projetos de software
-                  </small>
-                </span>
-              </button>
-            </div>
-          </section>
-
-          <section className="computer-section">
-            <h2>Unidades de disco rígido</h2>
-
-            <div className="computer-items">
-              <button type="button">
-                <span className="hard-drive-icon">
-                  <span />
-                </span>
-
-                <span>
-                  <strong>
-                    Disco local (C:)
-                  </strong>
-
-                  <small>
-                    Sistema HOSSOMII
-                  </small>
-                </span>
-              </button>
-            </div>
-          </section>
+          {currentLocation ===
+          "computer"
+            ? renderComputerHome()
+            : renderDirectory()}
         </div>
       </div>
     </div>
