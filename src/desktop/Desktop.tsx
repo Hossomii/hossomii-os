@@ -18,6 +18,9 @@ import { StartMenu } from "./components/StartMenu";
 import { Taskbar } from "./components/Taskbar";
 import { WindowFrame } from "./components/WindowFrame";
 
+import { DocumentsApp } from "../applications/documents/DocumentsApp";
+import { ProjectsApp } from "../applications/projects/ProjectsApp";
+
 import "../styles/desktop.css";
 
 const desktopItems = [
@@ -49,50 +52,28 @@ const desktopItems = [
 ] as const;
 
 export function Desktop() {
-  const resetSystem = useSystemStore(
-    (state) => state.resetSystem
-  );
+  const resetSystem = useSystemStore((state) => state.resetSystem);
 
-  const windows = useWindowStore(
-    (state) => state.windows
-  );
+  const windows = useWindowStore((state) => state.windows);
 
-  const openWindow = useWindowStore(
-    (state) => state.openWindow
-  );
+  const openWindow = useWindowStore((state) => state.openWindow);
 
-  const restoreWindow = useWindowStore(
-    (state) => state.restoreWindow
-  );
+  const restoreWindow = useWindowStore((state) => state.restoreWindow);
 
-  const focusWindow = useWindowStore(
-    (state) => state.focusWindow
-  );
+  const focusWindow = useWindowStore((state) => state.focusWindow);
 
-  const minimizeWindow = useWindowStore(
-    (state) => state.minimizeWindow
-  );
+  const minimizeWindow = useWindowStore((state) => state.minimizeWindow);
 
-  const resetWindows = useWindowStore(
-    (state) => state.resetWindows
-  );
+  const resetWindows = useWindowStore((state) => state.resetWindows);
 
-  const [selectedIcon, setSelectedIcon] =
-    useState<string | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
-  const [startMenuOpen, setStartMenuOpen] =
-    useState(false);
+  const [startMenuOpen, setStartMenuOpen] = useState(false);
 
   const activeWindow =
     windows
-      .filter(
-        (windowItem) =>
-          !windowItem.minimized
-      )
-      .sort(
-        (a, b) =>
-          b.zIndex - a.zIndex
-      )[0] ?? null;
+      .filter((windowItem) => !windowItem.minimized)
+      .sort((a, b) => b.zIndex - a.zIndex)[0] ?? null;
 
   function handleDesktopClick() {
     setSelectedIcon(null);
@@ -112,15 +93,31 @@ export function Desktop() {
       return;
     }
 
+    if (id === "documents") {
+      openWindow({
+        appId: "documents",
+        title: "Meus Documentos",
+        icon: documentsIcon,
+      });
+
+      return;
+    }
+
+    if (id === "projects") {
+      openWindow({
+        appId: "projects",
+        title: "Meus Projetos",
+        icon: projectsIcon,
+      });
+
+      return;
+    }
+
     console.log(`Abrindo: ${id}`);
   }
 
-  function handleTaskbarWindowClick(
-    id: (typeof windows)[number]["id"]
-  ) {
-    const windowItem = windows.find(
-      (item) => item.id === id
-    );
+  function handleTaskbarWindowClick(id: (typeof windows)[number]["id"]) {
+    const windowItem = windows.find((item) => item.id === id);
 
     if (!windowItem) {
       return;
@@ -148,10 +145,7 @@ export function Desktop() {
   }
 
   return (
-    <main
-      className="desktop"
-      onClick={handleDesktopClick}
-    >
+    <main className="desktop" onClick={handleDesktopClick}>
       <div className="desktop-icons">
         {desktopItems.map((item) => (
           <DesktopIcon
@@ -159,27 +153,34 @@ export function Desktop() {
             id={item.id}
             label={item.label}
             icon={item.icon}
-            selected={
-              selectedIcon === item.id
-            }
+            selected={selectedIcon === item.id}
             onSelect={setSelectedIcon}
-            onOpen={() =>
-              handleOpenItem(item.id)
-            }
+            onOpen={() => handleOpenItem(item.id)}
           />
         ))}
       </div>
 
       {windows.map((windowItem) => {
-        if (
-          windowItem.appId === "computer"
-        ) {
+        if (windowItem.appId === "computer") {
           return (
-            <WindowFrame
-              key={windowItem.id}
-              windowItem={windowItem}
-            >
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
               <ComputerApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "documents") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <DocumentsApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "projects") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <ProjectsApp />
             </WindowFrame>
           );
         }
@@ -196,18 +197,9 @@ export function Desktop() {
       <Taskbar
         startMenuOpen={startMenuOpen}
         windows={windows}
-        activeWindowId={
-          activeWindow?.id ?? null
-        }
-        onStartToggle={() =>
-          setStartMenuOpen(
-            (currentState) =>
-              !currentState
-          )
-        }
-        onWindowClick={
-          handleTaskbarWindowClick
-        }
+        activeWindowId={activeWindow?.id ?? null}
+        onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
+        onWindowClick={handleTaskbarWindowClick}
       />
     </main>
   );
