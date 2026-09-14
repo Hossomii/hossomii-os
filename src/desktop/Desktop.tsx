@@ -23,56 +23,34 @@ import { StartMenu } from "./components/StartMenu";
 import { Taskbar } from "./components/Taskbar";
 import { WindowFrame } from "./components/WindowFrame";
 
+import { NotepadApp } from "../applications/notepad/NotepadApp";
+
 import "../styles/desktop.css";
 
 export function Desktop() {
-  const resetSystem = useSystemStore(
-    (state) => state.resetSystem
-  );
+  const resetSystem = useSystemStore((state) => state.resetSystem);
 
-  const windows = useWindowStore(
-    (state) => state.windows
-  );
+  const windows = useWindowStore((state) => state.windows);
 
-  const openWindow = useWindowStore(
-    (state) => state.openWindow
-  );
+  const openWindow = useWindowStore((state) => state.openWindow);
 
-  const restoreWindow = useWindowStore(
-    (state) => state.restoreWindow
-  );
+  const restoreWindow = useWindowStore((state) => state.restoreWindow);
 
-  const focusWindow = useWindowStore(
-    (state) => state.focusWindow
-  );
+  const focusWindow = useWindowStore((state) => state.focusWindow);
 
-  const minimizeWindow = useWindowStore(
-    (state) => state.minimizeWindow
-  );
+  const minimizeWindow = useWindowStore((state) => state.minimizeWindow);
 
-  const resetWindows = useWindowStore(
-    (state) => state.resetWindows
-  );
+  const resetWindows = useWindowStore((state) => state.resetWindows);
 
-  const fileSystemItems =
-    useFileSystemStore(
-      (state) => state.items
-    );
+  const fileSystemItems = useFileSystemStore((state) => state.items);
 
-  const [selectedIcon, setSelectedIcon] =
-    useState<string | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
 
-  const [startMenuOpen, setStartMenuOpen] =
-    useState(false);
+  const [startMenuOpen, setStartMenuOpen] = useState(false);
 
-  const trashIsEmpty =
-    !fileSystemItems.some(
-      (item) => item.trashed
-    );
+  const trashIsEmpty = !fileSystemItems.some((item) => item.trashed);
 
-  const trashIcon = trashIsEmpty
-    ? emptyTrashIcon
-    : defaultTrashIcon;
+  const trashIcon = trashIsEmpty ? emptyTrashIcon : defaultTrashIcon;
 
   const desktopItems = [
     {
@@ -104,23 +82,15 @@ export function Desktop() {
 
   const activeWindow =
     windows
-      .filter(
-        (windowItem) =>
-          !windowItem.minimized
-      )
-      .sort(
-        (a, b) =>
-          b.zIndex - a.zIndex
-      )[0] ?? null;
+      .filter((windowItem) => !windowItem.minimized)
+      .sort((a, b) => b.zIndex - a.zIndex)[0] ?? null;
 
   function handleDesktopClick() {
     setSelectedIcon(null);
     setStartMenuOpen(false);
   }
 
-  function handleOpenItem(
-    id: WindowAppId
-  ) {
+  function handleOpenItem(id: WindowAppId) {
     setStartMenuOpen(false);
 
     if (id === "computer") {
@@ -166,13 +136,8 @@ export function Desktop() {
     console.log(`Abrindo: ${id}`);
   }
 
-  function handleTaskbarWindowClick(
-    id: (typeof windows)[number]["id"]
-  ) {
-    const windowItem =
-      windows.find(
-        (item) => item.id === id
-      );
+  function handleTaskbarWindowClick(id: (typeof windows)[number]["id"]) {
+    const windowItem = windows.find((item) => item.id === id);
 
     if (!windowItem) {
       return;
@@ -183,9 +148,7 @@ export function Desktop() {
       return;
     }
 
-    if (
-      activeWindow?.id === id
-    ) {
+    if (activeWindow?.id === id) {
       minimizeWindow(id);
       return;
     }
@@ -202,10 +165,7 @@ export function Desktop() {
   }
 
   return (
-    <main
-      className="desktop"
-      onClick={handleDesktopClick}
-    >
+    <main className="desktop" onClick={handleDesktopClick}>
       <div className="desktop-icons">
         {desktopItems.map((item) => (
           <DesktopIcon
@@ -213,112 +173,75 @@ export function Desktop() {
             id={item.id}
             label={item.label}
             icon={item.icon}
-            selected={
-              selectedIcon === item.id
-            }
+            selected={selectedIcon === item.id}
             onSelect={setSelectedIcon}
-            onOpen={() =>
-              handleOpenItem(item.id)
-            }
+            onOpen={() => handleOpenItem(item.id)}
           />
         ))}
       </div>
 
-      {windows.map(
-        (windowItem) => {
-          if (
-            windowItem.appId ===
-            "computer"
-          ) {
-            return (
-              <WindowFrame
-                key={windowItem.id}
-                windowItem={
-                  windowItem
-                }
-              >
-                <ComputerApp />
-              </WindowFrame>
-            );
-          }
-
-          if (
-            windowItem.appId ===
-            "documents"
-          ) {
-            return (
-              <WindowFrame
-                key={windowItem.id}
-                windowItem={
-                  windowItem
-                }
-              >
-                <DocumentsApp />
-              </WindowFrame>
-            );
-          }
-
-          if (
-            windowItem.appId ===
-            "projects"
-          ) {
-            return (
-              <WindowFrame
-                key={windowItem.id}
-                windowItem={
-                  windowItem
-                }
-              >
-                <ProjectsApp />
-              </WindowFrame>
-            );
-          }
-
-          if (
-            windowItem.appId ===
-            "recycle-bin"
-          ) {
-            return (
-              <WindowFrame
-                key={windowItem.id}
-                windowItem={
-                  windowItem
-                }
-              >
-                <RecycleBinApp />
-              </WindowFrame>
-            );
-          }
-
-          return null;
+      {windows.map((windowItem) => {
+        if (windowItem.appId === "computer") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <ComputerApp />
+            </WindowFrame>
+          );
         }
-      )}
+
+        if (windowItem.appId === "documents") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <DocumentsApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "projects") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <ProjectsApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "recycle-bin") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <RecycleBinApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "notepad") {
+          const fileId = windowItem.data?.fileId;
+
+          if (!fileId) {
+            return null;
+          }
+
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <NotepadApp fileId={fileId} />
+            </WindowFrame>
+          );
+        }
+
+        return null;
+      })}
 
       <StartMenu
         open={startMenuOpen}
         onRestart={handleRestart}
-        onOpenItem={
-          handleOpenItem
-        }
+        onOpenItem={handleOpenItem}
       />
 
       <Taskbar
-        startMenuOpen={
-          startMenuOpen
-        }
+        startMenuOpen={startMenuOpen}
         windows={windows}
-        activeWindowId={
-          activeWindow?.id ?? null
-        }
-        onStartToggle={() =>
-          setStartMenuOpen(
-            (currentState) =>
-              !currentState
-          )
-        }
-        onWindowClick={
-          handleTaskbarWindowClick
-        }
+        activeWindowId={activeWindow?.id ?? null}
+        onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
+        onWindowClick={handleTaskbarWindowClick}
       />
     </main>
   );

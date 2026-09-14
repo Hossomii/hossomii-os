@@ -9,16 +9,17 @@ import { ExplorerDirectoryView } from "./components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "./components/ExplorerToolbar";
 import { useExplorerNavigation } from "./useExplorerNavigation";
 
+import { useWindowStore } from "../../stores/windowStore";
+import documentsIcon from "../../assets/icons/documents.webp";
+
 type FolderExplorerAppProps = {
   initialLocation: string;
 };
 
-export function FolderExplorerApp({
-  initialLocation,
-}: FolderExplorerAppProps) {
-  const trashItem = useFileSystemStore(
-    (state) => state.trashItem
-  );
+export function FolderExplorerApp({ initialLocation }: FolderExplorerAppProps) {
+  const trashItem = useFileSystemStore((state) => state.trashItem);
+
+  const openWindow = useWindowStore((state) => state.openWindow);
 
   const {
     currentItem,
@@ -33,30 +34,17 @@ export function FolderExplorerApp({
 
     getItem,
     getChildren,
-  } = useExplorerNavigation(
-    initialLocation
+  } = useExplorerNavigation(initialLocation);
+
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
+  const [deleteCandidate, setDeleteCandidate] = useState<FileSystemItem | null>(
+    null,
   );
 
-  const [
-    selectedItemId,
-    setSelectedItemId,
-  ] = useState<string | null>(null);
+  const selectedItem = selectedItemId ? getItem(selectedItemId) : undefined;
 
-  const [
-    deleteCandidate,
-    setDeleteCandidate,
-  ] = useState<FileSystemItem | null>(
-    null
-  );
-
-  const selectedItem =
-    selectedItemId
-      ? getItem(selectedItemId)
-      : undefined;
-
-  function handleOpenItem(
-    item: FileSystemItem
-  ) {
+  function handleOpenItem(item: FileSystemItem) {
     setSelectedItemId(null);
 
     if (item.type === "directory") {
@@ -65,8 +53,7 @@ export function FolderExplorerApp({
     }
 
     if (item.type === "shortcut") {
-      const targetItem =
-        getItem(item.targetId);
+      const targetItem = getItem(item.targetId);
 
       if (!targetItem) {
         return;
@@ -77,23 +64,35 @@ export function FolderExplorerApp({
     }
 
     if (item.type === "application") {
-      console.log(
-        `Aplicativo solicitado: ${item.appId}`
-      );
+      console.log(`Aplicativo solicitado: ${item.appId}`);
 
       return;
     }
 
     if (item.type === "file") {
-      console.log(
-        `Arquivo solicitado: ${item.name}`
-      );
+      if (item.extension === "txt") {
+        openWindow({
+          appId: "notepad",
+
+          instanceId: item.id,
+
+          title: `${item.name} - Bloco de Notas`,
+
+          icon: documentsIcon,
+
+          data: {
+            fileId: item.id,
+          },
+        });
+
+        return;
+      }
+
+      console.log(`Ainda não existe aplicativo para abrir: ${item.name}`);
     }
   }
 
-  function handleNavigate(
-    location: string
-  ) {
+  function handleNavigate(location: string) {
     setSelectedItemId(null);
 
     navigateTo(location);
@@ -114,9 +113,7 @@ export function FolderExplorerApp({
       return;
     }
 
-    setDeleteCandidate(
-      selectedItem
-    );
+    setDeleteCandidate(selectedItem);
   }
 
   function handleConfirmDelete() {
@@ -124,10 +121,7 @@ export function FolderExplorerApp({
       return;
     }
 
-    const deleted =
-      trashItem(
-        deleteCandidate.id
-      );
+    const deleted = trashItem(deleteCandidate.id);
 
     if (deleted) {
       setSelectedItemId(null);
@@ -147,48 +141,25 @@ export function FolderExplorerApp({
       <div className="computer-app-content">
         <aside className="computer-sidebar">
           <section>
-            <h2>
-              Tarefas de arquivo
-            </h2>
+            <h2>Tarefas de arquivo</h2>
 
             <button
               type="button"
-              disabled={
-                !selectedItem ||
-                !selectedItem.deletable
-              }
-              onClick={
-                handleDeleteRequest
-              }
+              disabled={!selectedItem || !selectedItem.deletable}
+              onClick={handleDeleteRequest}
             >
               Excluir este item
             </button>
           </section>
 
           <section>
-            <h2>
-              Outros locais
-            </h2>
+            <h2>Outros locais</h2>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleNavigate(
-                  "documents"
-                )
-              }
-            >
+            <button type="button" onClick={() => handleNavigate("documents")}>
               Meus Documentos
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                handleNavigate(
-                  "projects"
-                )
-              }
-            >
+            <button type="button" onClick={() => handleNavigate("projects")}>
               Meus Projetos
             </button>
           </section>
@@ -197,36 +168,20 @@ export function FolderExplorerApp({
         <div className="computer-main">
           <ExplorerDirectoryView
             currentItem={currentItem}
-            currentChildren={
-              currentChildren
-            }
+            currentChildren={currentChildren}
             getChildren={getChildren}
-            onOpenItem={
-              handleOpenItem
-            }
-            selectedItemId={
-              selectedItemId
-            }
-            onSelectItem={(item) =>
-              setSelectedItemId(
-                item.id
-              )
-            }
+            onOpenItem={handleOpenItem}
+            selectedItemId={selectedItemId}
+            onSelectItem={(item) => setSelectedItemId(item.id)}
           />
         </div>
       </div>
 
       {deleteCandidate && (
         <DeleteConfirmationDialog
-          itemName={
-            deleteCandidate.name
-          }
-          onConfirm={
-            handleConfirmDelete
-          }
-          onCancel={() =>
-            setDeleteCandidate(null)
-          }
+          itemName={deleteCandidate.name}
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setDeleteCandidate(null)}
         />
       )}
     </div>

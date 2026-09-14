@@ -3,7 +3,8 @@ export type WindowAppId =
   | "projects"
   | "documents"
   | "terminal"
-  | "recycle-bin";
+  | "recycle-bin"
+  | "notepad";
 
 export type WindowBounds = {
   x: number;
@@ -12,8 +13,13 @@ export type WindowBounds = {
   height: number;
 };
 
+export type WindowData = {
+  fileId?: string;
+};
+
 export type OSWindow = {
-  id: WindowAppId;
+  id: string;
+
   appId: WindowAppId;
 
   title: string;
@@ -31,10 +37,28 @@ export type OSWindow = {
   zIndex: number;
 
   restoreBounds: WindowBounds | null;
+
+  data?: WindowData;
 };
 
 export type OpenWindowConfig = {
   appId: WindowAppId;
+
   title: string;
   icon: string;
+
+  /*
+   * Diferencia várias janelas da mesma aplicação.
+   *
+   * Exemplo:
+   * notepad:about-file
+   * notepad:readme-file
+   */
+  instanceId?: string;
+
+  /*
+   * Informações que a aplicação precisa
+   * para saber o que deve exibir.
+   */
+  data?: WindowData;
 };
