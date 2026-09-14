@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
 import type { FileSystemItem } from "../../types/filesystem";
@@ -7,38 +5,35 @@ import type { FileSystemItem } from "../../types/filesystem";
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
-type ExplorerLocation =
-  | "computer"
-  | string;
+import { useExplorerNavigation } from "../explorer/useExplorerNavigation";
 
 export function ComputerApp() {
-  const items = useFileSystemStore(
-    (state) => state.items
-  );
+  const fileSystemItems =
+    useFileSystemStore(
+      (state) => state.items
+    );
 
-  const getItem = useFileSystemStore(
-    (state) => state.getItem
-  );
+  const {
+    currentLocation,
+    currentItem,
+    currentChildren,
 
-  const getChildren = useFileSystemStore(
-    (state) => state.getChildren
-  );
+    canGoBack,
 
-  const getPath = useFileSystemStore(
-    (state) => state.getPath
-  );
+    navigateTo,
+    goBack,
 
-  const [currentLocation, setCurrentLocation] =
-    useState<ExplorerLocation>("computer");
+    address,
 
-  const [history, setHistory] =
-    useState<ExplorerLocation[]>([]);
+    getItem,
+    getChildren,
+  } = useExplorerNavigation("computer");
 
   /*
-   * "items" também é utilizado para fazer o componente
-   * reagir quando o filesystem mudar futuramente.
+   * Garante atualização dos contadores da tela inicial
+   * quando o filesystem mudar futuramente.
    */
-  void items;
+  void fileSystemItems;
 
   const documentItems =
     getChildren("documents");
@@ -46,57 +41,20 @@ export function ComputerApp() {
   const projectItems =
     getChildren("projects");
 
-  const currentItem =
-    currentLocation === "computer"
-      ? undefined
-      : getItem(currentLocation);
-
-  const currentChildren =
-    currentLocation === "computer"
-      ? []
-      : getChildren(currentLocation);
-
-  function navigateTo(
-    location: ExplorerLocation
-  ) {
-    if (location === currentLocation) {
-      return;
-    }
-
-    setHistory((currentHistory) => [
-      ...currentHistory,
-      currentLocation,
-    ]);
-
-    setCurrentLocation(location);
-  }
-
-  function handleBack() {
-    if (history.length === 0) {
-      return;
-    }
-
-    const previousLocation =
-      history[history.length - 1];
-
-    setHistory((currentHistory) =>
-      currentHistory.slice(0, -1)
-    );
-
-    setCurrentLocation(
-      previousLocation
-    );
-  }
-
   function handleOpenItem(
     item: FileSystemItem
   ) {
-    if (item.type === "directory") {
+    if (
+      item.type === "directory"
+    ) {
       navigateTo(item.id);
+
       return;
     }
 
-    if (item.type === "shortcut") {
+    if (
+      item.type === "shortcut"
+    ) {
       const targetItem =
         getItem(item.targetId);
 
@@ -105,10 +63,13 @@ export function ComputerApp() {
       }
 
       handleOpenItem(targetItem);
+
       return;
     }
 
-    if (item.type === "application") {
+    if (
+      item.type === "application"
+    ) {
       console.log(
         `Aplicativo solicitado: ${item.appId}`
       );
@@ -116,29 +77,21 @@ export function ComputerApp() {
       return;
     }
 
-    if (item.type === "file") {
+    if (
+      item.type === "file"
+    ) {
       console.log(
         `Arquivo solicitado: ${item.name}`
       );
     }
   }
 
-  function getAddress() {
-    if (
-      currentLocation === "computer"
-    ) {
-      return "Meu Computador";
-    }
-
-    return getPath(currentLocation)
-      .map((item) => item.name)
-      .join("\\");
-  }
-
   function getItemDescription(
     item: FileSystemItem
   ) {
-    if (item.type === "directory") {
+    if (
+      item.type === "directory"
+    ) {
       const children =
         getChildren(item.id);
 
@@ -149,11 +102,15 @@ export function ComputerApp() {
       }`;
     }
 
-    if (item.type === "file") {
+    if (
+      item.type === "file"
+    ) {
       return `Arquivo ${item.extension.toUpperCase()}`;
     }
 
-    if (item.type === "application") {
+    if (
+      item.type === "application"
+    ) {
       return "Aplicativo";
     }
 
@@ -163,7 +120,9 @@ export function ComputerApp() {
   function renderItemIcon(
     item: FileSystemItem
   ) {
-    if (item.id === "documents") {
+    if (
+      item.id === "documents"
+    ) {
       return (
         <img
           src={documentsIcon}
@@ -184,19 +143,29 @@ export function ComputerApp() {
       );
     }
 
-    if (item.type === "directory") {
+    if (
+      item.type === "directory"
+    ) {
       return (
         <span
-          className="explorer-generic-icon explorer-folder-icon"
+          className="
+            explorer-generic-icon
+            explorer-folder-icon
+          "
           aria-hidden="true"
         />
       );
     }
 
-    if (item.type === "file") {
+    if (
+      item.type === "file"
+    ) {
       return (
         <span
-          className="explorer-generic-icon explorer-file-icon"
+          className="
+            explorer-generic-icon
+            explorer-file-icon
+          "
           aria-hidden="true"
         >
           {item.extension.toUpperCase()}
@@ -209,7 +178,10 @@ export function ComputerApp() {
     ) {
       return (
         <span
-          className="explorer-generic-icon explorer-application-icon"
+          className="
+            explorer-generic-icon
+            explorer-application-icon
+          "
           aria-hidden="true"
         >
           &gt;_
@@ -219,7 +191,10 @@ export function ComputerApp() {
 
     return (
       <span
-        className="explorer-generic-icon explorer-shortcut-icon"
+        className="
+          explorer-generic-icon
+          explorer-shortcut-icon
+        "
         aria-hidden="true"
       >
         ↗
@@ -327,7 +302,8 @@ export function ComputerApp() {
   function renderDirectory() {
     if (
       !currentItem ||
-      currentItem.type !== "directory"
+      currentItem.type !==
+        "directory"
     ) {
       return (
         <p className="explorer-empty-state">
@@ -339,9 +315,12 @@ export function ComputerApp() {
 
     return (
       <section className="computer-section">
-        <h2>{currentItem.name}</h2>
+        <h2>
+          {currentItem.name}
+        </h2>
 
-        {currentChildren.length === 0 ? (
+        {currentChildren.length ===
+        0 ? (
           <p className="explorer-empty-state">
             Esta pasta está vazia.
           </p>
@@ -357,7 +336,9 @@ export function ComputerApp() {
                   }
                   title="Clique duas vezes para abrir"
                 >
-                  {renderItemIcon(item)}
+                  {renderItemIcon(
+                    item
+                  )}
 
                   <span>
                     <strong>
@@ -384,10 +365,8 @@ export function ComputerApp() {
       <div className="explorer-toolbar">
         <button
           type="button"
-          disabled={
-            history.length === 0
-          }
-          onClick={handleBack}
+          disabled={!canGoBack}
+          onClick={goBack}
         >
           ← Voltar
         </button>
@@ -399,7 +378,7 @@ export function ComputerApp() {
         </span>
 
         <div className="explorer-address">
-          {getAddress()}
+          {address}
         </div>
       </div>
 
@@ -411,8 +390,7 @@ export function ComputerApp() {
             </h2>
 
             <button type="button">
-              Exibir informações do
-              sistema
+              Exibir informações do sistema
             </button>
 
             <button type="button">
@@ -421,7 +399,9 @@ export function ComputerApp() {
           </section>
 
           <section>
-            <h2>Outros locais</h2>
+            <h2>
+              Outros locais
+            </h2>
 
             <button
               type="button"

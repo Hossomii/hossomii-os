@@ -195,7 +195,7 @@ export const initialFileSystem: FileSystemItem[] = [
 
   {
     id: "project-tnt-basketball",
-    name: "TNT Basketball TESTE",
+    name: "TNT Basketball",
     type: "directory",
     parentId: "projects",
 
