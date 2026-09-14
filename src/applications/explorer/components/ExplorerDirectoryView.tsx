@@ -15,6 +15,12 @@ type ExplorerDirectoryViewProps = {
   onOpenItem: (
     item: FileSystemItem
   ) => void;
+
+  selectedItemId?: string | null;
+
+  onSelectItem?: (
+    item: FileSystemItem
+  ) => void;
 };
 
 export function ExplorerDirectoryView({
@@ -22,6 +28,8 @@ export function ExplorerDirectoryView({
   currentChildren,
   getChildren,
   onOpenItem,
+  selectedItemId = null,
+  onSelectItem,
 }: ExplorerDirectoryViewProps) {
   function getItemDescription(
     item: FileSystemItem
@@ -146,28 +154,43 @@ export function ExplorerDirectoryView({
         </p>
       ) : (
         <div className="computer-items">
-          {currentChildren.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              onDoubleClick={() =>
-                onOpenItem(item)
-              }
-              title="Clique duas vezes para abrir"
-            >
-              {renderItemIcon(item)}
+          {currentChildren.map((item) => {
+            const isSelected =
+              selectedItemId === item.id;
 
-              <span>
-                <strong>
-                  {item.name}
-                </strong>
+            return (
+              <button
+                key={item.id}
+                type="button"
+                className={
+                  isSelected
+                    ? "explorer-item-selected"
+                    : ""
+                }
+                onClick={() =>
+                  onSelectItem?.(item)
+                }
+                onDoubleClick={() =>
+                  onOpenItem(item)
+                }
+                title="Clique duas vezes para abrir"
+              >
+                {renderItemIcon(item)}
 
-                <small>
-                  {getItemDescription(item)}
-                </small>
-              </span>
-            </button>
-          ))}
+                <span>
+                  <strong>
+                    {item.name}
+                  </strong>
+
+                  <small>
+                    {getItemDescription(
+                      item
+                    )}
+                  </small>
+                </span>
+              </button>
+            );
+          })}
         </div>
       )}
     </section>

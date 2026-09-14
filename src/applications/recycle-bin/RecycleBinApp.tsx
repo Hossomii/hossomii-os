@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
 import type { FileSystemItem } from "../../types/filesystem";
@@ -9,9 +11,41 @@ export function RecycleBinApp() {
     (state) => state.items
   );
 
-  const trashedItems = items.filter(
-    (item) => item.trashed
-  );
+  const restoreItem =
+    useFileSystemStore(
+      (state) => state.restoreItem
+    );
+
+  const [
+    selectedItemId,
+    setSelectedItemId,
+  ] = useState<string | null>(null);
+
+  const trashedItems =
+    items.filter(
+      (item) => item.trashed
+    );
+
+  const selectedItem =
+    trashedItems.find(
+      (item) =>
+        item.id === selectedItemId
+    );
+
+  function handleRestore() {
+    if (!selectedItem) {
+      return;
+    }
+
+    const restored =
+      restoreItem(
+        selectedItem.id
+      );
+
+    if (restored) {
+      setSelectedItemId(null);
+    }
+  }
 
   function getItemDescription(
     item: FileSystemItem
@@ -60,7 +94,9 @@ export function RecycleBinApp() {
       );
     }
 
-    if (item.type === "application") {
+    if (
+      item.type === "application"
+    ) {
       return (
         <span
           className="
@@ -117,7 +153,13 @@ export function RecycleBinApp() {
 
             <button
               type="button"
-              disabled
+              disabled={
+                !selectedItem ||
+                !selectedItem.recoverable
+              }
+              onClick={
+                handleRestore
+              }
             >
               Restaurar item
             </button>
@@ -146,7 +188,8 @@ export function RecycleBinApp() {
           <section className="computer-section">
             <h2>Lixeira</h2>
 
-            {trashedItems.length === 0 ? (
+            {trashedItems.length ===
+            0 ? (
               <div className="recycle-bin-empty">
                 <img
                   src={emptyTrashIcon}
@@ -171,8 +214,21 @@ export function RecycleBinApp() {
                     <button
                       key={item.id}
                       type="button"
+                      className={
+                        selectedItemId ===
+                        item.id
+                          ? "explorer-item-selected"
+                          : ""
+                      }
+                      onClick={() =>
+                        setSelectedItemId(
+                          item.id
+                        )
+                      }
                     >
-                      {renderItemIcon(item)}
+                      {renderItemIcon(
+                        item
+                      )}
 
                       <span>
                         <strong>
