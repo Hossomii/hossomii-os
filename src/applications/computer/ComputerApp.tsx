@@ -1,20 +1,13 @@
-import { useFileSystemStore } from "../../stores/filesystemStore";
-
-import type { FileSystemItem } from "../../types/filesystem";
-
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
-import { useExplorerNavigation } from "../explorer/useExplorerNavigation";
-import { ExplorerToolbar } from "../explorer/components/ExplorerToolbar";
 import { ExplorerDirectoryView } from "../explorer/components/ExplorerDirectoryView";
+import { ExplorerToolbar } from "../explorer/components/ExplorerToolbar";
+
+import { useExplorerNavigation } from "../explorer/useExplorerNavigation";
+import { useFileSystemItemLauncher } from "../explorer/useFileSystemItemLauncher";
 
 export function ComputerApp() {
-  const fileSystemItems =
-    useFileSystemStore(
-      (state) => state.items
-    );
-
   const {
     currentLocation,
     currentItem,
@@ -27,52 +20,21 @@ export function ComputerApp() {
 
     address,
 
-    getItem,
     getChildren,
-  } = useExplorerNavigation("computer");
+  } = useExplorerNavigation(
+    "computer"
+  );
 
-  void fileSystemItems;
+  const { openItem } =
+    useFileSystemItemLauncher({
+      navigateTo,
+    });
 
   const documentItems =
     getChildren("documents");
 
   const projectItems =
     getChildren("projects");
-
-  function handleOpenItem(
-    item: FileSystemItem
-  ) {
-    if (item.type === "directory") {
-      navigateTo(item.id);
-      return;
-    }
-
-    if (item.type === "shortcut") {
-      const targetItem =
-        getItem(item.targetId);
-
-      if (!targetItem) {
-        return;
-      }
-
-      handleOpenItem(targetItem);
-      return;
-    }
-
-    if (item.type === "application") {
-      console.log(
-        `Aplicativo solicitado: ${item.appId}`
-      );
-
-      return;
-    }
-
-    if (item.type === "file") {
-      console.log(
-        `Arquivo solicitado: ${item.name}`
-      );
-    }
-  }
 
   function renderComputerHome() {
     return (
@@ -230,17 +192,22 @@ export function ComputerApp() {
         </aside>
 
         <div className="computer-main">
-          {currentLocation === "computer" ? (
+          {currentLocation ===
+          "computer" ? (
             renderComputerHome()
           ) : (
             <ExplorerDirectoryView
-              currentItem={currentItem}
+              currentItem={
+                currentItem
+              }
               currentChildren={
                 currentChildren
               }
-              getChildren={getChildren}
+              getChildren={
+                getChildren
+              }
               onOpenItem={
-                handleOpenItem
+                openItem
               }
             />
           )}
