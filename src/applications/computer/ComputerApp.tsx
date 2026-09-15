@@ -1,14 +1,18 @@
+import type { FileSystemItem } from "../../types/filesystem";
+
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
+import { CriticalItemDialog } from "../explorer/components/CriticalItemDialog";
+import { DeleteConfirmationDialog } from "../explorer/components/DeleteConfirmationDialog";
 import { ExplorerDirectoryView } from "../explorer/components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "../explorer/components/ExplorerToolbar";
+import { ProtectedItemDialog } from "../explorer/components/ProtectedItemDialog";
 
+import { useExplorerActions } from "../explorer/useExplorerActions";
 import { useExplorerNavigation } from "../explorer/useExplorerNavigation";
-import { useFileSystemItemLauncher } from "../explorer/useFileSystemItemLauncher";
-
-import type { FileSystemItem } from "../../types/filesystem";
 import { useExplorerSelection } from "../explorer/useExplorerSelection";
+import { useFileSystemItemLauncher } from "../explorer/useFileSystemItemLauncher";
 
 export function ComputerApp() {
   const {
@@ -24,25 +28,48 @@ export function ComputerApp() {
     address,
 
     getChildren,
-  } = useExplorerNavigation("computer");
+  } = useExplorerNavigation(
+    "computer"
+  );
 
-  const { selectedItemId, selectItem, clearSelection } = useExplorerSelection();
+  const {
+    selectedItemId,
+    selectedItem,
 
-  const { openItem } = useFileSystemItemLauncher({
-    navigateTo,
-  });
+    selectItem,
+    clearSelection,
+  } = useExplorerSelection();
 
-  const documentItems = getChildren("documents");
+  const {
+    deleteAction,
 
-  const projectItems = getChildren("projects");
+    requestDelete,
+    confirmNormalDelete,
+    cancelDelete,
+  } = useExplorerActions();
 
-  function handleOpenItem(item: FileSystemItem) {
+  const { openItem } =
+    useFileSystemItemLauncher({
+      navigateTo,
+    });
+
+  const documentItems =
+    getChildren("documents");
+
+  const projectItems =
+    getChildren("projects");
+
+  function handleOpenItem(
+    item: FileSystemItem
+  ) {
     clearSelection();
 
     openItem(item);
   }
 
-  function handleNavigate(location: string) {
+  function handleNavigate(
+    location: string
+  ) {
     clearSelection();
 
     navigateTo(location);
@@ -53,43 +80,86 @@ export function ComputerApp() {
 
     goBack();
   }
+
+  function handleDeleteRequest() {
+    if (!selectedItem) {
+      return;
+    }
+
+    requestDelete(selectedItem);
+  }
+
+  function handleConfirmNormalDelete() {
+    const deleted =
+      confirmNormalDelete();
+
+    if (deleted) {
+      clearSelection();
+    }
+  }
+
   function renderComputerHome() {
     return (
       <>
         <section className="computer-section">
-          <h2>Arquivos armazenados neste computador</h2>
+          <h2>
+            Arquivos armazenados neste
+            computador
+          </h2>
 
           <div className="computer-items">
             <button
               type="button"
-              onDoubleClick={() => navigateTo("documents")}
+              onDoubleClick={() =>
+                handleNavigate(
+                  "documents"
+                )
+              }
               title="Clique duas vezes para abrir"
             >
-              <img src={documentsIcon} alt="" />
+              <img
+                src={documentsIcon}
+                alt=""
+              />
 
               <span>
-                <strong>Meus Documentos</strong>
+                <strong>
+                  Meus Documentos
+                </strong>
 
                 <small>
                   {documentItems.length}{" "}
-                  {documentItems.length === 1 ? "item" : "itens"}
+                  {documentItems.length === 1
+                    ? "item"
+                    : "itens"}
                 </small>
               </span>
             </button>
 
             <button
               type="button"
-              onDoubleClick={() => navigateTo("projects")}
+              onDoubleClick={() =>
+                handleNavigate(
+                  "projects"
+                )
+              }
               title="Clique duas vezes para abrir"
             >
-              <img src={projectsIcon} alt="" />
+              <img
+                src={projectsIcon}
+                alt=""
+              />
 
               <span>
-                <strong>Meus Projetos</strong>
+                <strong>
+                  Meus Projetos
+                </strong>
 
                 <small>
                   {projectItems.length}{" "}
-                  {projectItems.length === 1 ? "projeto" : "projetos"}
+                  {projectItems.length === 1
+                    ? "projeto"
+                    : "projetos"}
                 </small>
               </span>
             </button>
@@ -97,12 +167,18 @@ export function ComputerApp() {
         </section>
 
         <section className="computer-section">
-          <h2>Unidades de disco rígido</h2>
+          <h2>
+            Unidades de disco rígido
+          </h2>
 
           <div className="computer-items">
             <button
               type="button"
-              onDoubleClick={() => navigateTo("drive-c")}
+              onDoubleClick={() =>
+                handleNavigate(
+                  "drive-c"
+                )
+              }
               title="Clique duas vezes para abrir"
             >
               <span className="hard-drive-icon">
@@ -110,9 +186,13 @@ export function ComputerApp() {
               </span>
 
               <span>
-                <strong>Disco local (C:)</strong>
+                <strong>
+                  Disco local (C:)
+                </strong>
 
-                <small>Sistema HOSSOMII</small>
+                <small>
+                  Sistema HOSSOMII
+                </small>
               </span>
             </button>
           </div>
@@ -131,46 +211,134 @@ export function ComputerApp() {
 
       <div className="computer-app-content">
         <aside className="computer-sidebar">
+          {currentLocation !==
+            "computer" && (
+            <section>
+              <h2>
+                Tarefas de arquivo
+              </h2>
+
+              <button
+                type="button"
+                disabled={
+                  !selectedItem
+                }
+                onClick={
+                  handleDeleteRequest
+                }
+              >
+                Excluir este item
+              </button>
+            </section>
+          )}
+
           <section>
-            <h2>Tarefas do sistema</h2>
+            <h2>
+              Outros locais
+            </h2>
 
-            <button type="button">Exibir informações do sistema</button>
-
-            <button type="button">Alterar uma configuração</button>
-          </section>
-
-          <section>
-            <h2>Outros locais</h2>
-
-            <button type="button" onClick={() => handleNavigate("computer")}>
+            <button
+              type="button"
+              onClick={() =>
+                handleNavigate(
+                  "computer"
+                )
+              }
+            >
               Meu Computador
             </button>
 
-            <button type="button" onClick={() => handleNavigate("documents")}>
+            <button
+              type="button"
+              onClick={() =>
+                handleNavigate(
+                  "documents"
+                )
+              }
+            >
               Meus Documentos
             </button>
 
-            <button type="button" onClick={() => handleNavigate("projects")}>
+            <button
+              type="button"
+              onClick={() =>
+                handleNavigate(
+                  "projects"
+                )
+              }
+            >
               Meus Projetos
             </button>
           </section>
         </aside>
 
         <div className="computer-main">
-          {currentLocation === "computer" ? (
+          {currentLocation ===
+          "computer" ? (
             renderComputerHome()
           ) : (
             <ExplorerDirectoryView
-              currentItem={currentItem}
-              currentChildren={currentChildren}
-              getChildren={getChildren}
-              onOpenItem={handleOpenItem}
-              selectedItemId={selectedItemId}
-              onSelectItem={selectItem}
+              currentItem={
+                currentItem
+              }
+              currentChildren={
+                currentChildren
+              }
+              getChildren={
+                getChildren
+              }
+              onOpenItem={
+                handleOpenItem
+              }
+              selectedItemId={
+                selectedItemId
+              }
+              onSelectItem={
+                selectItem
+              }
             />
           )}
         </div>
       </div>
+
+      {deleteAction?.type ===
+        "normal" && (
+        <DeleteConfirmationDialog
+          itemName={
+            deleteAction.item.name
+          }
+          onConfirm={
+            handleConfirmNormalDelete
+          }
+          onCancel={
+            cancelDelete
+          }
+        />
+      )}
+
+      {deleteAction?.type ===
+        "protected" && (
+        <ProtectedItemDialog
+          itemName={
+            deleteAction.item.name
+          }
+          onClose={
+            cancelDelete
+          }
+        />
+      )}
+
+      {deleteAction?.type ===
+        "critical" && (
+        <CriticalItemDialog
+          itemName={
+            deleteAction.item.name
+          }
+          onClose={
+            cancelDelete
+          }
+        />
+      )}
     </div>
   );
 }

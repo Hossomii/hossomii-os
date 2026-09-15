@@ -1,13 +1,12 @@
-import { useState } from "react";
-
-import { useFileSystemStore } from "../../stores/filesystemStore";
-
 import type { FileSystemItem } from "../../types/filesystem";
 
+import { CriticalItemDialog } from "./components/CriticalItemDialog";
 import { DeleteConfirmationDialog } from "./components/DeleteConfirmationDialog";
 import { ExplorerDirectoryView } from "./components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "./components/ExplorerToolbar";
+import { ProtectedItemDialog } from "./components/ProtectedItemDialog";
 
+import { useExplorerActions } from "./useExplorerActions";
 import { useExplorerNavigation } from "./useExplorerNavigation";
 import { useExplorerSelection } from "./useExplorerSelection";
 import { useFileSystemItemLauncher } from "./useFileSystemItemLauncher";
@@ -19,10 +18,6 @@ type FolderExplorerAppProps = {
 export function FolderExplorerApp({
   initialLocation,
 }: FolderExplorerAppProps) {
-  const trashItem = useFileSystemStore(
-    (state) => state.trashItem
-  );
-
   const {
     currentItem,
     currentChildren,
@@ -47,17 +42,18 @@ export function FolderExplorerApp({
     clearSelection,
   } = useExplorerSelection();
 
+  const {
+    deleteAction,
+
+    requestDelete,
+    confirmNormalDelete,
+    cancelDelete,
+  } = useExplorerActions();
+
   const { openItem } =
     useFileSystemItemLauncher({
       navigateTo,
     });
-
-  const [
-    deleteCandidate,
-    setDeleteCandidate,
-  ] = useState<FileSystemItem | null>(
-    null
-  );
 
   function handleOpenItem(
     item: FileSystemItem
@@ -86,30 +82,16 @@ export function FolderExplorerApp({
       return;
     }
 
-    if (!selectedItem.deletable) {
-      return;
-    }
-
-    setDeleteCandidate(
-      selectedItem
-    );
+    requestDelete(selectedItem);
   }
 
-  function handleConfirmDelete() {
-    if (!deleteCandidate) {
-      return;
-    }
-
+  function handleConfirmNormalDelete() {
     const deleted =
-      trashItem(
-        deleteCandidate.id
-      );
+      confirmNormalDelete();
 
     if (deleted) {
       clearSelection();
     }
-
-    setDeleteCandidate(null);
   }
 
   return (
@@ -129,10 +111,7 @@ export function FolderExplorerApp({
 
             <button
               type="button"
-              disabled={
-                !selectedItem ||
-                !selectedItem.deletable
-              }
+              disabled={!selectedItem}
               onClick={
                 handleDeleteRequest
               }
@@ -192,16 +171,41 @@ export function FolderExplorerApp({
         </div>
       </div>
 
-      {deleteCandidate && (
+      {deleteAction?.type ===
+        "normal" && (
         <DeleteConfirmationDialog
           itemName={
-            deleteCandidate.name
+            deleteAction.item.name
           }
           onConfirm={
-            handleConfirmDelete
+            handleConfirmNormalDelete
           }
-          onCancel={() =>
-            setDeleteCandidate(null)
+          onCancel={
+            cancelDelete
+          }
+        />
+      )}
+
+      {deleteAction?.type ===
+        "protected" && (
+        <ProtectedItemDialog
+          itemName={
+            deleteAction.item.name
+          }
+          onClose={
+            cancelDelete
+          }
+        />
+      )}
+
+      {deleteAction?.type ===
+        "critical" && (
+        <CriticalItemDialog
+          itemName={
+            deleteAction.item.name
+          }
+          onClose={
+            cancelDelete
           }
         />
       )}
