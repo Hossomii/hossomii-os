@@ -9,6 +9,7 @@ import { ExplorerDirectoryView } from "./components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "./components/ExplorerToolbar";
 
 import { useExplorerNavigation } from "./useExplorerNavigation";
+import { useExplorerSelection } from "./useExplorerSelection";
 import { useFileSystemItemLauncher } from "./useFileSystemItemLauncher";
 
 type FolderExplorerAppProps = {
@@ -33,21 +34,23 @@ export function FolderExplorerApp({
 
     address,
 
-    getItem,
     getChildren,
   } = useExplorerNavigation(
     initialLocation
   );
 
+  const {
+    selectedItemId,
+    selectedItem,
+
+    selectItem,
+    clearSelection,
+  } = useExplorerSelection();
+
   const { openItem } =
     useFileSystemItemLauncher({
       navigateTo,
     });
-
-  const [
-    selectedItemId,
-    setSelectedItemId,
-  ] = useState<string | null>(null);
 
   const [
     deleteCandidate,
@@ -56,15 +59,10 @@ export function FolderExplorerApp({
     null
   );
 
-  const selectedItem =
-    selectedItemId
-      ? getItem(selectedItemId)
-      : undefined;
-
   function handleOpenItem(
     item: FileSystemItem
   ) {
-    setSelectedItemId(null);
+    clearSelection();
 
     openItem(item);
   }
@@ -72,13 +70,13 @@ export function FolderExplorerApp({
   function handleNavigate(
     location: string
   ) {
-    setSelectedItemId(null);
+    clearSelection();
 
     navigateTo(location);
   }
 
   function handleBack() {
-    setSelectedItemId(null);
+    clearSelection();
 
     goBack();
   }
@@ -108,7 +106,7 @@ export function FolderExplorerApp({
       );
 
     if (deleted) {
-      setSelectedItemId(null);
+      clearSelection();
     }
 
     setDeleteCandidate(null);
@@ -178,17 +176,17 @@ export function FolderExplorerApp({
             currentChildren={
               currentChildren
             }
-            getChildren={getChildren}
+            getChildren={
+              getChildren
+            }
             onOpenItem={
               handleOpenItem
             }
             selectedItemId={
               selectedItemId
             }
-            onSelectItem={(item) =>
-              setSelectedItemId(
-                item.id
-              )
+            onSelectItem={
+              selectItem
             }
           />
         </div>

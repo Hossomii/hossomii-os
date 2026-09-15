@@ -7,6 +7,9 @@ import { ExplorerToolbar } from "../explorer/components/ExplorerToolbar";
 import { useExplorerNavigation } from "../explorer/useExplorerNavigation";
 import { useFileSystemItemLauncher } from "../explorer/useFileSystemItemLauncher";
 
+import type { FileSystemItem } from "../../types/filesystem";
+import { useExplorerSelection } from "../explorer/useExplorerSelection";
+
 export function ComputerApp() {
   const {
     currentLocation,
@@ -21,79 +24,72 @@ export function ComputerApp() {
     address,
 
     getChildren,
-  } = useExplorerNavigation(
-    "computer"
-  );
+  } = useExplorerNavigation("computer");
 
-  const { openItem } =
-    useFileSystemItemLauncher({
-      navigateTo,
-    });
+  const { selectedItemId, selectItem, clearSelection } = useExplorerSelection();
 
-  const documentItems =
-    getChildren("documents");
+  const { openItem } = useFileSystemItemLauncher({
+    navigateTo,
+  });
 
-  const projectItems =
-    getChildren("projects");
+  const documentItems = getChildren("documents");
 
+  const projectItems = getChildren("projects");
+
+  function handleOpenItem(item: FileSystemItem) {
+    clearSelection();
+
+    openItem(item);
+  }
+
+  function handleNavigate(location: string) {
+    clearSelection();
+
+    navigateTo(location);
+  }
+
+  function handleBack() {
+    clearSelection();
+
+    goBack();
+  }
   function renderComputerHome() {
     return (
       <>
         <section className="computer-section">
-          <h2>
-            Arquivos armazenados neste
-            computador
-          </h2>
+          <h2>Arquivos armazenados neste computador</h2>
 
           <div className="computer-items">
             <button
               type="button"
-              onDoubleClick={() =>
-                navigateTo("documents")
-              }
+              onDoubleClick={() => navigateTo("documents")}
               title="Clique duas vezes para abrir"
             >
-              <img
-                src={documentsIcon}
-                alt=""
-              />
+              <img src={documentsIcon} alt="" />
 
               <span>
-                <strong>
-                  Meus Documentos
-                </strong>
+                <strong>Meus Documentos</strong>
 
                 <small>
                   {documentItems.length}{" "}
-                  {documentItems.length === 1
-                    ? "item"
-                    : "itens"}
+                  {documentItems.length === 1 ? "item" : "itens"}
                 </small>
               </span>
             </button>
 
             <button
               type="button"
-              onDoubleClick={() =>
-                navigateTo("projects")
-              }
+              onDoubleClick={() => navigateTo("projects")}
               title="Clique duas vezes para abrir"
             >
-              <img
-                src={projectsIcon}
-                alt=""
-              />
+              <img src={projectsIcon} alt="" />
 
               <span>
-                <strong>
-                  Meus Projetos
-                </strong>
+                <strong>Meus Projetos</strong>
 
                 <small>
                   {projectItems.length}{" "}
-                  {projectItems.length === 1
-                    ? "projeto"
-                    : "projetos"}
+                  {projectItems.length === 1 ? "projeto" : "projetos"}
                 </small>
               </span>
             </button>
@@ -101,16 +97,12 @@ export function ComputerApp() {
         </section>
 
         <section className="computer-section">
-          <h2>
-            Unidades de disco rígido
-          </h2>
+          <h2>Unidades de disco rígido</h2>
 
           <div className="computer-items">
             <button
               type="button"
-              onDoubleClick={() =>
-                navigateTo("drive-c")
-              }
+              onDoubleClick={() => navigateTo("drive-c")}
               title="Clique duas vezes para abrir"
             >
               <span className="hard-drive-icon">
@@ -118,13 +110,9 @@ export function ComputerApp() {
               </span>
 
               <span>
-                <strong>
-                  Disco local (C:)
-                </strong>
+                <strong>Disco local (C:)</strong>
 
-                <small>
-                  Sistema HOSSOMII
-                </small>
+                <small>Sistema HOSSOMII</small>
               </span>
             </button>
           </div>
@@ -138,77 +126,47 @@ export function ComputerApp() {
       <ExplorerToolbar
         address={address}
         canGoBack={canGoBack}
-        onBack={goBack}
+        onBack={handleBack}
       />
 
       <div className="computer-app-content">
         <aside className="computer-sidebar">
           <section>
-            <h2>
-              Tarefas do sistema
-            </h2>
+            <h2>Tarefas do sistema</h2>
 
-            <button type="button">
-              Exibir informações do sistema
-            </button>
+            <button type="button">Exibir informações do sistema</button>
 
-            <button type="button">
-              Alterar uma configuração
-            </button>
+            <button type="button">Alterar uma configuração</button>
           </section>
 
           <section>
-            <h2>
-              Outros locais
-            </h2>
+            <h2>Outros locais</h2>
 
-            <button
-              type="button"
-              onClick={() =>
-                navigateTo("computer")
-              }
-            >
+            <button type="button" onClick={() => handleNavigate("computer")}>
               Meu Computador
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                navigateTo("documents")
-              }
-            >
+            <button type="button" onClick={() => handleNavigate("documents")}>
               Meus Documentos
             </button>
 
-            <button
-              type="button"
-              onClick={() =>
-                navigateTo("projects")
-              }
-            >
+            <button type="button" onClick={() => handleNavigate("projects")}>
               Meus Projetos
             </button>
           </section>
         </aside>
 
         <div className="computer-main">
-          {currentLocation ===
-          "computer" ? (
+          {currentLocation === "computer" ? (
             renderComputerHome()
           ) : (
             <ExplorerDirectoryView
-              currentItem={
-                currentItem
-              }
-              currentChildren={
-                currentChildren
-              }
-              getChildren={
-                getChildren
-              }
-              onOpenItem={
-                openItem
-              }
+              currentItem={currentItem}
+              currentChildren={currentChildren}
+              getChildren={getChildren}
+              onOpenItem={handleOpenItem}
+              selectedItemId={selectedItemId}
+              onSelectItem={selectItem}
             />
           )}
         </div>

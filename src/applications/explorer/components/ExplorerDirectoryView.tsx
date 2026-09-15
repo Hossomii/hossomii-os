@@ -9,18 +9,14 @@ type ExplorerDirectoryViewProps = {
 
   getChildren: (
     parentId: string | null,
-    includeHidden?: boolean
+    includeHidden?: boolean,
   ) => FileSystemItem[];
 
-  onOpenItem: (
-    item: FileSystemItem
-  ) => void;
+  onOpenItem: (item: FileSystemItem) => void;
 
   selectedItemId?: string | null;
 
-  onSelectItem?: (
-    item: FileSystemItem
-  ) => void;
+  onSelectItem?: (item: FileSystemItem) => void;
 };
 
 export function ExplorerDirectoryView({
@@ -31,18 +27,11 @@ export function ExplorerDirectoryView({
   selectedItemId = null,
   onSelectItem,
 }: ExplorerDirectoryViewProps) {
-  function getItemDescription(
-    item: FileSystemItem
-  ) {
+  function getItemDescription(item: FileSystemItem) {
     if (item.type === "directory") {
-      const children =
-        getChildren(item.id);
+      const children = getChildren(item.id);
 
-      return `${children.length} ${
-        children.length === 1
-          ? "item"
-          : "itens"
-      }`;
+      return `${children.length} ${children.length === 1 ? "item" : "itens"}`;
     }
 
     if (item.type === "file") {
@@ -56,28 +45,13 @@ export function ExplorerDirectoryView({
     return "Atalho";
   }
 
-  function renderItemIcon(
-    item: FileSystemItem
-  ) {
+  function renderItemIcon(item: FileSystemItem) {
     if (item.id === "documents") {
-      return (
-        <img
-          src={documentsIcon}
-          alt=""
-        />
-      );
+      return <img src={documentsIcon} alt="" />;
     }
 
-    if (
-      item.id === "projects" ||
-      item.parentId === "projects"
-    ) {
-      return (
-        <img
-          src={projectsIcon}
-          alt=""
-        />
-      );
+    if (item.id === "projects" || item.parentId === "projects") {
+      return <img src={projectsIcon} alt="" />;
     }
 
     if (item.type === "directory") {
@@ -93,12 +67,42 @@ export function ExplorerDirectoryView({
     }
 
     if (item.type === "file") {
+      if (item.extension.toLowerCase() === "txt") {
+        return (
+          <span
+            className="
+          explorer-generic-icon
+          explorer-file-icon
+          explorer-file-icon-txt
+        "
+            aria-hidden="true"
+          >
+            TXT
+          </span>
+        );
+      }
+
+      if (item.extension.toLowerCase() === "pdf") {
+        return (
+          <span
+            className="
+          explorer-generic-icon
+          explorer-file-icon
+          explorer-file-icon-pdf
+        "
+            aria-hidden="true"
+          >
+            PDF
+          </span>
+        );
+      }
+
       return (
         <span
           className="
-            explorer-generic-icon
-            explorer-file-icon
-          "
+        explorer-generic-icon
+        explorer-file-icon
+      "
           aria-hidden="true"
         >
           {item.extension.toUpperCase()}
@@ -133,14 +137,9 @@ export function ExplorerDirectoryView({
     );
   }
 
-  if (
-    !currentItem ||
-    currentItem.type !== "directory"
-  ) {
+  if (!currentItem || currentItem.type !== "directory") {
     return (
-      <p className="explorer-empty-state">
-        Não foi possível abrir este local.
-      </p>
+      <p className="explorer-empty-state">Não foi possível abrir este local.</p>
     );
   }
 
@@ -149,44 +148,27 @@ export function ExplorerDirectoryView({
       <h2>{currentItem.name}</h2>
 
       {currentChildren.length === 0 ? (
-        <p className="explorer-empty-state">
-          Esta pasta está vazia.
-        </p>
+        <p className="explorer-empty-state">Esta pasta está vazia.</p>
       ) : (
         <div className="computer-items">
           {currentChildren.map((item) => {
-            const isSelected =
-              selectedItemId === item.id;
+            const isSelected = selectedItemId === item.id;
 
             return (
               <button
                 key={item.id}
                 type="button"
-                className={
-                  isSelected
-                    ? "explorer-item-selected"
-                    : ""
-                }
-                onClick={() =>
-                  onSelectItem?.(item)
-                }
-                onDoubleClick={() =>
-                  onOpenItem(item)
-                }
+                className={isSelected ? "explorer-item-selected" : ""}
+                onClick={() => onSelectItem?.(item)}
+                onDoubleClick={() => onOpenItem(item)}
                 title="Clique duas vezes para abrir"
               >
                 {renderItemIcon(item)}
 
                 <span>
-                  <strong>
-                    {item.name}
-                  </strong>
+                  <strong>{item.name}</strong>
 
-                  <small>
-                    {getItemDescription(
-                      item
-                    )}
-                  </small>
+                  <small>{getItemDescription(item)}</small>
                 </span>
               </button>
             );

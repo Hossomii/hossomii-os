@@ -7,49 +7,29 @@ import type { FileSystemItem } from "../../types/filesystem";
 import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
 
 export function RecycleBinApp() {
-  const items = useFileSystemStore(
-    (state) => state.items
-  );
+  const items = useFileSystemStore((state) => state.items);
 
-  const restoreItem =
-    useFileSystemStore(
-      (state) => state.restoreItem
-    );
+  const restoreItem = useFileSystemStore((state) => state.restoreItem);
 
-  const [
-    selectedItemId,
-    setSelectedItemId,
-  ] = useState<string | null>(null);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
 
-  const trashedItems =
-    items.filter(
-      (item) => item.trashed
-    );
+  const trashedItems = items.filter((item) => item.trashed);
 
-  const selectedItem =
-    trashedItems.find(
-      (item) =>
-        item.id === selectedItemId
-    );
+  const selectedItem = trashedItems.find((item) => item.id === selectedItemId);
 
   function handleRestore() {
     if (!selectedItem) {
       return;
     }
 
-    const restored =
-      restoreItem(
-        selectedItem.id
-      );
+    const restored = restoreItem(selectedItem.id);
 
     if (restored) {
       setSelectedItemId(null);
     }
   }
 
-  function getItemDescription(
-    item: FileSystemItem
-  ) {
+  function getItemDescription(item: FileSystemItem) {
     if (item.type === "file") {
       return `Arquivo ${item.extension.toUpperCase()}`;
     }
@@ -65,9 +45,7 @@ export function RecycleBinApp() {
     return "Atalho";
   }
 
-  function renderItemIcon(
-    item: FileSystemItem
-  ) {
+  function renderItemIcon(item: FileSystemItem) {
     if (item.type === "directory") {
       return (
         <span
@@ -81,12 +59,42 @@ export function RecycleBinApp() {
     }
 
     if (item.type === "file") {
+      if (item.extension.toLowerCase() === "txt") {
+        return (
+          <span
+            className="
+          explorer-generic-icon
+          explorer-file-icon
+          explorer-file-icon-txt
+        "
+            aria-hidden="true"
+          >
+            TXT
+          </span>
+        );
+      }
+
+      if (item.extension.toLowerCase() === "pdf") {
+        return (
+          <span
+            className="
+          explorer-generic-icon
+          explorer-file-icon
+          explorer-file-icon-pdf
+        "
+            aria-hidden="true"
+          >
+            PDF
+          </span>
+        );
+      }
+
       return (
         <span
           className="
-            explorer-generic-icon
-            explorer-file-icon
-          "
+        explorer-generic-icon
+        explorer-file-icon
+      "
           aria-hidden="true"
         >
           {item.extension.toUpperCase()}
@@ -94,9 +102,7 @@ export function RecycleBinApp() {
       );
     }
 
-    if (
-      item.type === "application"
-    ) {
+    if (item.type === "application") {
       return (
         <span
           className="
@@ -126,48 +132,31 @@ export function RecycleBinApp() {
   return (
     <div className="computer-app">
       <div className="explorer-toolbar">
-        <button
-          type="button"
-          disabled
-        >
+        <button type="button" disabled>
           ← Voltar
         </button>
 
         <span className="explorer-toolbar-separator" />
 
-        <span className="explorer-address-label">
-          Endereço
-        </span>
+        <span className="explorer-address-label">Endereço</span>
 
-        <div className="explorer-address">
-          Lixeira
-        </div>
+        <div className="explorer-address">Lixeira</div>
       </div>
 
       <div className="computer-app-content">
         <aside className="computer-sidebar">
           <section>
-            <h2>
-              Tarefas da Lixeira
-            </h2>
+            <h2>Tarefas da Lixeira</h2>
 
             <button
               type="button"
-              disabled={
-                !selectedItem ||
-                !selectedItem.recoverable
-              }
-              onClick={
-                handleRestore
-              }
+              disabled={!selectedItem || !selectedItem.recoverable}
+              onClick={handleRestore}
             >
               Restaurar item
             </button>
 
-            <button
-              type="button"
-              disabled
-            >
+            <button type="button" disabled>
               Esvaziar Lixeira
             </button>
           </section>
@@ -177,9 +166,7 @@ export function RecycleBinApp() {
 
             <p>
               {trashedItems.length}{" "}
-              {trashedItems.length === 1
-                ? "item"
-                : "itens"}
+              {trashedItems.length === 1 ? "item" : "itens"}
             </p>
           </section>
         </aside>
@@ -188,62 +175,36 @@ export function RecycleBinApp() {
           <section className="computer-section">
             <h2>Lixeira</h2>
 
-            {trashedItems.length ===
-            0 ? (
+            {trashedItems.length === 0 ? (
               <div className="recycle-bin-empty">
-                <img
-                  src={emptyTrashIcon}
-                  alt=""
-                />
+                <img src={emptyTrashIcon} alt="" />
 
                 <div>
-                  <strong>
-                    A Lixeira está vazia.
-                  </strong>
+                  <strong>A Lixeira está vazia.</strong>
 
-                  <p>
-                    Os arquivos excluídos
-                    aparecerão aqui.
-                  </p>
+                  <p>Os arquivos excluídos aparecerão aqui.</p>
                 </div>
               </div>
             ) : (
               <div className="computer-items">
-                {trashedItems.map(
-                  (item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className={
-                        selectedItemId ===
-                        item.id
-                          ? "explorer-item-selected"
-                          : ""
-                      }
-                      onClick={() =>
-                        setSelectedItemId(
-                          item.id
-                        )
-                      }
-                    >
-                      {renderItemIcon(
-                        item
-                      )}
+                {trashedItems.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={
+                      selectedItemId === item.id ? "explorer-item-selected" : ""
+                    }
+                    onClick={() => setSelectedItemId(item.id)}
+                  >
+                    {renderItemIcon(item)}
 
-                      <span>
-                        <strong>
-                          {item.name}
-                        </strong>
+                    <span>
+                      <strong>{item.name}</strong>
 
-                        <small>
-                          {getItemDescription(
-                            item
-                          )}
-                        </small>
-                      </span>
-                    </button>
-                  )
-                )}
+                      <small>{getItemDescription(item)}</small>
+                    </span>
+                  </button>
+                ))}
               </div>
             )}
           </section>

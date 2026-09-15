@@ -62,8 +62,6 @@ export function AuthenticatingScreen() {
 
         <div className="xp-session-content">
           <div className="xp-brand">
-            <span className="xp-brand-mark">H</span>
-
             <div>
               <strong>HOSSOMII OS</strong>
               <span>Acesso remoto</span>

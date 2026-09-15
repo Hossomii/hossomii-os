@@ -42,8 +42,6 @@ export function LoginScreen() {
       <section className="access-window">
         <header className="access-titlebar">
           <div className="titlebar-left">
-            <span className="titlebar-icon">H</span>
-
             <span>HOSSOMII - ACESSO REMOTO</span>
           </div>
 
