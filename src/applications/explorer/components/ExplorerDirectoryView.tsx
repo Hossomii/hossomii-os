@@ -97,6 +97,21 @@ export function ExplorerDirectoryView({
         );
       }
 
+      if (
+        item.type === "file" &&
+        ["webp", "png", "jpg", "jpeg"].includes(item.extension.toLowerCase()) &&
+        item.resourceUrl
+      ) {
+        return (
+          <img
+            className="explorer-image-thumbnail"
+            src={item.resourceUrl}
+            alt=""
+            draggable={false}
+          />
+        );
+      }
+
       return (
         <span
           className="

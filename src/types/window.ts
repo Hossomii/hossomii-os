@@ -5,7 +5,8 @@ export type WindowAppId =
   | "terminal"
   | "recycle-bin"
   | "notepad"
-  | "pdf-viewer";
+  | "pdf-viewer"
+  | "image-viewer";
 
 export type WindowBounds = {
   x: number;

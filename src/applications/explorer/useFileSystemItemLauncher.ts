@@ -41,6 +41,8 @@ export function useFileSystemItemLauncher({
 
     const extension = item.extension.toLowerCase();
 
+    const imageExtensions = ["webp", "png", "jpg", "jpeg"];
+
     if (extension === "txt") {
       openWindow({
         appId: "notepad",
@@ -66,6 +68,24 @@ export function useFileSystemItemLauncher({
         instanceId: item.id,
 
         title: `${item.name} - Visualizador de PDF`,
+
+        icon: documentsIcon,
+
+        data: {
+          fileId: item.id,
+        },
+      });
+
+      return;
+    }
+
+    if (imageExtensions.includes(extension)) {
+      openWindow({
+        appId: "image-viewer",
+
+        instanceId: item.id,
+
+        title: `${item.name} - Visualizador de Imagens`,
 
         icon: documentsIcon,
 

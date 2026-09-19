@@ -25,6 +25,7 @@ import { WindowFrame } from "./components/WindowFrame";
 
 import { NotepadApp } from "../applications/notepad/NotepadApp";
 import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
+import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
 
 import "../styles/desktop.css";
 
@@ -242,6 +243,20 @@ export function Desktop() {
           );
         }
 
+        if (windowItem.appId === "image-viewer") {
+          const fileId = windowItem.data?.fileId;
+
+          if (!fileId) {
+            return null;
+          }
+
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <ImageViewerApp fileId={fileId} />
+            </WindowFrame>
+          );
+        }
+        
         return null;
       })}
 
