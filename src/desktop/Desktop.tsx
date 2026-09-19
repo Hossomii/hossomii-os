@@ -26,6 +26,7 @@ import { WindowFrame } from "./components/WindowFrame";
 import { NotepadApp } from "../applications/notepad/NotepadApp";
 import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
 import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
+import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerApp";
 
 import "../styles/desktop.css";
 
@@ -256,7 +257,21 @@ export function Desktop() {
             </WindowFrame>
           );
         }
-        
+
+        if (windowItem.appId === "project-viewer") {
+          const projectId = windowItem.data?.projectId;
+
+          if (!projectId) {
+            return null;
+          }
+
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <ProjectViewerApp projectId={projectId} />
+            </WindowFrame>
+          );
+        }
+
         return null;
       })}
 

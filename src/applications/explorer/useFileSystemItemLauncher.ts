@@ -5,6 +5,8 @@ import documentsIcon from "../../assets/icons/documents.webp";
 
 import type { FileSystemItem } from "../../types/filesystem";
 
+import projectsIcon from "../../assets/icons/projects.webp";
+
 type UseFileSystemItemLauncherParams = {
   navigateTo: (location: string) => void;
 };
@@ -34,6 +36,32 @@ export function useFileSystemItemLauncher({
     }
 
     if (item.type === "application") {
+      if (item.appId === "project-viewer") {
+        const projectId = item.data?.projectId;
+
+        if (!projectId) {
+          return;
+        }
+
+        const project = getItem(projectId);
+
+        openWindow({
+          appId: "project-viewer",
+
+          instanceId: item.instanceId ?? projectId,
+
+          title: `${project?.name ?? "Projeto"} - HOSSOMII Portfolio`,
+
+          icon: projectsIcon,
+
+          data: {
+            projectId,
+          },
+        });
+
+        return;
+      }
+
       console.log(`Aplicativo ainda não conectado: ${item.appId}`);
 
       return;

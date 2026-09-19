@@ -1,4 +1,7 @@
-import type { WindowAppId } from "./window";
+import type {
+  WindowAppId,
+  WindowData,
+} from "./window";
 
 export type FileSystemItemType =
   | "file"
@@ -42,6 +45,9 @@ export type FileSystemApplication =
     type: "application";
 
     appId: WindowAppId;
+
+    instanceId?: string;
+    data?: WindowData;
   };
 
 export type FileSystemShortcut =

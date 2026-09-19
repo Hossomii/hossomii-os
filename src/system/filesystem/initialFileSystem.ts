@@ -174,6 +174,29 @@ export const initialFileSystem: FileSystemItem[] = [
   },
 
   {
+    id: "tnt-project-app",
+    name: "project.exe",
+    type: "application",
+    parentId: "project-tnt-basketball",
+
+    appId: "project-viewer",
+    instanceId: "project-tnt-basketball",
+
+    data: {
+      projectId: "project-tnt-basketball",
+    },
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
     id: "tnt-about",
     name: "sobre-o-projeto.txt",
     type: "file",
@@ -231,6 +254,29 @@ export const initialFileSystem: FileSystemItem[] = [
     deletable: true,
     critical: false,
     recoverable: true,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
+    id: "medicos-project-app",
+    name: "project.exe",
+    type: "application",
+    parentId: "project-medicos-dentistas",
+
+    appId: "project-viewer",
+    instanceId: "project-medicos-dentistas",
+
+    data: {
+      projectId: "project-medicos-dentistas",
+    },
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
 
     trashed: false,
     originalParentId: null,
