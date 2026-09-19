@@ -6,6 +6,8 @@ import {
 import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
+import { RecoveryEnvironment } from "./RecoveryEnvironment";
+
 const REQUIRED_PHRASE =
   "eu sei o que estou fazendo";
 
@@ -43,6 +45,12 @@ export function CriticalDeleteFlow() {
         state.triggerFailure
     );
 
+  const startRecovery =
+    useCriticalFileStore(
+      (state) =>
+        state.startRecovery
+    );
+
   const resetFlow =
     useCriticalFileStore(
       (state) => state.resetFlow
@@ -51,11 +59,6 @@ export function CriticalDeleteFlow() {
   const trashItem =
     useFileSystemStore(
       (state) => state.trashItem
-    );
-
-  const restoreItem =
-    useFileSystemStore(
-      (state) => state.restoreItem
     );
 
   const [
@@ -99,12 +102,18 @@ export function CriticalDeleteFlow() {
     const x =
       20 +
       Math.random() *
-        Math.max(0, maxX - 20);
+        Math.max(
+          0,
+          maxX - 20
+        );
 
     const y =
       20 +
       Math.random() *
-        Math.max(0, maxY - 20);
+        Math.max(
+          0,
+          maxY - 20
+        );
 
     setSecondDialogPosition({
       x,
@@ -114,7 +123,8 @@ export function CriticalDeleteFlow() {
 
   useEffect(() => {
     if (
-      phase !== "typed-confirmation"
+      phase !==
+      "typed-confirmation"
     ) {
       setConfirmationText("");
     }
@@ -127,15 +137,6 @@ export function CriticalDeleteFlow() {
     return null;
   }
 
-  /*
-   * Depois da validação acima,
-   * o TypeScript sabe que target
-   * não é mais null.
-   *
-   * Guardamos essa referência em
-   * uma constante para também usá-la
-   * com segurança dentro dos callbacks.
-   */
   const activeTarget = target;
 
   function handleFinalDelete() {
@@ -164,12 +165,26 @@ export function CriticalDeleteFlow() {
     triggerFailure();
   }
 
-  function handleTemporaryRecovery() {
-    restoreItem(
-      activeTarget.id
+  if (
+    phase ===
+    "recovery-diagnostic" ||
+    phase ===
+    "recovery-restore" ||
+    phase ===
+    "recovery-restart" ||
+    phase ===
+    "recovered"
+  ) {
+    return (
+      <RecoveryEnvironment
+        targetId={
+          activeTarget.id
+        }
+        targetName={
+          activeTarget.name
+        }
+      />
     );
-
-    resetFlow();
   }
 
   if (
@@ -454,15 +469,14 @@ STATUS:
           <button
             type="button"
             onClick={
-              handleTemporaryRecovery
+              startRecovery
             }
           >
-            Executar recuperação automática
+            Iniciar ambiente de recuperação
           </button>
 
           <small>
-            Ambiente de recuperação
-            simplificado
+            Recovery Environment disponível
           </small>
         </div>
       </div>

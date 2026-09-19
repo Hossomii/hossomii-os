@@ -5,7 +5,11 @@ export type CriticalFilePhase =
   | "first-confirmation"
   | "second-confirmation"
   | "typed-confirmation"
-  | "failure";
+  | "failure"
+  | "recovery-diagnostic"
+  | "recovery-restore"
+  | "recovery-restart"
+  | "recovered";
 
 type CriticalFileTarget = {
   id: string;
@@ -26,6 +30,14 @@ type CriticalFileStore = {
   showTypedConfirmation: () => void;
 
   triggerFailure: () => void;
+
+  startRecovery: () => void;
+
+  markDiagnosed: () => void;
+
+  markRestored: () => void;
+
+  markRecovered: () => void;
 
   resetFlow: () => void;
 };
@@ -58,6 +70,30 @@ export const useCriticalFileStore =
     triggerFailure: () => {
       set({
         phase: "failure",
+      });
+    },
+
+    startRecovery: () => {
+      set({
+        phase: "recovery-diagnostic",
+      });
+    },
+
+    markDiagnosed: () => {
+      set({
+        phase: "recovery-restore",
+      });
+    },
+
+    markRestored: () => {
+      set({
+        phase: "recovery-restart",
+      });
+    },
+
+    markRecovered: () => {
+      set({
+        phase: "recovered",
       });
     },
 
