@@ -1,6 +1,5 @@
 import type { FileSystemItem } from "../../types/filesystem";
 
-import { CriticalItemDialog } from "./components/CriticalItemDialog";
 import { DeleteConfirmationDialog } from "./components/DeleteConfirmationDialog";
 import { ExplorerDirectoryView } from "./components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "./components/ExplorerToolbar";
@@ -198,17 +197,6 @@ export function FolderExplorerApp({
         />
       )}
 
-      {deleteAction?.type ===
-        "critical" && (
-        <CriticalItemDialog
-          itemName={
-            deleteAction.item.name
-          }
-          onClose={
-            cancelDelete
-          }
-        />
-      )}
     </div>
   );
 }

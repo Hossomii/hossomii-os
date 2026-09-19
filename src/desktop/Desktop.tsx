@@ -28,6 +28,8 @@ import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
 import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
 import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerApp";
 
+import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
+
 import "../styles/desktop.css";
 
 export function Desktop() {
@@ -274,6 +276,8 @@ export function Desktop() {
 
         return null;
       })}
+
+      <CriticalDeleteFlow />
 
       <StartMenu
         open={startMenuOpen}

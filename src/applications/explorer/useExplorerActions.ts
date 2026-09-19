@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
 import type { FileSystemItem } from "../../types/filesystem";
@@ -13,10 +14,6 @@ type DeleteActionState =
       type: "protected";
       item: FileSystemItem;
     }
-  | {
-      type: "critical";
-      item: FileSystemItem;
-    }
   | null;
 
 export function useExplorerActions() {
@@ -24,10 +21,17 @@ export function useExplorerActions() {
     (state) => state.trashItem
   );
 
+  const startCriticalDelete =
+    useCriticalFileStore(
+      (state) => state.startFlow
+    );
+
   const [
     deleteAction,
     setDeleteAction,
-  ] = useState<DeleteActionState>(null);
+  ] = useState<DeleteActionState>(
+    null
+  );
 
   function requestDelete(
     item: FileSystemItem
@@ -42,9 +46,9 @@ export function useExplorerActions() {
     }
 
     if (item.critical) {
-      setDeleteAction({
-        type: "critical",
-        item,
+      startCriticalDelete({
+        id: item.id,
+        name: item.name,
       });
 
       return;
@@ -65,7 +69,9 @@ export function useExplorerActions() {
     }
 
     const deleted =
-      trashItem(deleteAction.item.id);
+      trashItem(
+        deleteAction.item.id
+      );
 
     setDeleteAction(null);
 

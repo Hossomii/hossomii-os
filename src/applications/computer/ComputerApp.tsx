@@ -3,7 +3,6 @@ import type { FileSystemItem } from "../../types/filesystem";
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
-import { CriticalItemDialog } from "../explorer/components/CriticalItemDialog";
 import { DeleteConfirmationDialog } from "../explorer/components/DeleteConfirmationDialog";
 import { ExplorerDirectoryView } from "../explorer/components/ExplorerDirectoryView";
 import { ExplorerToolbar } from "../explorer/components/ExplorerToolbar";
@@ -327,18 +326,7 @@ export function ComputerApp() {
           }
         />
       )}
-
-      {deleteAction?.type ===
-        "critical" && (
-        <CriticalItemDialog
-          itemName={
-            deleteAction.item.name
-          }
-          onClose={
-            cancelDelete
-          }
-        />
-      )}
+      
     </div>
   );
 }
