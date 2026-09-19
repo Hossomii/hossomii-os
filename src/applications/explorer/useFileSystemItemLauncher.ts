@@ -12,25 +12,18 @@ type UseFileSystemItemLauncherParams = {
 export function useFileSystemItemLauncher({
   navigateTo,
 }: UseFileSystemItemLauncherParams) {
-  const getItem = useFileSystemStore(
-    (state) => state.getItem
-  );
+  const getItem = useFileSystemStore((state) => state.getItem);
 
-  const openWindow = useWindowStore(
-    (state) => state.openWindow
-  );
+  const openWindow = useWindowStore((state) => state.openWindow);
 
-  function openItem(
-    item: FileSystemItem
-  ) {
+  function openItem(item: FileSystemItem) {
     if (item.type === "directory") {
       navigateTo(item.id);
       return;
     }
 
     if (item.type === "shortcut") {
-      const targetItem =
-        getItem(item.targetId);
+      const targetItem = getItem(item.targetId);
 
       if (!targetItem) {
         return;
@@ -41,15 +34,12 @@ export function useFileSystemItemLauncher({
     }
 
     if (item.type === "application") {
-      console.log(
-        `Aplicativo ainda não conectado: ${item.appId}`
-      );
+      console.log(`Aplicativo ainda não conectado: ${item.appId}`);
 
       return;
     }
 
-    const extension =
-      item.extension.toLowerCase();
+    const extension = item.extension.toLowerCase();
 
     if (extension === "txt") {
       openWindow({
@@ -70,24 +60,30 @@ export function useFileSystemItemLauncher({
     }
 
     if (extension === "pdf") {
-      console.log(
-        `Visualizador de PDF ainda não implementado: ${item.name}`
-      );
+      openWindow({
+        appId: "pdf-viewer",
+
+        instanceId: item.id,
+
+        title: `${item.name} - Visualizador de PDF`,
+
+        icon: documentsIcon,
+
+        data: {
+          fileId: item.id,
+        },
+      });
 
       return;
     }
 
     if (extension === "sys") {
-      console.log(
-        `Arquivo de sistema: ${item.name}`
-      );
+      console.log(`Arquivo de sistema: ${item.name}`);
 
       return;
     }
 
-    console.log(
-      `Nenhum aplicativo associado a: ${item.name}`
-    );
+    console.log(`Nenhum aplicativo associado a: ${item.name}`);
   }
 
   return {

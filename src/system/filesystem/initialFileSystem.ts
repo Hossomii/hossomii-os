@@ -181,6 +181,9 @@ export const initialFileSystem: FileSystemItem[] = [
 
     extension: "pdf",
 
+    resourceUrl:
+      "/documents/curriculo.pdf",
+
     hidden: false,
 
     deletable: true,

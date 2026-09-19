@@ -24,6 +24,7 @@ import { Taskbar } from "./components/Taskbar";
 import { WindowFrame } from "./components/WindowFrame";
 
 import { NotepadApp } from "../applications/notepad/NotepadApp";
+import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
 
 import "../styles/desktop.css";
 
@@ -223,6 +224,20 @@ export function Desktop() {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
               <NotepadApp fileId={fileId} />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "pdf-viewer") {
+          const fileId = windowItem.data?.fileId;
+
+          if (!fileId) {
+            return null;
+          }
+
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <PdfViewerApp fileId={fileId} />
             </WindowFrame>
           );
         }

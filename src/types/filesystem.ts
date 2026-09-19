@@ -26,7 +26,10 @@ export type FileSystemFile =
     type: "file";
 
     extension: string;
+
     content?: string;
+
+    resourceUrl?: string;
   };
 
 export type FileSystemDirectory =
