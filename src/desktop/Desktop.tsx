@@ -31,7 +31,7 @@ import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerAp
 
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
-import "../styles/desktop.css";
+import "../styles/desktop/index.css";
 
 export function Desktop() {
   const resetSystem = useSystemStore((state) => state.resetSystem);

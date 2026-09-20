@@ -1,0 +1,144 @@
+.recovery-environment {
+  position: fixed;
+  inset: 0;
+
+  z-index: 30000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: #050505;
+
+  color: #d6d6d6;
+
+  font-family:
+    "Lucida Console",
+    Consolas,
+    monospace;
+}
+
+.recovery-terminal {
+  display: flex;
+  flex-direction: column;
+
+  width: min(900px, 100%);
+  height: min(620px, 90vh);
+
+  border: 1px solid #555;
+
+  background: #0b0b0b;
+
+  box-shadow:
+    0 0 40px
+      rgba(0, 0, 0, 0.8);
+}
+
+.recovery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 34px;
+
+  padding: 0 12px;
+
+  border-bottom: 1px solid #444;
+
+  background: #191919;
+
+  color: #e6e6e6;
+
+  font-size: 11px;
+}
+
+.recovery-header span:last-child {
+  color: #d9b44a;
+
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.recovery-output {
+  flex: 1;
+
+  min-height: 0;
+
+  padding: 16px;
+
+  overflow: auto;
+
+  color: #d5d5d5;
+
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.recovery-error-line {
+  color: #ff8e8e;
+}
+
+.recovery-command-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 8px 14px;
+
+  border-top: 1px solid #333;
+
+  background: #080808;
+
+  font-size: 12px;
+}
+
+.recovery-command-line span {
+  flex: 0 0 auto;
+
+  color: #8ec7ff;
+}
+
+.recovery-command-line input {
+  flex: 1;
+
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font: inherit;
+
+  caret-color: #ffffff;
+}
+
+.recovery-footer {
+  min-height: 27px;
+
+  padding: 7px 12px;
+
+  border-top: 1px solid #292929;
+
+  background: #111;
+
+  color: #777;
+
+  font-size: 9px;
+}
+
+.recovery-success {
+  margin-top: 20px;
+
+  color: #9df49d;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+}
+
