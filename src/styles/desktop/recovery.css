@@ -1,103 +1,522 @@
+/* =========================================================
+   HOSSOMII OS
+   Recovery Console
+   Early-2000s / Windows recovery inspired
+   ========================================================= */
+
+
+/* =========================================================
+   ENVIRONMENT
+   ========================================================= */
+
 .recovery-environment {
+  --terminal-bg: #012456;
+  --terminal-bg-dark: #001a3d;
+  --terminal-bg-soft: #0a2c63;
+
+  --terminal-text: #f1f1f1;
+  --terminal-muted: #a8bdd3;
+  --terminal-faint: #7d9dbc;
+
+  --terminal-cyan: #5fd7ff;
+  --terminal-blue: #38a6ff;
+
+  --terminal-error: #ff9b9b;
+
+  --terminal-border:
+    rgba(255, 255, 255, 0.14);
+
   position: fixed;
   inset: 0;
 
   z-index: 30000;
 
   display: flex;
-  align-items: center;
-  justify-content: center;
 
-  padding: 24px;
+  width: 100%;
+  height: 100%;
 
-  background: #050505;
+  overflow: hidden;
 
-  color: #d6d6d6;
+  background: var(--terminal-bg);
+
+  color: var(--terminal-text);
 
   font-family:
     "Lucida Console",
-    Consolas,
+    "Courier New",
     monospace;
+
+  font-size: 12px;
+  font-weight: 400;
+
+  letter-spacing: -0.15px;
+
+  user-select: none;
 }
 
+
+/* =========================================================
+   OLD DISPLAY TEXTURE
+   ========================================================= */
+
+.recovery-environment::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      rgba(255, 255, 255, 0.018) 3px
+    );
+
+  opacity: 0.8;
+}
+
+.recovery-environment::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.008) 0,
+      rgba(255, 255, 255, 0.008) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+
+  mix-blend-mode: screen;
+
+  opacity: 0.35;
+}
+
+
+/* =========================================================
+   TERMINAL
+   ========================================================= */
+
 .recovery-terminal {
+  position: relative;
+
+  z-index: 1;
+
   display: flex;
   flex-direction: column;
 
-  width: min(900px, 100%);
-  height: min(620px, 90vh);
+  width: 100%;
+  height: 100%;
 
-  border: 1px solid #555;
+  min-width: 0;
+  min-height: 0;
 
-  background: #0b0b0b;
+  overflow: hidden;
 
-  box-shadow:
-    0 0 40px
-      rgba(0, 0, 0, 0.8);
+  background: var(--terminal-bg);
 }
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .recovery-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  min-height: 34px;
+  flex: 0 0 auto;
 
-  padding: 0 12px;
+  min-height: 30px;
 
-  border-bottom: 1px solid #444;
+  padding: 0 10px;
 
-  background: #191919;
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.13);
 
-  color: #e6e6e6;
+  background: var(--terminal-bg-dark);
 
-  font-size: 11px;
+  box-shadow:
+    0 1px 0
+      rgba(0, 0, 0, 0.2);
 }
 
-.recovery-header span:last-child {
-  color: #d9b44a;
+.recovery-header-main {
+  display: flex;
+  align-items: center;
 
-  font-size: 9px;
+  min-width: 0;
+
+  gap: 8px;
+}
+
+.recovery-header-mark {
+  flex: 0 0 auto;
+
+  color: var(--terminal-cyan);
+
+  font-size: 10px;
+  font-weight: 400;
+
+  letter-spacing: 0;
+}
+
+.recovery-header-main > div {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+
+  min-width: 0;
+
+  gap: 8px;
+}
+
+.recovery-header strong {
+  overflow: hidden;
+
+  color: var(--terminal-text);
+
+  font-size: 10px;
+  font-weight: 400;
+
+  letter-spacing: 0;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.recovery-header small {
+  overflow: hidden;
+
+  color: var(--terminal-faint);
+
+  font-size: 8px;
+  font-weight: 400;
+
+  letter-spacing: 0.4px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.recovery-mode-label {
+  flex: 0 0 auto;
+
+  color: var(--terminal-cyan);
+
+  font-size: 8px;
+  font-weight: 400;
+
   letter-spacing: 1px;
 }
 
+
+/* =========================================================
+   OUTPUT
+   ========================================================= */
+
 .recovery-output {
+  position: relative;
+
   flex: 1;
 
+  min-width: 0;
   min-height: 0;
 
-  padding: 16px;
+  padding:
+    18px 22px 28px;
 
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 
-  color: #d5d5d5;
+  background: var(--terminal-bg);
+
+  color: var(--terminal-text);
 
   font-size: 12px;
+  font-weight: 400;
+
+  line-height: 1.55;
+
+  letter-spacing: -0.15px;
+
+  scroll-behavior: smooth;
+
+  user-select: text;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.recovery-output::-webkit-scrollbar {
+  width: 8px;
+}
+
+.recovery-output::-webkit-scrollbar-track {
+  background:
+    var(--terminal-bg-dark);
+}
+
+.recovery-output::-webkit-scrollbar-thumb {
+  background: #29558d;
+}
+
+.recovery-output::-webkit-scrollbar-thumb:hover {
+  background: #3670ad;
+}
+
+
+/* =========================================================
+   TERMINAL LINES
+   ========================================================= */
+
+.recovery-line {
+  min-height: 18px;
+
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  animation:
+    recovery-line-enter
+    90ms linear;
+}
+
+.recovery-line-normal {
+  padding-left: 0;
+}
+
+.recovery-line-prompt {
+  margin:
+    13px 0 6px;
+
+  color: var(--terminal-text);
+}
+
+.recovery-line-section {
+  margin:
+    20px 0 8px;
+
+  color: var(--terminal-cyan);
+
+  font-size: 11px;
+  font-weight: 400;
+
+  letter-spacing: 0.2px;
+
+  text-transform: uppercase;
+}
+
+.recovery-line-section:first-child {
+  margin-top: 0;
+}
+
+.recovery-line-section::after {
+  content: "";
+
+  display: block;
+
+  width: min(520px, 100%);
+  height: 1px;
+
+  margin-top: 6px;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(95, 215, 255, 0.34),
+      transparent
+    );
+}
+
+.recovery-line-note {
+  max-width: 680px;
+
+  margin:
+    8px 0 11px 8ch;
+
+  color: var(--terminal-muted);
+
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
+
   line-height: 1.55;
 }
 
-.recovery-error-line {
-  color: #ff8e8e;
+.recovery-line-activity {
+  color: var(--terminal-text);
 }
+
+
+/* =========================================================
+   SEMANTIC TOKENS
+   ========================================================= */
+
+.recovery-token {
+  white-space: pre-wrap;
+}
+
+.recovery-token-text {
+  color: var(--terminal-text);
+}
+
+.recovery-token-status {
+  display: inline-block;
+
+  min-width: 8ch;
+
+  color: var(--terminal-blue);
+
+  font-weight: 400;
+}
+
+.recovery-token-ok {
+  display: inline-block;
+
+  min-width: 8ch;
+
+  color: var(--terminal-cyan);
+
+  font-weight: 400;
+}
+
+.recovery-token-error {
+  display: inline-block;
+
+  color: var(--terminal-error);
+
+  font-weight: 400;
+}
+
+.recovery-token-path {
+  color: var(--terminal-cyan);
+
+  font-weight: 400;
+}
+
+.recovery-token-file {
+  color: var(--terminal-text);
+
+  font-weight: 400;
+}
+
+.recovery-token-command {
+  color: var(--terminal-text);
+
+  font-weight: 400;
+}
+
+.recovery-token-muted {
+  color: var(--terminal-muted);
+
+  font-weight: 400;
+}
+
+.recovery-token-accent {
+  color: var(--terminal-cyan);
+
+  font-weight: 400;
+}
+
+.recovery-token-prompt {
+  color: var(--terminal-blue);
+
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   INLINE PROCESSING INDICATOR
+   ========================================================= */
+
+.recovery-inline-spinner {
+  display: inline-block;
+
+  width: 7px;
+  height: 7px;
+
+  margin-left: 8px;
+
+  border:
+    1px solid
+      rgba(95, 215, 255, 0.25);
+
+  border-top-color:
+    var(--terminal-cyan);
+
+  border-radius: 50%;
+
+  vertical-align: middle;
+
+  animation:
+    recovery-spinner
+    720ms linear infinite;
+}
+
+
+/* =========================================================
+   COMMAND LINE
+   ========================================================= */
 
 .recovery-command-line {
+  position: relative;
+
   display: flex;
   align-items: center;
-  gap: 8px;
 
-  padding: 8px 14px;
-
-  border-top: 1px solid #333;
-
-  background: #080808;
-
-  font-size: 12px;
-}
-
-.recovery-command-line span {
   flex: 0 0 auto;
 
-  color: #8ec7ff;
+  gap: 4px;
+
+  min-height: 38px;
+
+  padding:
+    0 22px;
+
+  border-top:
+    1px solid
+      rgba(255, 255, 255, 0.11);
+
+  background:
+    var(--terminal-bg-dark);
+
+  color: var(--terminal-text);
+
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
+
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.recovery-prompt-path {
+  flex: 0 0 auto;
+
+  color: var(--terminal-cyan);
+}
+
+.recovery-prompt-chevron {
+  flex: 0 0 auto;
+
+  color: var(--terminal-text);
 }
 
 .recovery-command-line input {
@@ -105,40 +524,277 @@
 
   min-width: 0;
 
+  padding: 0;
+
   border: 0;
   outline: 0;
 
   background: transparent;
 
-  color: #ffffff;
+  color: var(--terminal-text);
 
-  font: inherit;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
 
-  caret-color: #ffffff;
+  letter-spacing: -0.15px;
+
+  caret-color: transparent;
 }
 
-.recovery-footer {
-  min-height: 27px;
+.recovery-command-line input:disabled {
+  opacity: 0.58;
+}
 
-  padding: 7px 12px;
 
-  border-top: 1px solid #292929;
+/* =========================================================
+   BLOCK CURSOR
+   ========================================================= */
 
-  background: #111;
+.recovery-command-line::after {
+  content: "";
 
-  color: #777;
+  flex: 0 0 auto;
+
+  width: 7px;
+  height: 13px;
+
+  margin-left: -2px;
+
+  background: var(--terminal-text);
+
+  animation:
+    recovery-cursor-blink
+    800ms steps(1, end)
+    infinite;
+}
+
+
+/* =========================================================
+   RECOVERED STATE
+   ========================================================= */
+
+.recovery-restored-message {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  margin-top: 18px;
+
+  padding:
+    8px 0 8px 10px;
+
+  border-left:
+    1px solid
+      rgba(95, 215, 255, 0.4);
+
+  color: var(--terminal-text);
+}
+
+.recovery-restored-message strong {
+  color: var(--terminal-text);
+
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.recovery-restored-message span {
+  color: var(--terminal-muted);
 
   font-size: 9px;
+  font-weight: 400;
 }
 
-.recovery-success {
-  margin-top: 20px;
 
-  color: #9df49d;
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
-  font-size: 15px;
-  font-weight: 700;
+.recovery-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-  letter-spacing: 1px;
+  flex: 0 0 auto;
+
+  min-height: 24px;
+
+  padding:
+    0 10px;
+
+  border-top:
+    1px solid
+      rgba(255, 255, 255, 0.08);
+
+  background:
+    var(--terminal-bg-dark);
+
+  color: var(--terminal-faint);
+
+  font-size: 8px;
+  font-weight: 400;
+
+  letter-spacing: 0.2px;
 }
 
+.recovery-status-ready {
+  color: var(--terminal-cyan);
+}
+
+.recovery-status-busy {
+  color: var(--terminal-blue);
+
+  animation:
+    recovery-busy-pulse
+    900ms steps(1)
+    infinite;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes recovery-spinner {
+  to {
+    transform:
+      rotate(360deg);
+  }
+}
+
+@keyframes recovery-line-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes recovery-busy-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes recovery-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .recovery-header {
+    min-height: 28px;
+
+    padding:
+      0 8px;
+  }
+
+  .recovery-header-main {
+    gap: 6px;
+  }
+
+  .recovery-header small {
+    display: none;
+  }
+
+  .recovery-mode-label {
+    font-size: 7px;
+  }
+
+  .recovery-output {
+    padding:
+      14px 10px 20px;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+  }
+
+  .recovery-line {
+    min-height: 16px;
+  }
+
+  .recovery-line-section {
+    margin-top: 17px;
+
+    font-size: 9px;
+  }
+
+  .recovery-line-note {
+    margin-left: 0;
+
+    font-size: 9px;
+  }
+
+  .recovery-token-status,
+  .recovery-token-ok {
+    min-width: 7ch;
+  }
+
+  .recovery-command-line {
+    min-height: 36px;
+
+    padding:
+      0 10px;
+
+    font-size: 10px;
+  }
+
+  .recovery-command-line input {
+    font-size: 10px;
+  }
+
+  .recovery-command-line::after {
+    width: 6px;
+    height: 11px;
+  }
+
+  .recovery-footer {
+    padding:
+      0 8px;
+
+    font-size: 7px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .recovery-output {
+    scroll-behavior: auto;
+  }
+
+  .recovery-line,
+  .recovery-inline-spinner,
+  .recovery-status-busy,
+  .recovery-command-line::after {
+    animation: none;
+  }
+
+  .recovery-command-line::after {
+    opacity: 1;
+  }
+}
