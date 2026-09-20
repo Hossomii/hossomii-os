@@ -4,6 +4,7 @@ import {
   type FormEvent,
 } from "react";
 
+import { useAchievementStore } from "../../stores/achievementStore";
 import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
@@ -23,17 +24,20 @@ export function RecoveryEnvironment({
 
   const markDiagnosed =
     useCriticalFileStore(
-      (state) => state.markDiagnosed
+      (state) =>
+        state.markDiagnosed
     );
 
   const markRestored =
     useCriticalFileStore(
-      (state) => state.markRestored
+      (state) =>
+        state.markRestored
     );
 
   const markRecovered =
     useCriticalFileStore(
-      (state) => state.markRecovered
+      (state) =>
+        state.markRecovered
     );
 
   const resetFlow =
@@ -44,6 +48,12 @@ export function RecoveryEnvironment({
   const restoreItem =
     useFileSystemStore(
       (state) => state.restoreItem
+    );
+
+  const unlockAchievement =
+    useAchievementStore(
+      (state) =>
+        state.unlockAchievement
     );
 
   const [command, setCommand] =
@@ -65,6 +75,10 @@ export function RecoveryEnvironment({
 
     const timer = window.setTimeout(
       () => {
+        unlockAchievement(
+          "i-warned-you"
+        );
+
         resetFlow();
       },
       2200
@@ -73,7 +87,11 @@ export function RecoveryEnvironment({
     return () => {
       window.clearTimeout(timer);
     };
-  }, [phase, resetFlow]);
+  }, [
+    phase,
+    resetFlow,
+    unlockAchievement,
+  ]);
 
   function appendOutput(
     ...lines: string[]
@@ -108,7 +126,8 @@ export function RecoveryEnvironment({
 
   function handleStatus() {
     if (
-      phase === "recovery-diagnostic"
+      phase ===
+      "recovery-diagnostic"
     ) {
       appendOutput(
         "STATUS:",
@@ -120,7 +139,8 @@ export function RecoveryEnvironment({
     }
 
     if (
-      phase === "recovery-restore"
+      phase ===
+      "recovery-restore"
     ) {
       appendOutput(
         "STATUS:",
@@ -133,7 +153,8 @@ export function RecoveryEnvironment({
     }
 
     if (
-      phase === "recovery-restart"
+      phase ===
+      "recovery-restart"
     ) {
       appendOutput(
         "STATUS:",
@@ -145,7 +166,9 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase === "recovered") {
+    if (
+      phase === "recovered"
+    ) {
       appendOutput(
         "STATUS:",
         "Sistema recuperado.",
@@ -156,7 +179,8 @@ export function RecoveryEnvironment({
 
   function handleDiagnostic() {
     if (
-      phase === "recovery-diagnostic"
+      phase ===
+      "recovery-diagnostic"
     ) {
       appendOutput(
         "Iniciando diagnóstico...",
@@ -189,7 +213,8 @@ export function RecoveryEnvironment({
 
   function handleRestore() {
     if (
-      phase === "recovery-diagnostic"
+      phase ===
+      "recovery-diagnostic"
     ) {
       appendOutput(
         "ERRO:",
@@ -201,7 +226,8 @@ export function RecoveryEnvironment({
     }
 
     if (
-      phase === "recovery-restart" ||
+      phase ===
+        "recovery-restart" ||
       phase === "recovered"
     ) {
       appendOutput(
@@ -212,7 +238,10 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase !== "recovery-restore") {
+    if (
+      phase !==
+      "recovery-restore"
+    ) {
       return;
     }
 
@@ -248,7 +277,8 @@ export function RecoveryEnvironment({
 
   function handleStartShell() {
     if (
-      phase === "recovery-diagnostic"
+      phase ===
+      "recovery-diagnostic"
     ) {
       appendOutput(
         "ERRO:",
@@ -259,7 +289,10 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase === "recovery-restore") {
+    if (
+      phase ===
+      "recovery-restore"
+    ) {
       appendOutput(
         "ERRO:",
         `${targetName} continua ausente.`,
@@ -270,7 +303,10 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase !== "recovery-restart") {
+    if (
+      phase !==
+      "recovery-restart"
+    ) {
       return;
     }
 
@@ -321,7 +357,8 @@ export function RecoveryEnvironment({
     }
 
     if (
-      normalizedCommand === "status"
+      normalizedCommand ===
+      "status"
     ) {
       handleStatus();
       return;
@@ -395,14 +432,16 @@ export function RecoveryEnvironment({
             )
           )}
 
-          {phase === "recovered" && (
+          {phase ===
+            "recovered" && (
             <div className="recovery-success">
               SISTEMA RECUPERADO
             </div>
           )}
         </div>
 
-        {phase !== "recovered" && (
+        {phase !==
+          "recovered" && (
           <form
             className="recovery-command-line"
             onSubmit={
@@ -416,7 +455,9 @@ export function RecoveryEnvironment({
             <input
               type="text"
               value={command}
-              onChange={(event) =>
+              onChange={(
+                event
+              ) =>
                 setCommand(
                   event.target.value
                 )
@@ -430,7 +471,8 @@ export function RecoveryEnvironment({
         )}
 
         <footer className="recovery-footer">
-          {phase === "recovered"
+          {phase ===
+          "recovered"
             ? "Reiniciando shell..."
             : "Digite ajuda caso precise de orientação."}
         </footer>

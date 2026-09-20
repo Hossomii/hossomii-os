@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSystemStore } from "../stores/systemStore";
 import { useWindowStore } from "../stores/windowStore";
 import { useFileSystemStore } from "../stores/filesystemStore";
+import { AchievementNotification } from "./components/AchievementNotification";
 
 import type { WindowAppId } from "../types/window";
 
@@ -278,6 +279,8 @@ export function Desktop() {
       })}
 
       <CriticalDeleteFlow />
+
+      <AchievementNotification />
 
       <StartMenu
         open={startMenuOpen}

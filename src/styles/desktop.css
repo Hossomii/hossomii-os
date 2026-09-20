@@ -2445,3 +2445,186 @@
 
   letter-spacing: 1px;
 }
+
+.achievement-notification {
+  position: fixed;
+
+  right: 12px;
+  bottom: 48px;
+
+  z-index: 25000;
+
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  box-sizing: border-box;
+
+  width: min(
+    340px,
+    calc(100vw - 24px)
+  );
+
+  padding: 11px 34px 11px 11px;
+
+  border: 1px solid #1d4c92;
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fffef2 0%,
+      #fff7c8 100%
+    );
+
+  box-shadow:
+    2px 3px 8px
+      rgba(0, 0, 0, 0.35);
+
+  color: #222;
+
+  font-family:
+    Tahoma,
+    Verdana,
+    sans-serif;
+
+  animation:
+    achievement-notification-enter
+    220ms ease-out;
+}
+
+.achievement-notification::after {
+  content: "";
+
+  position: absolute;
+
+  right: 24px;
+  bottom: -8px;
+
+  width: 14px;
+  height: 14px;
+
+  border-right:
+    1px solid #1d4c92;
+  border-bottom:
+    1px solid #1d4c92;
+
+  background: #fff7c8;
+
+  transform: rotate(45deg);
+}
+
+.achievement-notification-icon {
+  display: flex;
+  flex: 0 0 auto;
+
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+
+  border: 1px solid #b88b13;
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #fff0a1,
+      #e2ad24
+    );
+
+  color: #704c00;
+
+  font-size: 18px;
+
+  text-shadow:
+    0 1px rgba(
+      255,
+      255,
+      255,
+      0.75
+    );
+}
+
+.achievement-notification-content {
+  min-width: 0;
+}
+
+.achievement-notification-label {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #285697;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.achievement-notification-content strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #111;
+
+  font-size: 13px;
+}
+
+.achievement-notification-content p {
+  margin: 0;
+
+  color: #444;
+
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.achievement-notification-close {
+  position: absolute;
+
+  top: 5px;
+  right: 6px;
+
+  width: 20px;
+  height: 20px;
+
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #555;
+
+  font-family:
+    Tahoma,
+    sans-serif;
+
+  font-size: 16px;
+  line-height: 20px;
+
+  cursor: pointer;
+}
+
+.achievement-notification-close:hover,
+.achievement-notification-close:focus {
+  color: #000;
+}
+
+@keyframes achievement-notification-enter {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+}
