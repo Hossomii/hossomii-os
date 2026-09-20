@@ -1,0 +1,410 @@
+/* =========================================================
+   CRITICAL FAILURE TRANSITION
+   ========================================================= */
+
+.critical-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 29000;
+  overflow: hidden;
+  pointer-events: all;
+}
+
+.critical-transition-closing-windows {
+  background: transparent;
+}
+
+/* =========================================================
+   GLITCH
+   ========================================================= */
+
+.critical-transition-glitching {
+  background: transparent;
+}
+
+.critical-glitch-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.critical-glitch-rgb-shift {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0, 229, 255, 0.08),
+      transparent 32%,
+      transparent 68%,
+      rgba(255, 45, 142, 0.08)
+    );
+  mix-blend-mode: screen;
+  animation: glitch-rgb-shift 90ms steps(2) infinite;
+}
+
+.critical-glitch-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.02);
+  animation: glitch-screen-flash 140ms steps(2) infinite;
+}
+
+.critical-glitch-tear-row {
+  position: absolute;
+  z-index: 20;
+  display: flex;
+  gap: 0;
+  pointer-events: none;
+  animation: glitch-tear-row steps(2) infinite;
+}
+
+.critical-glitch-tear-cell {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.critical-glitch-tear-cell.is-visible {
+  position: relative;
+
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.85),
+    0 -1px 0 rgba(255, 255, 255, 0.28),
+    3px 0 0 currentColor,
+    -2px 0 0 rgba(0, 0, 0, 0.48);
+
+  filter:
+    saturate(1.35)
+    contrast(1.2);
+}
+
+.critical-glitch-block {
+  position: absolute;
+  z-index: 18;
+
+  display: block;
+
+  pointer-events: none;
+
+  image-rendering: pixelated;
+
+  background-repeat: repeat;
+
+  box-shadow:
+    3px 3px 0 rgba(0, 0, 0, 0.72),
+    -2px -1px 0 rgba(255, 255, 255, 0.14);
+
+  filter:
+    saturate(1.35)
+    contrast(1.18);
+
+  animation:
+    glitch-pixel-block
+    steps(2)
+    infinite;
+}
+
+.critical-glitch-noise-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0.22;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 14px,
+      rgba(255, 255, 255, 0.04) 15px,
+      transparent 16px,
+      transparent 31px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 12px,
+      rgba(255, 255, 255, 0.025) 13px,
+      transparent 14px,
+      transparent 27px
+    );
+  animation: glitch-noise-grid 110ms steps(2) infinite;
+}
+
+/* =========================================================
+   SHUTDOWN
+   ========================================================= */
+
+.critical-transition-shutting-down {
+  background: #000;
+}
+
+.critical-shutdown-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.critical-shutdown-image {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.001);
+  backdrop-filter: brightness(0.9) contrast(1.05) saturate(0.65);
+  transform-origin: center;
+  animation: critical-screen-shutdown 580ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+.critical-shutdown-image::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 2px;
+  background: #ffffff;
+  box-shadow:
+    0 0 6px #ffffff,
+    0 0 14px rgba(138, 206, 255, 0.8);
+  transform: translate(-50%, -50%);
+  animation: critical-shutdown-line 580ms ease-out forwards;
+}
+
+/* =========================================================
+   BLACKOUT
+   ========================================================= */
+
+.critical-transition-blackout,
+.critical-blackout {
+  position: absolute;
+  inset: 0;
+  background: #000;
+}
+
+/* =========================================================
+   RECOVERY BOOT
+   ========================================================= */
+
+.critical-transition-recovery-boot {
+  background: #0000aa;
+}
+
+.recovery-boot-screen {
+  position: absolute;
+  inset: 0;
+  background: #0000aa;
+  color: #ffffff;
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.recovery-boot-content {
+  width: min(560px, calc(100vw - 48px));
+  margin: 18vh auto 0;
+}
+
+.recovery-boot-heading {
+  display: inline-block;
+  margin-bottom: 28px;
+  padding: 2px 8px;
+  background: #c0c0c0;
+  color: #0000aa;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.recovery-boot-lines {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.recovery-boot-lines p {
+  margin: 0 0 8px;
+  opacity: 0;
+  animation: recovery-line-appear 120ms steps(1) forwards;
+}
+
+.recovery-boot-lines p:nth-child(1) {
+  animation-delay: 180ms;
+}
+
+.recovery-boot-lines p:nth-child(2) {
+  animation-delay: 520ms;
+}
+
+.recovery-boot-lines p:nth-child(3) {
+  animation-delay: 860ms;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes glitch-rgb-shift {
+  0%, 100% {
+    transform: translateX(0);
+    opacity: 0.25;
+  }
+
+  33% {
+    transform: translateX(-4px);
+    opacity: 0.85;
+  }
+
+  66% {
+    transform: translateX(5px);
+    opacity: 0.5;
+  }
+}
+
+@keyframes glitch-screen-flash {
+  0%, 68%, 100% {
+    opacity: 0;
+  }
+
+  69%, 78% {
+    opacity: 1;
+  }
+}
+
+@keyframes glitch-tear-row {
+  0%, 18% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+
+  19%, 38% {
+    transform: translateX(-22px);
+    opacity: 1;
+  }
+
+  39%, 58% {
+    transform: translateX(18px);
+    opacity: 0.85;
+  }
+
+  59%, 100% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-pixel-block {
+  0%, 14% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+
+  15%, 28% {
+    opacity: 0.95;
+    transform: translate(-10px, 2px);
+  }
+
+  29%, 46% {
+    opacity: 0;
+  }
+
+  47%, 61% {
+    opacity: 0.78;
+    transform: translate(12px, -3px);
+  }
+
+  62%, 77% {
+    opacity: 0;
+  }
+
+  78%, 89% {
+    opacity: 0.88;
+    transform: translate(-4px, 3px);
+  }
+
+  90%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-noise-grid {
+  0% {
+    transform: translateX(-2px);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+
+  100% {
+    transform: translateX(-1px);
+  }
+}
+
+@keyframes critical-screen-shutdown {
+  0% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(1);
+  }
+
+  48% {
+    opacity: 1;
+    transform: scaleX(1) scaleY(0.025);
+  }
+
+  75% {
+    opacity: 1;
+    transform: scaleX(0.35) scaleY(0.01);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scaleX(0) scaleY(0);
+  }
+}
+
+@keyframes critical-shutdown-line {
+  0%, 35% {
+    width: 0;
+    opacity: 0;
+  }
+
+  50% {
+    width: 94%;
+    opacity: 1;
+  }
+
+  72% {
+    width: 36%;
+    opacity: 1;
+  }
+
+  100% {
+    width: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes recovery-line-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .recovery-boot-content {
+    width: calc(100vw - 28px);
+    margin-top: 14vh;
+  }
+
+  .recovery-boot-heading {
+    font-size: 13px;
+  }
+
+  .recovery-boot-lines {
+    font-size: 12px;
+  }
+}

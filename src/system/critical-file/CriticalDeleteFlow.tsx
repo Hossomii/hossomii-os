@@ -1,11 +1,9 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useState } from "react";
 
 import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
+import { CriticalFailureTransition } from "./CriticalFailureTransition";
 import { RecoveryEnvironment } from "./RecoveryEnvironment";
 
 const REQUIRED_PHRASE =
@@ -45,12 +43,6 @@ export function CriticalDeleteFlow() {
         state.triggerFailure
     );
 
-  const startRecovery =
-    useCriticalFileStore(
-      (state) =>
-        state.startRecovery
-    );
-
   const resetFlow =
     useCriticalFileStore(
       (state) => state.resetFlow
@@ -74,14 +66,16 @@ export function CriticalDeleteFlow() {
     y: 100,
   });
 
-  useEffect(() => {
-    if (
-      phase !==
-      "second-confirmation"
-    ) {
-      return;
-    }
+  if (
+    phase === "idle" ||
+    !target
+  ) {
+    return null;
+  }
 
+  const activeTarget = target;
+
+  function handleShowSecondConfirmation() {
     const dialogWidth = 380;
     const dialogHeight = 220;
 
@@ -119,25 +113,15 @@ export function CriticalDeleteFlow() {
       x,
       y,
     });
-  }, [phase]);
 
-  useEffect(() => {
-    if (
-      phase !==
-      "typed-confirmation"
-    ) {
-      setConfirmationText("");
-    }
-  }, [phase]);
-
-  if (
-    phase === "idle" ||
-    !target
-  ) {
-    return null;
+    showSecondConfirmation();
   }
 
-  const activeTarget = target;
+  function handleShowTypedConfirmation() {
+    setConfirmationText("");
+
+    showTypedConfirmation();
+  }
 
   function handleFinalDelete() {
     const normalizedText =
@@ -167,13 +151,12 @@ export function CriticalDeleteFlow() {
 
   if (
     phase ===
-    "recovery-diagnostic" ||
+      "recovery-diagnostic" ||
     phase ===
-    "recovery-restore" ||
+      "recovery-restore" ||
     phase ===
-    "recovery-restart" ||
-    phase ===
-    "recovered"
+      "recovery-restart" ||
+    phase === "recovered"
   ) {
     return (
       <RecoveryEnvironment
@@ -222,8 +205,8 @@ export function CriticalDeleteFlow() {
 
             <div>
               <p>
-                Tem certeza de que deseja
-                excluir:
+                Tem certeza de que
+                deseja excluir:
               </p>
 
               <strong>
@@ -241,7 +224,7 @@ export function CriticalDeleteFlow() {
             <button
               type="button"
               onClick={
-                showSecondConfirmation
+                handleShowSecondConfirmation
               }
             >
               Sim
@@ -322,7 +305,7 @@ export function CriticalDeleteFlow() {
             <button
               type="button"
               onClick={
-                showTypedConfirmation
+                handleShowTypedConfirmation
               }
             >
               Sim, continuar
@@ -376,9 +359,9 @@ export function CriticalDeleteFlow() {
 
           <div className="critical-typed-content">
             <p>
-              Certo. Para provar que sabe
-              exatamente o que está fazendo,
-              digite:
+              Certo. Para provar que
+              sabe exatamente o que está
+              fazendo, digite:
             </p>
 
             <strong>
@@ -431,55 +414,7 @@ export function CriticalDeleteFlow() {
     phase === "failure"
   ) {
     return (
-      <div
-        className="critical-system-failure"
-        role="alert"
-      >
-        <div className="critical-failure-content">
-          <h1>
-            HOSSOMII OS
-          </h1>
-
-          <p>
-            O sistema encontrou um problema
-            crítico e interrompeu a sessão
-            para evitar danos adicionais.
-          </p>
-
-          <pre>
-{`CRITICAL_FILE_MISSING
-
-Arquivo ausente:
-C:\\Sistema\\${activeTarget.name}
-
-STATUS:
-0xH0550M11
-
-> verificando componentes...
-> shell principal não encontrado
-> arquivo localizado na Lixeira
-> recuperação necessária`}
-          </pre>
-
-          <p className="critical-failure-comment">
-            Você ignorou todos os avisos.
-            Impressionante.
-          </p>
-
-          <button
-            type="button"
-            onClick={
-              startRecovery
-            }
-          >
-            Iniciar ambiente de recuperação
-          </button>
-
-          <small>
-            Recovery Environment disponível
-          </small>
-        </div>
-      </div>
+      <CriticalFailureTransition />
     );
   }
 
