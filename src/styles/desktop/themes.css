@@ -1,0 +1,1018 @@
+/* =========================================================
+   HOSSOMII OS
+   System Themes
+   ========================================================= */
+
+/* =========================================================
+   DEFAULT THEME VARIABLES
+   ========================================================= */
+
+.desktop {
+  --system-surface: #ece9d8;
+
+  --system-content: #ffffff;
+
+  --system-text: #222222;
+
+  --system-muted: #666666;
+
+  --system-heading: #2453a1;
+
+  --system-border: #aca899;
+
+  --system-accent: #316ac5;
+
+  --system-button: #ece9d8;
+
+  --window-border: #0a55c4;
+
+  --window-title-start: #3d95ff;
+
+  --window-title-middle: #0054c9;
+
+  --window-title-end: #0644a6;
+
+  --taskbar-start: #3168d5;
+
+  --taskbar-middle: #1f54c5;
+
+  --taskbar-end: #1941a2;
+
+  --tray-start: #20a4e8;
+
+  --tray-end: #118bc9;
+
+  --start-menu-header-start: #2d7ce2;
+
+  --start-menu-header-end: #1d64ce;
+
+  --selection: #316ac5;
+
+  --selection-text: #ffffff;
+}
+
+/* =========================================================
+   DARK THEME VARIABLES
+   ========================================================= */
+
+.desktop[data-theme="dark"] {
+  --system-surface: #1e252e;
+
+  --system-content: #252e39;
+
+  --system-text: #e7edf5;
+
+  --system-muted: #9eabb9;
+
+  --system-heading: #9fc7ff;
+
+  --system-border: #536274;
+
+  --system-accent: #568ad0;
+
+  --system-button: #303b48;
+
+  --window-border: #334d6d;
+
+  --window-title-start: #385a80;
+
+  --window-title-middle: #253e5c;
+
+  --window-title-end: #172b43;
+
+  --taskbar-start: #263f60;
+
+  --taskbar-middle: #1b304c;
+
+  --taskbar-end: #111f34;
+
+  --tray-start: #315775;
+
+  --tray-end: #203d57;
+
+  --start-menu-header-start: #365d86;
+
+  --start-menu-header-end: #213d5c;
+
+  --selection: #406fa9;
+
+  --selection-text: #ffffff;
+}
+
+/* =========================================================
+   HIGH CONTRAST THEME VARIABLES
+   ========================================================= */
+
+.desktop[data-theme="high-contrast"] {
+  --system-surface: #000000;
+
+  --system-content: #000000;
+
+  --system-text: #ffffff;
+
+  --system-muted: #ffffff;
+
+  --system-heading: #00ffff;
+
+  --system-border: #ffffff;
+
+  --system-accent: #ffff00;
+
+  --system-button: #000000;
+
+  --window-border: #00ffff;
+
+  --window-title-start: #000080;
+
+  --window-title-middle: #000080;
+
+  --window-title-end: #000050;
+
+  --taskbar-start: #000000;
+
+  --taskbar-middle: #000000;
+
+  --taskbar-end: #000000;
+
+  --tray-start: #000080;
+
+  --tray-end: #000080;
+
+  --start-menu-header-start: #000080;
+
+  --start-menu-header-end: #000080;
+
+  --selection: #0000ff;
+
+  --selection-text: #ffffff;
+}
+
+/* =========================================================
+   WINDOW CHROME
+   ========================================================= */
+
+.desktop[data-theme="dark"] .os-window,
+.desktop[data-theme="high-contrast"] .os-window {
+  border-color: var(--window-border);
+
+  background: var(--system-surface);
+}
+
+.desktop[data-theme="dark"] .window-titlebar,
+.desktop[data-theme="high-contrast"] .window-titlebar {
+  background: linear-gradient(
+    to bottom,
+    var(--window-title-start),
+    var(--window-title-middle) 50%,
+    var(--window-title-end)
+  );
+}
+
+.desktop[data-theme="high-contrast"] .window-titlebar {
+  border-bottom: 1px solid #00ffff;
+}
+
+.desktop[data-theme="dark"] .window-body,
+.desktop[data-theme="high-contrast"] .window-body {
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+/* =========================================================
+   WINDOW CONTROLS
+   ========================================================= */
+
+.desktop[data-theme="dark"] .window-controls button {
+  border-color: #8295aa;
+
+  background: linear-gradient(145deg, #516a86, #304967);
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="dark"] .window-controls .window-close-button {
+  background: linear-gradient(145deg, #b5675c, #7d332d);
+}
+
+.desktop[data-theme="high-contrast"] .window-controls button {
+  border: 1px solid #ffffff;
+
+  background: #000080;
+
+  color: #ffffff;
+
+  box-shadow: none;
+}
+
+.desktop[data-theme="high-contrast"] .window-controls .window-close-button {
+  background: #800000;
+}
+
+/* =========================================================
+   TASKBAR
+   ========================================================= */
+
+.desktop[data-theme="dark"] .taskbar,
+.desktop[data-theme="high-contrast"] .taskbar {
+  background: linear-gradient(
+    to bottom,
+    var(--taskbar-start),
+    var(--taskbar-middle) 50%,
+    var(--taskbar-end)
+  );
+}
+
+.desktop[data-theme="dark"] .system-tray,
+.desktop[data-theme="high-contrast"] .system-tray {
+  background: linear-gradient(to bottom, var(--tray-start), var(--tray-end));
+}
+
+.desktop[data-theme="dark"] .taskbar-window-button {
+  border-color: #516c8f;
+
+  background: linear-gradient(to bottom, #375979, #253f5e);
+}
+
+.desktop[data-theme="dark"] .taskbar-window-button:hover {
+  background: linear-gradient(to bottom, #42698d, #2c4a6e);
+}
+
+.desktop[data-theme="dark"] .taskbar-window-active {
+  background: linear-gradient(to bottom, #223b5a, #182b43);
+}
+
+.desktop[data-theme="high-contrast"] .taskbar-window-button {
+  border: 1px solid #ffffff;
+
+  background: #000080;
+
+  color: #ffffff;
+
+  box-shadow: none;
+}
+
+.desktop[data-theme="high-contrast"] .taskbar-window-button:hover {
+  background: #0000cc;
+}
+
+.desktop[data-theme="high-contrast"] .taskbar-window-active {
+  border-color: #ffff00;
+
+  background: #0000ff;
+}
+
+/* =========================================================
+   START BUTTON
+   ========================================================= */
+
+.desktop[data-theme="dark"] .start-button {
+  background: linear-gradient(to bottom, #52705c, #395243 50%, #273b30);
+
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.65);
+}
+
+.desktop[data-theme="dark"] .start-button:active,
+.desktop[data-theme="dark"] .start-button-active {
+  background: linear-gradient(to bottom, #25382e, #405b49);
+}
+
+.desktop[data-theme="high-contrast"] .start-button {
+  border-right: 1px solid #ffffff;
+
+  border-radius: 0;
+
+  background: #000000;
+
+  color: #ffff00;
+
+  text-shadow: none;
+
+  box-shadow: none;
+}
+
+.desktop[data-theme="high-contrast"] .start-button:active,
+.desktop[data-theme="high-contrast"] .start-button-active {
+  background: #000080;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   START MENU
+   ========================================================= */
+
+.desktop[data-theme="dark"] .start-menu,
+.desktop[data-theme="high-contrast"] .start-menu {
+  border-color: var(--window-border);
+
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .start-menu-header,
+.desktop[data-theme="high-contrast"] .start-menu-header {
+  background: linear-gradient(
+    to bottom,
+    var(--start-menu-header-start),
+    var(--start-menu-header-end)
+  );
+}
+
+.desktop[data-theme="dark"] .start-menu-header {
+  border-bottom-color: #846b3d;
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-header {
+  border-bottom: 1px solid #ffffff;
+}
+
+.desktop[data-theme="dark"] .start-menu-primary,
+.desktop[data-theme="high-contrast"] .start-menu-primary {
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .start-menu-secondary {
+  border-color: #536b87;
+
+  background: linear-gradient(to bottom, #303b49, #252f3c);
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-secondary {
+  border-color: #ffffff;
+
+  background: #000000;
+}
+
+.desktop[data-theme="dark"] .start-menu-primary button,
+.desktop[data-theme="dark"] .start-menu-secondary button,
+.desktop[data-theme="high-contrast"] .start-menu-primary button,
+.desktop[data-theme="high-contrast"] .start-menu-secondary button {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .start-menu-primary small {
+  color: var(--system-muted);
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-primary small {
+  color: #ffffff;
+}
+
+.desktop[data-theme="dark"] .start-menu-primary button:hover,
+.desktop[data-theme="dark"] .start-menu-secondary button:hover {
+  background: #40658b;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-primary button:hover,
+.desktop[data-theme="high-contrast"] .start-menu-secondary button:hover {
+  background: #000080;
+
+  color: #ffff00;
+}
+
+.desktop[data-theme="dark"] .start-menu-separator {
+  background: #536274;
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-separator {
+  background: #ffffff;
+}
+
+.desktop[data-theme="dark"] .start-menu-footer,
+.desktop[data-theme="high-contrast"] .start-menu-footer {
+  background: linear-gradient(
+    to bottom,
+    var(--start-menu-header-start),
+    var(--start-menu-header-end)
+  );
+}
+
+.desktop[data-theme="high-contrast"] .start-menu-footer {
+  border-top: 1px solid #ffffff;
+}
+
+/* =========================================================
+   EXPLORER BASE
+   ========================================================= */
+
+.desktop[data-theme="dark"] .computer-app,
+.desktop[data-theme="high-contrast"] .computer-app {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .explorer-toolbar,
+.desktop[data-theme="high-contrast"] .explorer-toolbar {
+  border-color: var(--system-border);
+
+  background: var(--system-surface);
+}
+
+.desktop[data-theme="dark"] .explorer-toolbar button,
+.desktop[data-theme="high-contrast"] .explorer-toolbar button {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .explorer-toolbar button:not(:disabled):hover {
+  border-color: var(--system-border);
+
+  background: #364352;
+}
+
+.desktop[data-theme="high-contrast"]
+  .explorer-toolbar
+  button:not(:disabled):hover {
+  border-color: #ffff00;
+
+  background: #000080;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="dark"] .explorer-toolbar button:disabled {
+  color: #68727e;
+}
+
+.desktop[data-theme="high-contrast"] .explorer-toolbar button:disabled {
+  color: #808080;
+}
+
+.desktop[data-theme="dark"] .explorer-toolbar-separator,
+.desktop[data-theme="high-contrast"] .explorer-toolbar-separator {
+  background: var(--system-border);
+}
+
+.desktop[data-theme="dark"] .explorer-address-label,
+.desktop[data-theme="high-contrast"] .explorer-address-label {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .explorer-address {
+  border-color: #63778f;
+
+  background: #161d25;
+
+  color: #eef4fa;
+}
+
+.desktop[data-theme="high-contrast"] .explorer-address {
+  border: 1px solid #ffffff;
+
+  background: #000000;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   EXPLORER MAIN AREA
+   ========================================================= */
+
+.desktop[data-theme="dark"] .computer-main,
+.desktop[data-theme="high-contrast"] .computer-main {
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .computer-section h2 {
+  border-color: #536274;
+
+  color: #9fc7ff;
+}
+
+.desktop[data-theme="high-contrast"] .computer-section h2 {
+  border-color: #ffffff;
+
+  color: #00ffff;
+}
+
+/* =========================================================
+   EXPLORER SIDEBAR
+   ========================================================= */
+
+.desktop[data-theme="dark"] .computer-sidebar {
+  background: linear-gradient(to bottom, #334d6d, #283e59);
+}
+
+.desktop[data-theme="dark"] .computer-sidebar section {
+  background: #2b3745;
+}
+
+.desktop[data-theme="dark"] .computer-sidebar h2 {
+  background: linear-gradient(to right, #3b495a, #303c4a);
+
+  color: #bad6ff;
+}
+
+.desktop[data-theme="dark"] .computer-sidebar button {
+  color: #c3d9f7;
+}
+
+.desktop[data-theme="high-contrast"] .computer-sidebar {
+  border-right: 1px solid #ffffff;
+
+  background: #000000;
+}
+
+.desktop[data-theme="high-contrast"] .computer-sidebar section {
+  border: 1px solid #ffffff;
+
+  background: #000000;
+}
+
+.desktop[data-theme="high-contrast"] .computer-sidebar h2 {
+  background: #000080;
+
+  color: #ffff00;
+}
+
+.desktop[data-theme="high-contrast"] .computer-sidebar button {
+  color: #00ffff;
+}
+
+/* =========================================================
+   EXPLORER ITEMS
+   ========================================================= */
+
+.desktop[data-theme="dark"] .computer-items button,
+.desktop[data-theme="high-contrast"] .computer-items button {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .computer-items button.explorer-item-selected,
+.desktop[data-theme="high-contrast"]
+  .computer-items
+  button.explorer-item-selected {
+  background: var(--selection);
+
+  color: var(--selection-text);
+}
+
+.desktop[data-theme="dark"]
+  .computer-items
+  button.explorer-item-selected
+  strong,
+.desktop[data-theme="dark"] .computer-items button.explorer-item-selected small,
+.desktop[data-theme="high-contrast"]
+  .computer-items
+  button.explorer-item-selected
+  strong,
+.desktop[data-theme="high-contrast"]
+  .computer-items
+  button.explorer-item-selected
+  small {
+  color: var(--selection-text);
+}
+
+.desktop[data-theme="dark"] .explorer-empty-state,
+.desktop[data-theme="high-contrast"] .explorer-empty-state {
+  color: var(--system-muted);
+}
+
+/* =========================================================
+   FILE ICONS
+   ========================================================= */
+
+.desktop[data-theme="dark"] .explorer-file-icon {
+  border-color: #657587;
+
+  background: linear-gradient(to bottom right, #384553, #252e38);
+
+  color: #acd0ff;
+
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.desktop[data-theme="high-contrast"] .explorer-file-icon {
+  border-color: #ffffff;
+
+  background: #000000;
+
+  color: #00ffff;
+
+  box-shadow: none;
+}
+
+.desktop[data-theme="dark"] .explorer-shortcut-icon {
+  border-color: #6a7786;
+
+  background: #28323d;
+
+  color: #9fc7ff;
+}
+
+.desktop[data-theme="high-contrast"] .explorer-shortcut-icon {
+  border-color: #ffffff;
+
+  background: #000000;
+
+  color: #ffff00;
+}
+
+/* =========================================================
+   SYSTEM DIALOGS
+   ========================================================= */
+
+.desktop[data-theme="dark"] .system-dialog,
+.desktop[data-theme="high-contrast"] .system-dialog {
+  border-color: var(--window-border);
+
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .system-dialog-titlebar,
+.desktop[data-theme="high-contrast"] .system-dialog-titlebar {
+  background: linear-gradient(
+    to bottom,
+    var(--window-title-start),
+    var(--window-title-middle),
+    var(--window-title-end)
+  );
+}
+
+.desktop[data-theme="dark"] .system-dialog-actions button {
+  border-color: #677789;
+
+  background: #303b48;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="high-contrast"] .system-dialog-actions button {
+  border: 1px solid #ffffff;
+
+  background: #000000;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="high-contrast"] .system-dialog-actions button:focus {
+  outline-color: #ffff00;
+}
+
+/* =========================================================
+   NOTEPAD
+   ========================================================= */
+
+.desktop[data-theme="dark"] .notepad-app,
+.desktop[data-theme="high-contrast"] .notepad-app {
+  background: var(--system-content);
+}
+
+.desktop[data-theme="dark"] .notepad-menu,
+.desktop[data-theme="high-contrast"] .notepad-menu {
+  border-color: var(--system-border);
+
+  background: var(--system-surface);
+}
+
+.desktop[data-theme="dark"] .notepad-menu button,
+.desktop[data-theme="high-contrast"] .notepad-menu button {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .notepad-menu button:hover {
+  background: #40658b;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="high-contrast"] .notepad-menu button:hover {
+  background: #000080;
+
+  color: #ffff00;
+}
+
+.desktop[data-theme="dark"] .notepad-editor {
+  background: #151b22;
+
+  color: #e7edf5;
+}
+
+.desktop[data-theme="high-contrast"] .notepad-editor {
+  background: #000000;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   PDF VIEWER
+   ========================================================= */
+
+.desktop[data-theme="dark"] .pdf-viewer-toolbar,
+.desktop[data-theme="high-contrast"] .pdf-viewer-toolbar {
+  border-color: var(--system-border);
+
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .pdf-viewer-toolbar a {
+  color: #9fc7ff;
+}
+
+.desktop[data-theme="high-contrast"] .pdf-viewer-toolbar a {
+  color: #00ffff;
+}
+
+.desktop[data-theme="dark"] .pdf-viewer-error,
+.desktop[data-theme="high-contrast"] .pdf-viewer-error {
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+/* =========================================================
+   IMAGE VIEWER
+   ========================================================= */
+
+.desktop[data-theme="dark"] .image-viewer-toolbar,
+.desktop[data-theme="high-contrast"] .image-viewer-toolbar {
+  border-color: var(--system-border);
+
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .image-viewer-toolbar a {
+  color: #9fc7ff;
+}
+
+.desktop[data-theme="high-contrast"] .image-viewer-toolbar a {
+  color: #00ffff;
+}
+
+.desktop[data-theme="dark"] .image-viewer-error,
+.desktop[data-theme="high-contrast"] .image-viewer-error {
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .image-viewer-canvas {
+  background: #171b20;
+}
+
+.desktop[data-theme="high-contrast"] .image-viewer-canvas {
+  background: #000000;
+}
+
+/* =========================================================
+   PROJECT VIEWER
+   ========================================================= */
+
+.desktop[data-theme="dark"] .project-viewer-app,
+.desktop[data-theme="high-contrast"] .project-viewer-app {
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .project-viewer-header {
+  background: linear-gradient(135deg, #263c59, #344e70);
+}
+
+.desktop[data-theme="high-contrast"] .project-viewer-header {
+  border-color: #ffffff;
+
+  background: #000080;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="dark"] .project-viewer-section h2,
+.desktop[data-theme="high-contrast"] .project-viewer-section h2 {
+  border-color: var(--system-border);
+
+  color: var(--system-heading);
+}
+
+.desktop[data-theme="dark"] .project-viewer-description,
+.desktop[data-theme="high-contrast"] .project-viewer-description {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .project-viewer-technologies {
+  border-color: var(--system-border);
+
+  background: #151c24;
+
+  color: #e7edf5;
+}
+
+.desktop[data-theme="high-contrast"] .project-viewer-technologies {
+  border-color: #ffffff;
+
+  background: #000000;
+
+  color: #ffffff;
+}
+
+.desktop[data-theme="dark"] .project-viewer-gallery button {
+  border-color: var(--system-border);
+
+  background: #26313d;
+}
+
+.desktop[data-theme="high-contrast"] .project-viewer-gallery button {
+  border-color: #ffffff;
+
+  background: #000000;
+}
+
+.desktop[data-theme="dark"] .project-viewer-gallery button:hover {
+  border-color: #6b91c4;
+
+  background: #334150;
+}
+
+.desktop[data-theme="high-contrast"] .project-viewer-gallery button:hover {
+  border-color: #ffff00;
+
+  background: #000080;
+}
+
+.desktop[data-theme="dark"] .project-viewer-gallery span,
+.desktop[data-theme="high-contrast"] .project-viewer-gallery span {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .project-viewer-footer,
+.desktop[data-theme="high-contrast"] .project-viewer-footer {
+  border-color: var(--system-border);
+
+  color: var(--system-muted);
+}
+
+/* =========================================================
+   RECYCLE BIN
+   ========================================================= */
+
+.desktop[data-theme="dark"] .recycle-bin-empty {
+  border-color: var(--system-border);
+
+  background: linear-gradient(to bottom, #293440, #202832);
+}
+
+.desktop[data-theme="dark"] .recycle-bin-empty strong,
+.desktop[data-theme="dark"] .recycle-bin-empty p {
+  color: var(--system-text);
+}
+
+.desktop[data-theme="high-contrast"] .recycle-bin-empty {
+  border: 1px solid #ffffff;
+
+  background: #000000;
+}
+
+.desktop[data-theme="high-contrast"] .recycle-bin-empty strong,
+.desktop[data-theme="high-contrast"] .recycle-bin-empty p {
+  color: #ffffff;
+}
+
+/* =========================================================
+   CONTROL PANEL
+   ========================================================= */
+
+.desktop[data-theme="dark"] .control-panel-app,
+.desktop[data-theme="high-contrast"] .control-panel-app {
+  background: var(--system-surface);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .control-panel-header,
+.desktop[data-theme="high-contrast"] .control-panel-header {
+  border-color: var(--system-border);
+
+  background: var(--system-content);
+}
+
+.desktop[data-theme="dark"] .theme-option,
+.desktop[data-theme="dark"] .wallpaper-option,
+.desktop[data-theme="high-contrast"] .theme-option,
+.desktop[data-theme="high-contrast"] .wallpaper-option {
+  border-color: var(--system-border);
+
+  background: var(--system-content);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="dark"] .theme-option:hover,
+.desktop[data-theme="dark"] .wallpaper-option:hover {
+  border-color: #79a9e7;
+}
+
+.desktop[data-theme="high-contrast"] .theme-option:hover,
+.desktop[data-theme="high-contrast"] .wallpaper-option:hover {
+  border-color: #ffff00;
+}
+
+.desktop[data-theme="dark"] .theme-option-selected,
+.desktop[data-theme="dark"] .wallpaper-option-selected {
+  border-color: #79a9e7;
+}
+
+.desktop[data-theme="high-contrast"] .theme-option-selected,
+.desktop[data-theme="high-contrast"] .wallpaper-option-selected {
+  border-color: #ffff00;
+}
+
+.desktop[data-theme="dark"] .control-panel-reset,
+.desktop[data-theme="high-contrast"] .control-panel-reset {
+  border-color: var(--system-border);
+}
+
+.desktop[data-theme="dark"] .control-panel-reset button {
+  border-color: var(--system-border);
+
+  background: var(--system-button);
+
+  color: var(--system-text);
+}
+
+.desktop[data-theme="high-contrast"] .control-panel-reset button {
+  border: 1px solid #ffffff;
+
+  background: #000000;
+
+  color: #ffffff;
+}
+
+/* =========================================================
+   SCROLLBARS — DARK
+   ========================================================= */
+
+.desktop[data-theme="dark"] * {
+  scrollbar-color: #566779 #202832;
+}
+
+.desktop[data-theme="dark"] *::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.desktop[data-theme="dark"] *::-webkit-scrollbar-track {
+  background: #202832;
+}
+
+.desktop[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  border: 2px solid #202832;
+
+  background: #566779;
+}
+
+.desktop[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+  background: #6a7d91;
+}
+
+/* =========================================================
+   SCROLLBARS — HIGH CONTRAST
+   ========================================================= */
+
+.desktop[data-theme="high-contrast"] * {
+  scrollbar-color: #ffffff #000000;
+}
+
+.desktop[data-theme="high-contrast"] *::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.desktop[data-theme="high-contrast"] *::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+.desktop[data-theme="high-contrast"] *::-webkit-scrollbar-thumb {
+  border: 1px solid #ffffff;
+
+  background: #ffffff;
+}
+
+/* =========================================================
+   FOCUS VISIBILITY
+   ========================================================= */
+
+.desktop[data-theme="dark"] button:focus-visible,
+.desktop[data-theme="dark"] a:focus-visible {
+  outline: 1px dotted #c7ddff;
+
+  outline-offset: 2px;
+}
+
+.desktop[data-theme="high-contrast"] button:focus-visible,
+.desktop[data-theme="high-contrast"] a:focus-visible {
+  outline: 2px solid #ffff00;
+
+  outline-offset: 2px;
+}

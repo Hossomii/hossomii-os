@@ -22,8 +22,13 @@
 
   overflow: hidden;
 
-  background: #3b88d8 url("../../assets/wallpaper.webp") center center / cover
-    no-repeat;
+  background-color: #3b88d8;
+
+  background-position: center center;
+
+  background-size: cover;
+
+  background-repeat: no-repeat;
 
   font-family: Tahoma, Verdana, Arial, sans-serif;
 
@@ -743,9 +748,7 @@
 
     gap: 5px;
 
-    padding:
-      0
-      7px;
+    padding: 0 7px;
   }
 
   .system-tray time {

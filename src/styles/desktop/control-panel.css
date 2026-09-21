@@ -1,0 +1,522 @@
+/* =========================================================
+   HOSSOMII OS
+   Control Panel
+   ========================================================= */
+
+.control-panel-app {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background:
+    var(
+      --system-surface,
+      #ece9d8
+    );
+
+  color:
+    var(
+      --system-text,
+      #222
+    );
+
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+}
+
+.control-panel-header {
+  flex: 0 0 auto;
+
+  padding:
+    20px
+    24px;
+
+  border-bottom:
+    1px solid
+      var(
+        --system-border,
+        #aca899
+      );
+
+  background:
+    var(
+      --system-content,
+      #ffffff
+    );
+}
+
+.control-panel-eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color:
+    var(
+      --system-accent,
+      #2453a1
+    );
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing:
+    1px;
+}
+
+.control-panel-header h1 {
+  margin:
+    0
+    0
+    5px;
+
+  color:
+    var(
+      --system-heading,
+      #17468a
+    );
+
+  font-size: 20px;
+}
+
+.control-panel-header p {
+  margin: 0;
+
+  color:
+    var(
+      --system-muted,
+      #666
+    );
+
+  font-size: 11px;
+}
+
+.control-panel-content {
+  flex: 1 1 auto;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding: 22px;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.control-panel-section {
+  margin-bottom: 30px;
+}
+
+.control-panel-section
+  > header {
+  margin-bottom: 14px;
+}
+
+.control-panel-section h2 {
+  margin:
+    0
+    0
+    4px;
+
+  color:
+    var(
+      --system-heading,
+      #17468a
+    );
+
+  font-size: 14px;
+}
+
+.control-panel-section
+  header p {
+  margin: 0;
+
+  color:
+    var(
+      --system-muted,
+      #666
+    );
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+
+.theme-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap: 12px;
+}
+
+.theme-option {
+  min-width: 0;
+
+  padding: 9px;
+
+  border:
+    1px solid
+      var(
+        --system-border,
+        #aaa
+      );
+
+  background:
+    var(
+      --system-content,
+      #fff
+    );
+
+  color:
+    var(
+      --system-text,
+      #222
+    );
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.theme-option:hover {
+  border-color:
+    var(
+      --system-accent,
+      #316ac5
+    );
+}
+
+.theme-option-selected {
+  padding: 8px;
+
+  border:
+    2px solid
+      var(
+        --system-accent,
+        #316ac5
+      );
+}
+
+.theme-preview {
+  height: 82px;
+
+  margin-bottom: 9px;
+
+  padding: 12px;
+
+  overflow: hidden;
+
+  border:
+    1px solid #777;
+}
+
+.theme-preview-window {
+  width: 80%;
+  height: 52px;
+
+  border:
+    2px solid;
+
+  background: white;
+}
+
+.theme-preview-window span {
+  display: block;
+
+  height: 13px;
+}
+
+.theme-preview-window div {
+  height:
+    calc(
+      100% - 13px
+    );
+}
+
+.theme-option-default
+  .theme-preview {
+  background: #3b88d8;
+}
+
+.theme-option-default
+  .theme-preview-window {
+  border-color: #0a55c4;
+}
+
+.theme-option-default
+  .theme-preview-window span {
+  background: #1767c9;
+}
+
+.theme-option-dark
+  .theme-preview {
+  background: #10151d;
+}
+
+.theme-option-dark
+  .theme-preview-window {
+  border-color: #4b5e76;
+
+  background: #202731;
+}
+
+.theme-option-dark
+  .theme-preview-window span {
+  background: #243b59;
+}
+
+.theme-option-high-contrast
+  .theme-preview {
+  background: #000;
+}
+
+.theme-option-high-contrast
+  .theme-preview-window {
+  border-color: #00ffff;
+
+  background: #000;
+}
+
+.theme-option-high-contrast
+  .theme-preview-window span {
+  background: #000080;
+}
+
+.theme-option strong {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 11px;
+}
+
+.theme-option small {
+  display: block;
+
+  color:
+    var(
+      --system-muted,
+      #666
+    );
+
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   WALLPAPERS
+   ========================================================= */
+
+.wallpaper-options {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(
+        135px,
+        1fr
+      )
+    );
+
+  gap: 12px;
+}
+
+.wallpaper-option {
+  min-width: 0;
+
+  padding: 6px;
+
+  border:
+    1px solid
+      var(
+        --system-border,
+        #aaa
+      );
+
+  background:
+    var(
+      --system-content,
+      #fff
+    );
+
+  color:
+    var(
+      --system-text,
+      #222
+    );
+
+  cursor: pointer;
+}
+
+.wallpaper-option:hover {
+  border-color:
+    var(
+      --system-accent,
+      #316ac5
+    );
+}
+
+.wallpaper-option-selected {
+  padding: 5px;
+
+  border:
+    2px solid
+      var(
+        --system-accent,
+        #316ac5
+      );
+}
+
+.wallpaper-option img {
+  display: block;
+
+  width: 100%;
+
+  aspect-ratio: 16 / 9;
+
+  object-fit: cover;
+
+  border:
+    1px solid
+      var(
+        --system-border,
+        #777
+      );
+
+  background: #222;
+}
+
+.wallpaper-option span {
+  display: block;
+
+  padding:
+    6px
+    2px
+    1px;
+
+  overflow: hidden;
+
+  font-size: 10px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+.control-panel-reset {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding-top: 18px;
+
+  border-top:
+    1px solid
+      var(
+        --system-border,
+        #aaa
+      );
+}
+
+.control-panel-reset button {
+  padding:
+    6px
+    12px;
+
+  border:
+    1px solid
+      var(
+        --system-border,
+        #888
+      );
+
+  background:
+    var(
+      --system-button,
+      #ece9d8
+    );
+
+  color:
+    var(
+      --system-text,
+      #222
+    );
+
+  font-family:
+    inherit;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.control-panel-reset span {
+  color:
+    var(
+      --system-muted,
+      #666
+    );
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+@container (max-width: 620px) {
+  .theme-options {
+    grid-template-columns:
+      1fr;
+  }
+
+  .wallpaper-options {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+  }
+}
+
+@container (max-width: 380px) {
+  .wallpaper-options {
+    grid-template-columns:
+      1fr;
+  }
+
+  .control-panel-content {
+    padding: 14px;
+  }
+}
