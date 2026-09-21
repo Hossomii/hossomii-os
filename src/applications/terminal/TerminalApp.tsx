@@ -11,6 +11,10 @@ import {
   useFileSystemStore,
 } from "../../stores/filesystemStore";
 
+import {
+  useFileSystemItemLauncher,
+} from "../explorer/useFileSystemItemLauncher";
+
 import type {
   FileSystemItem,
 } from "../../types/filesystem";
@@ -24,12 +28,31 @@ type TerminalLineKind =
 
 type TerminalLine = {
   id: number;
-  kind: TerminalLineKind;
+
+  kind:
+    TerminalLineKind;
+
   text: string;
 };
 
-const ROOT_ID = "drive-c";
-const HOME_ID = "anthony";
+const ROOT_ID =
+  "drive-c";
+
+const HOME_ID =
+  "anthony";
+
+const COMMANDS = [
+  "ajuda",
+  "dir",
+  "cd",
+  "pwd",
+  "type",
+  "open",
+  "cls",
+  "whoami",
+  "hostname",
+  "ver",
+] as const;
 
 function normalizeValue(
   value: string
@@ -76,7 +99,8 @@ function tokenizeCommand(
 }
 
 function getItemById(
-  items: FileSystemItem[],
+  items:
+    FileSystemItem[],
   id: string
 ) {
   return items.find(
@@ -86,9 +110,12 @@ function getItemById(
 }
 
 function getChildren(
-  items: FileSystemItem[],
-  parentId: string | null,
-  includeHidden = false
+  items:
+    FileSystemItem[],
+  parentId:
+    string | null,
+  includeHidden =
+    false
 ) {
   return items.filter(
     (item) => {
@@ -118,17 +145,20 @@ function getChildren(
 }
 
 function findChildByName(
-  items: FileSystemItem[],
-  parentId: string | null,
+  items:
+    FileSystemItem[],
+  parentId:
+    string | null,
   name: string
 ) {
   const normalizedName =
-    normalizeValue(name);
+    normalizeValue(
+      name
+    );
 
   return getChildren(
     items,
-    parentId,
-    false
+    parentId
   ).find(
     (item) =>
       normalizeValue(
@@ -139,7 +169,8 @@ function findChildByName(
 }
 
 function getPathItems(
-  items: FileSystemItem[],
+  items:
+    FileSystemItem[],
   id: string
 ) {
   const path:
@@ -189,7 +220,8 @@ function getPathItems(
 }
 
 function formatPath(
-  items: FileSystemItem[],
+  items:
+    FileSystemItem[],
   id: string
 ) {
   const path =
@@ -199,7 +231,8 @@ function formatPath(
     );
 
   if (
-    path.length === 0
+    path.length ===
+    0
   ) {
     return "C:\\";
   }
@@ -210,22 +243,22 @@ function formatPath(
   ] = path;
 
   if (
-    root.id !== ROOT_ID
+    segments.length ===
+    0
   ) {
-    return segments.length
-      ? `C:\\${segments
-          .map(
-            (item) =>
-              item.name
-          )
-          .join("\\")}`
-      : "C:\\";
+    return "C:\\";
   }
 
   if (
-    segments.length === 0
+    root.id !==
+    ROOT_ID
   ) {
-    return "C:\\";
+    return `C:\\${segments
+      .map(
+        (item) =>
+          item.name
+      )
+      .join("\\")}`;
   }
 
   return `${root.name}\\${segments
@@ -237,10 +270,14 @@ function formatPath(
 }
 
 function resolveItemPath(
-  items: FileSystemItem[],
-  currentDirectoryId: string,
-  rawPath: string
-): FileSystemItem | null {
+  items:
+    FileSystemItem[],
+  currentDirectoryId:
+    string,
+  rawPath:
+    string
+):
+  FileSystemItem | null {
   const trimmedPath =
     rawPath.trim();
 
@@ -310,14 +347,7 @@ function resolveItemPath(
     pathWithoutDrive ===
     ""
   ) {
-    return (
-      absolute
-        ? getItemById(
-            items,
-            ROOT_ID
-          )
-        : current
-    ) ?? null;
+    return current;
   }
 
   const segments =
@@ -374,14 +404,16 @@ function resolveItemPath(
       return null;
     }
 
-    current = child;
+    current =
+      child;
   }
 
   return current;
 }
 
 function getTypeLabel(
-  item: FileSystemItem
+  item:
+    FileSystemItem
 ) {
   switch (
     item.type
@@ -404,7 +436,8 @@ function getTypeLabel(
 }
 
 function sortItems(
-  items: FileSystemItem[]
+  items:
+    FileSystemItem[]
 ) {
   const priority:
     Record<
@@ -455,6 +488,19 @@ export function TerminalApp() {
       HOME_ID
     );
 
+  const {
+    openItem,
+  } =
+    useFileSystemItemLauncher({
+      navigateTo: (
+        location
+      ) => {
+        setCurrentDirectoryId(
+          location
+        );
+      },
+    });
+
   const [
     input,
     setInput,
@@ -470,19 +516,30 @@ export function TerminalApp() {
     >([
       {
         id: 1,
-        kind: "accent",
+
+        kind:
+          "accent",
+
         text:
           "HOSSOMII OS Command Terminal",
       },
+
       {
         id: 2,
-        kind: "muted",
+
+        kind:
+          "muted",
+
         text:
           "Digite \"ajuda\" para exibir os comandos disponíveis.",
       },
+
       {
         id: 3,
-        kind: "normal",
+
+        kind:
+          "normal",
+
         text: "",
       },
     ]);
@@ -491,30 +548,30 @@ export function TerminalApp() {
     history,
     setHistory,
   ] =
-    useState<string[]>(
-      []
-    );
+    useState<
+      string[]
+    >([]);
 
   const [
     historyIndex,
     setHistoryIndex,
   ] =
-    useState<number | null>(
-      null
-    );
+    useState<
+      number | null
+    >(null);
 
   const nextLineId =
     useRef(4);
 
   const terminalOutputRef =
-    useRef<HTMLDivElement>(
-      null
-    );
+    useRef<
+      HTMLDivElement
+    >(null);
 
   const inputRef =
-    useRef<HTMLInputElement>(
-      null
-    );
+    useRef<
+      HTMLInputElement
+    >(null);
 
   const currentPath =
     useMemo(
@@ -531,7 +588,8 @@ export function TerminalApp() {
 
   useEffect(() => {
     const output =
-      terminalOutputRef.current;
+      terminalOutputRef
+        .current;
 
     if (!output) {
       return;
@@ -549,11 +607,14 @@ export function TerminalApp() {
     kind:
       TerminalLineKind =
         "normal"
-  ): TerminalLine {
+  ):
+    TerminalLine {
     const line = {
       id:
         nextLineId.current,
+
       kind,
+
       text,
     };
 
@@ -568,7 +629,9 @@ export function TerminalApp() {
       TerminalLine[]
   ) {
     setLines(
-      (currentLines) => [
+      (
+        currentLines
+      ) => [
         ...currentLines,
         ...nextLines,
       ]
@@ -592,41 +655,74 @@ export function TerminalApp() {
         "Comandos disponíveis:",
         "accent"
       ),
+
       createLine(
         ""
       ),
+
       createLine(
         "  ajuda              Exibe esta ajuda."
       ),
+
       createLine(
         "  dir [caminho]      Lista arquivos e diretórios."
       ),
+
       createLine(
         "  cd [caminho]       Altera o diretório atual."
       ),
+
       createLine(
         "  pwd                Exibe o caminho atual."
       ),
+
       createLine(
         "  type <arquivo>     Exibe o conteúdo de um arquivo de texto."
       ),
+
+      createLine(
+        "  open <item>        Abre arquivos, aplicações, atalhos ou diretórios."
+      ),
+
       createLine(
         "  cls                Limpa o terminal."
       ),
+
       createLine(
         "  whoami             Exibe o usuário atual."
       ),
+
       createLine(
         "  hostname           Exibe o nome do computador."
       ),
+
       createLine(
         "  ver                Exibe informações do sistema."
       ),
+
       createLine(
         ""
       ),
+
       createLine(
-        "Dica: nomes com espaços podem ser escritos entre aspas.",
+        "Atalhos:",
+        "accent"
+      ),
+
+      createLine(
+        "  ↑ / ↓              Histórico de comandos."
+      ),
+
+      createLine(
+        "  Tab                Autocomplete."
+      ),
+
+      createLine(
+        ""
+      ),
+
+      createLine(
+        "Dica: caminhos com espaços podem ser escritos entre aspas.",
         "muted"
       )
     );
@@ -682,7 +778,10 @@ export function TerminalApp() {
         )}`,
         "accent"
       ),
-      createLine("")
+
+      createLine(
+        ""
+      )
     );
 
     if (
@@ -816,7 +915,9 @@ export function TerminalApp() {
 
     appendLines(
       ...contentLines.map(
-        (contentLine) =>
+        (
+          contentLine
+        ) =>
           createLine(
             contentLine
           )
@@ -824,8 +925,329 @@ export function TerminalApp() {
     );
   }
 
+  function handleOpen(
+    rawPath?: string
+  ) {
+    if (!rawPath) {
+      printError(
+        "Uso: open <item>"
+      );
+
+      return;
+    }
+
+    const target =
+      resolveItemPath(
+        items,
+        currentDirectoryId,
+        rawPath
+      );
+
+    if (!target) {
+      printError(
+        "O sistema não pode encontrar o item especificado."
+      );
+
+      return;
+    }
+
+    if (
+      target.type ===
+        "file" &&
+      target.extension
+        .toLowerCase() ===
+        "sys"
+    ) {
+      printError(
+        "Arquivos de sistema não podem ser abertos por este comando."
+      );
+
+      return;
+    }
+
+    openItem(
+      target
+    );
+  }
+
+  function handleAutocomplete() {
+    const rawInput =
+      input;
+
+    const trimmedStart =
+      rawInput.trimStart();
+
+    if (
+      !trimmedStart
+    ) {
+      return;
+    }
+
+    const firstWhitespace =
+      trimmedStart.search(
+        /\s/
+      );
+
+    if (
+      firstWhitespace ===
+      -1
+    ) {
+      const normalizedInput =
+        normalizeValue(
+          trimmedStart
+        );
+
+      const matches =
+        COMMANDS.filter(
+          (command) =>
+            normalizeValue(
+              command
+            ).startsWith(
+              normalizedInput
+            )
+        );
+
+      if (
+        matches.length ===
+        1
+      ) {
+        setInput(
+          `${matches[0]} `
+        );
+
+        return;
+      }
+
+      if (
+        matches.length >
+        1
+      ) {
+        appendLines(
+          createLine(
+            matches.join(
+              "    "
+            ),
+            "muted"
+          )
+        );
+      }
+
+      return;
+    }
+
+    const commandText =
+      trimmedStart.slice(
+        0,
+        firstWhitespace
+      );
+
+    const command =
+      normalizeValue(
+        commandText
+      );
+
+    const supportedCommands = [
+      "cd",
+      "dir",
+      "type",
+      "open",
+    ];
+
+    if (
+      !supportedCommands.includes(
+        command
+      )
+    ) {
+      return;
+    }
+
+    let rawArgument =
+      trimmedStart
+        .slice(
+          firstWhitespace
+        )
+        .trimStart();
+
+    if (
+      rawArgument.startsWith(
+        "\""
+      )
+    ) {
+      rawArgument =
+        rawArgument.slice(
+          1
+        );
+    }
+
+    if (
+      rawArgument.endsWith(
+        "\""
+      )
+    ) {
+      rawArgument =
+        rawArgument.slice(
+          0,
+          -1
+        );
+    }
+
+    const normalizedPath =
+      rawArgument.replace(
+        /\//g,
+        "\\"
+      );
+
+    const lastSeparatorIndex =
+      normalizedPath.lastIndexOf(
+        "\\"
+      );
+
+    let parentDirectory:
+      FileSystemItem | null;
+
+    let basePath =
+      "";
+
+    let partialName =
+      normalizedPath;
+
+    if (
+      lastSeparatorIndex >=
+      0
+    ) {
+      basePath =
+        normalizedPath.slice(
+          0,
+          lastSeparatorIndex +
+            1
+        );
+
+      partialName =
+        normalizedPath.slice(
+          lastSeparatorIndex +
+            1
+        );
+
+      parentDirectory =
+        resolveItemPath(
+          items,
+          currentDirectoryId,
+          basePath
+        );
+    } else {
+      parentDirectory =
+        getItemById(
+          items,
+          currentDirectoryId
+        ) ?? null;
+    }
+
+    if (
+      !parentDirectory ||
+      parentDirectory.type !==
+        "directory"
+    ) {
+      return;
+    }
+
+    const normalizedPartial =
+      normalizeValue(
+        partialName
+      );
+
+    const children =
+      getChildren(
+        items,
+        parentDirectory.id
+      );
+
+    const matches =
+      children.filter(
+        (item) => {
+          if (
+            command ===
+              "cd" &&
+            item.type !==
+              "directory"
+          ) {
+            return false;
+          }
+
+          if (
+            command ===
+              "type" &&
+            item.type !==
+              "file"
+          ) {
+            return false;
+          }
+
+          if (
+            command ===
+              "dir" &&
+            item.type !==
+              "directory"
+          ) {
+            return false;
+          }
+
+          return normalizeValue(
+            item.name
+          ).startsWith(
+            normalizedPartial
+          );
+        }
+      );
+
+    if (
+      matches.length ===
+      0
+    ) {
+      return;
+    }
+
+    if (
+      matches.length >
+      1
+    ) {
+      appendLines(
+        createLine(
+          matches
+            .map(
+              (item) =>
+                item.name
+            )
+            .join(
+              "    "
+            ),
+          "muted"
+        )
+      );
+
+      return;
+    }
+
+    const match =
+      matches[0];
+
+    const completedPath =
+      `${basePath}${match.name}`;
+
+    const requiresQuotes =
+      /\s/.test(
+        completedPath
+      );
+
+    setInput(
+      requiresQuotes
+        ? `${commandText} "${completedPath}"`
+        : `${commandText} ${completedPath}`
+    );
+  }
+
   function executeCommand(
-    rawCommand: string
+    rawCommand:
+      string
   ) {
     const trimmedCommand =
       rawCommand.trim();
@@ -904,9 +1326,18 @@ export function TerminalApp() {
         );
         break;
 
+      case "open":
+        handleOpen(
+          argument ||
+            undefined
+        );
+        break;
+
       case "cls":
       case "clear":
-        setLines([]);
+        setLines(
+          []
+        );
         break;
 
       case "whoami":
@@ -930,20 +1361,18 @@ export function TerminalApp() {
           createLine(
             "HOSSOMII OS"
           ),
+
           createLine(
-            "Terminal subsystem ativo."
+            "Command Terminal"
           ),
+
+          createLine(
+            "Virtual File System: online",
+            "accent"
+          ),
+
           createLine(
             "Ambiente de portfólio executado no navegador.",
-            "muted"
-          )
-        );
-        break;
-
-      case "open":
-        appendLines(
-          createLine(
-            "O comando open será habilitado na próxima atualização do terminal.",
             "muted"
           )
         );
@@ -983,7 +1412,9 @@ export function TerminalApp() {
       null
     );
 
-    setInput("");
+    setInput(
+      ""
+    );
 
     executeCommand(
       command
@@ -994,6 +1425,17 @@ export function TerminalApp() {
     event:
       KeyboardEvent<HTMLInputElement>
   ) {
+    if (
+      event.key ===
+      "Tab"
+    ) {
+      event.preventDefault();
+
+      handleAutocomplete();
+
+      return;
+    }
+
     if (
       event.key ===
       "ArrowUp"
@@ -1023,7 +1465,9 @@ export function TerminalApp() {
       );
 
       setInput(
-        history[nextIndex]
+        history[
+          nextIndex
+        ]
       );
 
       return;
@@ -1043,7 +1487,8 @@ export function TerminalApp() {
       }
 
       const nextIndex =
-        historyIndex + 1;
+        historyIndex +
+        1;
 
       if (
         nextIndex >=
@@ -1053,7 +1498,9 @@ export function TerminalApp() {
           null
         );
 
-        setInput("");
+        setInput(
+          ""
+        );
 
         return;
       }
@@ -1063,7 +1510,9 @@ export function TerminalApp() {
       );
 
       setInput(
-        history[nextIndex]
+        history[
+          nextIndex
+        ]
       );
     }
   }
@@ -1089,7 +1538,9 @@ export function TerminalApp() {
               key={
                 line.id
               }
-              className={`terminal-line terminal-line-${line.kind}`}
+              className={
+                `terminal-line terminal-line-${line.kind}`
+              }
             >
               {line.text ||
                 "\u00A0"}
@@ -1111,20 +1562,28 @@ export function TerminalApp() {
           </label>
 
           <input
-            ref={inputRef}
+            ref={
+              inputRef
+            }
             id="terminal-command-input"
             type="text"
-            value={input}
+            value={
+              input
+            }
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="off"
-            spellCheck={false}
+            spellCheck={
+              false
+            }
             aria-label="Comando do terminal"
             onChange={(
               event
             ) =>
               setInput(
-                event.target.value
+                event
+                  .target
+                  .value
               )
             }
             onKeyDown={
