@@ -12,6 +12,8 @@
 
 @import "./control-panel.css";
 
+@import "./terminal.css";
+
 @import "./critical-flow.css";
 
 @import "./critical-transition.css";

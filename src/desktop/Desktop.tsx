@@ -10,6 +10,8 @@ import { useSystemPreferencesStore } from "../stores/systemPreferencesStore";
 
 import { AchievementNotification } from "./components/AchievementNotification";
 
+import { TerminalApp } from "../applications/terminal/TerminalApp";
+
 import type { WindowAppId } from "../types/window";
 
 import computerIcon from "../assets/icons/computer.webp";
@@ -222,7 +224,13 @@ export function Desktop() {
     }
 
     if (id === "terminal") {
-      console.log("Terminal ainda não implementado.");
+      openWindow({
+        appId: "terminal",
+
+        title: "Terminal - HOSSOMII OS",
+
+        icon: terminalIcon,
+      });
 
       return;
     }
@@ -345,6 +353,14 @@ export function Desktop() {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
               <NotepadApp fileId={fileId} />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "terminal") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <TerminalApp />
             </WindowFrame>
           );
         }
