@@ -1,5 +1,11 @@
 /* =========================================================
-   WINDOW MANAGER
+   HOSSOMII OS
+   Window Manager
+   ========================================================= */
+
+
+/* =========================================================
+   WINDOW
    ========================================================= */
 
 .os-window {
@@ -8,24 +14,54 @@
   display: flex;
   flex-direction: column;
 
-  min-width: 340px;
-  min-height: 220px;
+  box-sizing: border-box;
+
+  min-width: min(
+    340px,
+    calc(100% - 16px)
+  );
+
+  min-height: min(
+    220px,
+    calc(
+      100% -
+      var(--taskbar-height) -
+      16px
+    )
+  );
+
+  max-width: 100%;
+
+  max-height: calc(
+    100% -
+    var(--taskbar-height)
+  );
 
   overflow: hidden;
 
-  border: 3px solid #0a55c4;
-  border-radius: 8px 8px 2px 2px;
+  border:
+    3px solid #0a55c4;
+
+  border-radius:
+    8px
+    8px
+    2px
+    2px;
 
   background: #ece9d8;
 
   box-shadow:
-    4px 5px 18px rgba(0, 0, 0, 0.35);
+    4px
+    5px
+    18px
+    rgba(
+      0,
+      0,
+      0,
+      0.35
+    );
 
   user-select: none;
-}
-
-.os-window-maximized {
-  border-radius: 0;
 }
 
 
@@ -38,11 +74,22 @@
   align-items: center;
   justify-content: space-between;
 
+  flex: 0 0 auto;
+
+  box-sizing: border-box;
+
+  width: 100%;
   height: 32px;
 
-  flex-shrink: 0;
+  min-width: 0;
 
-  padding: 0 4px 0 6px;
+  padding:
+    0
+    3px
+    0
+    6px;
+
+  overflow: hidden;
 
   background:
     linear-gradient(
@@ -73,19 +120,29 @@
   font-weight: 700;
 
   text-shadow:
-    1px 1px 1px rgba(0, 0, 0, 0.55);
+    1px
+    1px
+    1px
+    rgba(
+      0,
+      0,
+      0,
+      0.55
+    );
 }
 
 .window-title img {
   width: 18px;
   height: 18px;
 
-  flex-shrink: 0;
+  flex: 0 0 auto;
 
   object-fit: contain;
 }
 
 .window-title span {
+  min-width: 0;
+
   overflow: hidden;
 
   white-space: nowrap;
@@ -94,11 +151,13 @@
 
 
 /* =========================================================
-   WINDOW BUTTONS
+   WINDOW CONTROLS
    ========================================================= */
 
 .window-controls {
   display: flex;
+
+  flex: 0 0 auto;
 
   gap: 2px;
 }
@@ -111,9 +170,16 @@
   height: 22px;
 
   padding: 0;
+  flex: 0 0 23px;
 
   border:
-    1px solid rgba(255, 255, 255, 0.9);
+    1px solid
+      rgba(
+        255,
+        255,
+        255,
+        0.9
+      );
 
   border-radius: 3px;
 
@@ -125,7 +191,15 @@
     );
 
   box-shadow:
-    inset 1px 1px rgba(255, 255, 255, 0.35);
+    inset
+      1px
+      1px
+      rgba(
+        255,
+        255,
+        255,
+        0.35
+      );
 
   color: white;
 
@@ -140,15 +214,26 @@
 }
 
 .window-controls button:hover {
-  filter: brightness(1.12);
+  filter:
+    brightness(1.12);
 }
 
 .window-controls button:active {
   box-shadow:
-    inset 1px 2px 3px rgba(0, 0, 0, 0.3);
+    inset
+      1px
+      2px
+      3px
+      rgba(
+        0,
+        0,
+        0,
+        0.3
+      );
 }
 
-.window-controls .window-close-button {
+.window-controls
+  .window-close-button {
   background:
     linear-gradient(
       145deg,
@@ -163,47 +248,169 @@
    ========================================================= */
 
 .window-body {
-  flex: 1;
+  position: relative;
+
+  flex: 1 1 auto;
+
+  width: 100%;
 
   min-width: 0;
   min-height: 0;
 
-  overflow: auto;
+  /*
+   * Applications control their own scroll.
+   * This prevents nested scrollbars.
+   */
+  overflow: hidden;
 
   background: white;
 }
 
 
 /* =========================================================
-   TASKBAR WINDOW BUTTON
+   RESIZE HANDLES
+   ========================================================= */
+
+.window-resize-handle {
+  position: absolute;
+
+  z-index: 30;
+
+  display: block;
+
+  background: transparent;
+
+  touch-action: none;
+}
+
+.window-resize-n,
+.window-resize-s {
+  left: 8px;
+  right: 8px;
+
+  height: 7px;
+
+  cursor: ns-resize;
+}
+
+.window-resize-n {
+  top: -1px;
+}
+
+.window-resize-s {
+  bottom: -1px;
+}
+
+.window-resize-e,
+.window-resize-w {
+  top: 8px;
+  bottom: 8px;
+
+  width: 7px;
+
+  cursor: ew-resize;
+}
+
+.window-resize-e {
+  right: -1px;
+}
+
+.window-resize-w {
+  left: -1px;
+}
+
+.window-resize-ne,
+.window-resize-nw,
+.window-resize-se,
+.window-resize-sw {
+  width: 12px;
+  height: 12px;
+}
+
+.window-resize-ne {
+  top: -1px;
+  right: -1px;
+
+  cursor: nesw-resize;
+}
+
+.window-resize-nw {
+  top: -1px;
+  left: -1px;
+
+  cursor: nwse-resize;
+}
+
+.window-resize-se {
+  right: -1px;
+  bottom: -1px;
+
+  cursor: nwse-resize;
+}
+
+.window-resize-sw {
+  left: -1px;
+  bottom: -1px;
+
+  cursor: nesw-resize;
+}
+
+.os-window-maximized
+  .window-resize-handle {
+  display: none;
+}
+
+
+/* =========================================================
+   TASKBAR WINDOW AREA
    ========================================================= */
 
 .taskbar-applications {
   display: flex;
   align-items: center;
 
+  min-width: 0;
+
   gap: 3px;
 
-  padding: 3px 5px;
+  padding:
+    3px
+    5px;
+
+  overflow: hidden;
 }
 
 .taskbar-window-button {
   display: flex;
   align-items: center;
 
+  flex:
+    0
+    1
+    180px;
+
   gap: 5px;
 
-  width: min(180px, 20vw);
+  width: auto;
   height: 30px;
 
-  min-width: 80px;
+  min-width: 72px;
+  max-width: 180px;
 
-  padding: 0 8px;
+  padding:
+    0
+    8px;
 
   overflow: hidden;
 
   border:
-    1px solid rgba(75, 135, 220, 0.8);
+    1px solid
+      rgba(
+        75,
+        135,
+        220,
+        0.8
+      );
 
   border-radius: 3px;
 
@@ -228,7 +435,15 @@
   cursor: pointer;
 
   box-shadow:
-    inset 1px 1px rgba(255, 255, 255, 0.18);
+    inset
+      1px
+      1px
+      rgba(
+        255,
+        255,
+        255,
+        0.18
+      );
 }
 
 .taskbar-window-button:hover {
@@ -238,6 +453,27 @@
       #4b92eb,
       #3473d6
     );
+}
+
+.taskbar-window-active {
+  background:
+    linear-gradient(
+      to bottom,
+      #1f53ad,
+      #194994
+    );
+
+  box-shadow:
+    inset
+      1px
+      2px
+      3px
+      rgba(
+        0,
+        0,
+        0,
+        0.3
+      );
 }
 
 .taskbar-window-minimized {
@@ -255,12 +491,14 @@
   width: 18px;
   height: 18px;
 
-  flex-shrink: 0;
+  flex: 0 0 auto;
 
   object-fit: contain;
 }
 
 .taskbar-window-button span {
+  min-width: 0;
+
   overflow: hidden;
 
   white-space: nowrap;
@@ -268,17 +506,19 @@
 }
 
 
-
 /* =========================================================
-   WINDOW MOBILE
+   SMALL VIEWPORT
    ========================================================= */
 
 @media (max-width: 600px) {
-  .os-window {
-    min-width: 280px;
-  }
-
   .taskbar-window-button {
-    width: 110px;
+    flex-basis: 110px;
+
+    min-width: 58px;
+    max-width: 110px;
+
+    padding:
+      0
+      5px;
   }
 }

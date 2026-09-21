@@ -1,8 +1,26 @@
+/* =========================================================
+   HOSSOMII OS
+   Project Viewer
+   ========================================================= */
+
 .project-viewer-app {
+  container-type:
+    inline-size;
+
+  display: flex;
+  flex-direction: column;
+
   width: 100%;
   height: 100%;
 
-  overflow: auto;
+  min-width: 0;
+  min-height: 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior:
+    contain;
 
   background: #f4f4f4;
 
@@ -14,10 +32,36 @@
     sans-serif;
 }
 
-.project-viewer-header {
-  padding: 28px 30px 24px;
 
-  border-bottom: 1px solid #b8b8b8;
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.project-viewer-header {
+  flex: 0 0 auto;
+
+  width: 100%;
+
+  padding:
+    clamp(
+      18px,
+      4cqw,
+      28px
+    )
+    clamp(
+      18px,
+      4cqw,
+      30px
+    )
+    clamp(
+      16px,
+      3.5cqw,
+      24px
+    );
+
+  border-bottom:
+    1px solid
+      #b8b8b8;
 
   background:
     linear-gradient(
@@ -43,34 +87,75 @@
 }
 
 .project-viewer-header h1 {
-  margin: 0 0 8px;
+  margin:
+    0
+    0
+    8px;
 
-  font-size: 25px;
+  font-size:
+    clamp(
+      19px,
+      4cqw,
+      25px
+    );
+
   font-weight: 700;
+
+  overflow-wrap:
+    anywhere;
 }
 
 .project-viewer-header p {
+  max-width: 100%;
+
   margin: 0;
 
   font-size: 11px;
+  line-height: 1.5;
 
   opacity: 0.82;
 }
 
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
 .project-viewer-content {
-  padding: 24px;
+  flex: 1 0 auto;
+
+  min-width: 0;
+
+  padding:
+    clamp(
+      14px,
+      3.5cqw,
+      24px
+    );
 }
 
 .project-viewer-section {
-  margin-bottom: 28px;
+  min-width: 0;
+
+  margin-bottom:
+    clamp(
+      20px,
+      4cqw,
+      28px
+    );
 }
 
 .project-viewer-section h2 {
-  margin: 0 0 12px;
+  margin:
+    0
+    0
+    12px;
 
   padding-bottom: 6px;
 
-  border-bottom: 1px solid #c8c8c8;
+  border-bottom:
+    1px solid
+      #c8c8c8;
 
   color: #234b88;
 
@@ -88,13 +173,29 @@
   line-height: 1.7;
 
   white-space: pre-line;
+
+  overflow-wrap:
+    anywhere;
 }
 
+
+/* =========================================================
+   TECHNOLOGIES
+   ========================================================= */
+
 .project-viewer-technologies {
+  width: 100%;
+  max-width: 100%;
+
   margin: 0;
+
   padding: 14px;
 
-  border: 1px solid #ccc;
+  overflow-x: auto;
+
+  border:
+    1px solid
+      #ccc;
 
   background: #ffffff;
 
@@ -109,26 +210,55 @@
   line-height: 1.6;
 
   white-space: pre-wrap;
+
+  overflow-wrap:
+    anywhere;
 }
+
+
+/* =========================================================
+   GALLERY
+   ========================================================= */
 
 .project-viewer-gallery {
   display: grid;
 
+  width: 100%;
+
+  min-width: 0;
+
   grid-template-columns:
     repeat(
       auto-fit,
-      minmax(150px, 1fr)
+      minmax(
+        min(
+          170px,
+          100%
+        ),
+        1fr
+      )
     );
 
-  gap: 12px;
+  gap:
+    clamp(
+      8px,
+      2cqw,
+      12px
+    );
 }
 
 .project-viewer-gallery button {
+  width: 100%;
+
   min-width: 0;
 
   padding: 5px;
 
-  border: 1px solid #aaa;
+  overflow: hidden;
+
+  border:
+    1px solid
+      #aaa;
 
   background: #ffffff;
 
@@ -136,15 +266,19 @@
 }
 
 .project-viewer-gallery button:hover {
-  border-color: #316ac5;
+  border-color:
+    #316ac5;
 
-  background: #e9f2ff;
+  background:
+    #e9f2ff;
 }
 
 .project-viewer-gallery img {
   display: block;
 
   width: 100%;
+  height: auto;
+
   aspect-ratio: 16 / 9;
 
   object-fit: cover;
@@ -155,7 +289,12 @@
 .project-viewer-gallery span {
   display: block;
 
-  padding: 6px 2px 2px;
+  min-width: 0;
+
+  padding:
+    6px
+    2px
+    2px;
 
   overflow: hidden;
 
@@ -164,15 +303,22 @@
   font-size: 10px;
 
   text-align: left;
-  text-overflow: ellipsis;
 
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
 
 .project-viewer-footer {
   padding-top: 14px;
 
-  border-top: 1px solid #ccc;
+  border-top:
+    1px solid
+      #ccc;
 
   color: #777;
 
@@ -185,3 +331,64 @@
   font-size: 12px;
 }
 
+
+/* =========================================================
+   RESIZABLE WINDOW STATES
+   ========================================================= */
+
+@container (max-width: 520px) {
+  .project-viewer-header {
+    padding:
+      16px
+      17px;
+  }
+
+  .project-viewer-content {
+    padding:
+      14px;
+  }
+
+  .project-viewer-header h1 {
+    font-size: 19px;
+  }
+
+  .project-viewer-gallery {
+    grid-template-columns:
+      1fr;
+  }
+
+  .project-viewer-technologies {
+    padding: 10px;
+
+    font-size: 10px;
+  }
+}
+
+@container (max-width: 380px) {
+  .project-viewer-header {
+    padding:
+      13px
+      14px;
+  }
+
+  .project-viewer-content {
+    padding:
+      11px;
+  }
+
+  .project-viewer-section {
+    margin-bottom: 18px;
+  }
+
+  .project-viewer-header h1 {
+    font-size: 17px;
+  }
+
+  .project-viewer-section h2 {
+    font-size: 12px;
+  }
+
+  .project-viewer-description {
+    font-size: 11px;
+  }
+}

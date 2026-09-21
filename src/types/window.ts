@@ -16,6 +16,16 @@ export type WindowBounds = {
   height: number;
 };
 
+export type WindowResizeDirection =
+  | "n"
+  | "ne"
+  | "e"
+  | "se"
+  | "s"
+  | "sw"
+  | "w"
+  | "nw";
+
 export type WindowData = {
   fileId?: string;
 
@@ -41,7 +51,8 @@ export type OSWindow = {
 
   zIndex: number;
 
-  restoreBounds: WindowBounds | null;
+  restoreBounds:
+    WindowBounds | null;
 
   data?: WindowData;
 };
@@ -53,7 +64,8 @@ export type OpenWindowConfig = {
   icon: string;
 
   /*
-   * Diferencia várias janelas da mesma aplicação.
+   * Diferencia várias janelas
+   * da mesma aplicação.
    *
    * Exemplo:
    * notepad:about-file
@@ -62,8 +74,9 @@ export type OpenWindowConfig = {
   instanceId?: string;
 
   /*
-   * Informações que a aplicação precisa
-   * para saber o que deve exibir.
+   * Informações que a aplicação
+   * precisa para saber o que
+   * deve exibir.
    */
   data?: WindowData;
 };

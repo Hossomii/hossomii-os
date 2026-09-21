@@ -2,12 +2,19 @@ import profileAvatar from "../../assets/profile-avatar.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 import terminalIcon from "../../assets/icons/terminal.webp";
 
-import type { WindowAppId } from "../../types/window";
+import type {
+  WindowAppId,
+} from "../../types/window";
 
 type StartMenuProps = {
   open: boolean;
-  onRestart: () => void;
-  onOpenItem: (id: WindowAppId) => void;
+
+  onRestart:
+    () => void;
+
+  onOpenItem: (
+    id: WindowAppId
+  ) => void;
 };
 
 export function StartMenu({
@@ -21,16 +28,25 @@ export function StartMenu({
 
   return (
     <section
+      id="hossomii-start-menu"
       className="start-menu"
-      onClick={(event) => event.stopPropagation()}
+      onClick={(
+        event
+      ) =>
+        event.stopPropagation()
+      }
     >
       <header className="start-menu-header">
         <img
-          src={profileAvatar}
+          src={
+            profileAvatar
+          }
           alt="Avatar de Anthony"
         />
 
-        <strong>Anthony</strong>
+        <strong>
+          Anthony
+        </strong>
       </header>
 
       <div className="start-menu-content">
@@ -38,36 +54,54 @@ export function StartMenu({
           <button
             type="button"
             onClick={() =>
-              onOpenItem("terminal")
+              onOpenItem(
+                "terminal"
+              )
             }
           >
             <img
               className="start-menu-program-image"
-              src={terminalIcon}
+              src={
+                terminalIcon
+              }
               alt=""
             />
 
             <span>
-              <strong>Terminal</strong>
-              <small>Acessar o sistema</small>
+              <strong>
+                Terminal
+              </strong>
+
+              <small>
+                Acessar o sistema
+              </small>
             </span>
           </button>
 
           <button
             type="button"
             onClick={() =>
-              onOpenItem("projects")
+              onOpenItem(
+                "projects"
+              )
             }
           >
             <img
               className="start-menu-program-image"
-              src={projectsIcon}
+              src={
+                projectsIcon
+              }
               alt=""
             />
 
             <span>
-              <strong>Meus Projetos</strong>
-              <small>Trabalhos selecionados</small>
+              <strong>
+                Meus Projetos
+              </strong>
+
+              <small>
+                Trabalhos selecionados
+              </small>
             </span>
           </button>
         </div>
@@ -76,7 +110,9 @@ export function StartMenu({
           <button
             type="button"
             onClick={() =>
-              onOpenItem("documents")
+              onOpenItem(
+                "documents"
+              )
             }
           >
             Meus Documentos
@@ -85,19 +121,25 @@ export function StartMenu({
           <button
             type="button"
             onClick={() =>
-              onOpenItem("computer")
+              onOpenItem(
+                "computer"
+              )
             }
           >
             Meu Computador
           </button>
 
-          <button type="button">
+          <button
+            type="button"
+          >
             Painel de Controle
           </button>
 
           <div className="start-menu-separator" />
 
-          <button type="button">
+          <button
+            type="button"
+          >
             Ajuda e suporte
           </button>
         </div>
@@ -106,12 +148,16 @@ export function StartMenu({
       <footer className="start-menu-footer">
         <button
           type="button"
-          onClick={onRestart}
+          onClick={
+            onRestart
+          }
         >
           Reiniciar
         </button>
 
-        <button type="button">
+        <button
+          type="button"
+        >
           Desligar
         </button>
       </footer>

@@ -4,30 +4,28 @@
    Windows XP inspired
    ========================================================= */
 
-
 /* =========================================================
    DESKTOP
    ========================================================= */
 
 .desktop {
-  position: relative;
+  --taskbar-height: 38px;
 
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
 
   overflow: hidden;
 
-  background:
-    #3b88d8
-    url("../../assets/wallpaper.webp")
-    center center / cover
+  background: #3b88d8 url("../../assets/wallpaper.webp") center center / cover
     no-repeat;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    Arial,
-    sans-serif;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
 
   user-select: none;
 }
@@ -42,15 +40,13 @@
 
   pointer-events: none;
 
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 3px,
-      rgba(255, 255, 255, 0.008) 4px
-    );
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    rgba(255, 255, 255, 0.008) 4px
+  );
 }
-
 
 /* =========================================================
    DESKTOP ICON GRID
@@ -63,7 +59,8 @@
 
   left: 10px;
   top: 10px;
-  bottom: 42px;
+
+  bottom: calc(var(--taskbar-height) + 4px);
 
   display: flex;
   flex-direction: column;
@@ -71,9 +68,12 @@
 
   align-content: flex-start;
 
+  max-width: calc(100% - 20px);
+
+  overflow: hidden;
+
   gap: 7px 4px;
 }
-
 
 /* =========================================================
    DESKTOP ICON
@@ -96,18 +96,13 @@
 
   color: white;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    Arial,
-    sans-serif;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
 
   cursor: default;
 
   text-align: center;
 
-  text-shadow:
-    1px 1px 2px rgba(0, 0, 0, 0.95);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.95);
 }
 
 .desktop-icon:hover {
@@ -132,10 +127,7 @@
 
   pointer-events: none;
 
-  filter:
-    drop-shadow(
-      1px 2px 1px rgba(0, 0, 0, 0.35)
-    );
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.35));
 }
 
 .desktop-icon span {
@@ -152,10 +144,8 @@
 .desktop-icon-selected span {
   background: #0b55b5;
 
-  outline:
-    1px dotted rgba(255, 255, 255, 0.85);
+  outline: 1px dotted rgba(255, 255, 255, 0.85);
 }
-
 
 /* =========================================================
    TASKBAR
@@ -173,27 +163,28 @@
   display: flex;
   align-items: stretch;
 
-  height: 38px;
+  width: 100%;
+  height: var(--taskbar-height);
 
-  background:
-    linear-gradient(
-      to bottom,
-      #3168d5 0%,
-      #245dcc 9%,
-      #1f54c5 50%,
-      #1b47ad 92%,
-      #1941a2 100%
-    );
+  min-width: 0;
 
-  border-top:
-    1px solid rgba(130, 180, 255, 0.8);
+  overflow: hidden;
 
-  box-shadow:
-    0 -1px rgba(0, 47, 145, 0.8);
+  background: linear-gradient(
+    to bottom,
+    #3168d5 0%,
+    #245dcc 9%,
+    #1f54c5 50%,
+    #1b47ad 92%,
+    #1941a2 100%
+  );
+
+  border-top: 1px solid rgba(130, 180, 255, 0.8);
+
+  box-shadow: 0 -1px rgba(0, 47, 145, 0.8);
 
   color: white;
 }
-
 
 /* =========================================================
    START BUTTON
@@ -202,8 +193,12 @@
 .start-button {
   position: relative;
 
+  z-index: 2;
+
   display: flex;
   align-items: center;
+
+  flex: 0 0 auto;
 
   gap: 5px;
 
@@ -212,17 +207,17 @@
   padding: 0 15px 0 8px;
 
   border: 0;
+
   border-radius: 0 12px 12px 0;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #6fc75f 0%,
-      #46ae3a 12%,
-      #369c32 50%,
-      #278526 88%,
-      #4ca846 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    #6fc75f 0%,
+    #46ae3a 12%,
+    #369c32 50%,
+    #278526 88%,
+    #4ca846 100%
+  );
 
   box-shadow:
     inset 0 1px rgba(255, 255, 255, 0.55),
@@ -230,17 +225,14 @@
 
   color: white;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    sans-serif;
+  font-family: Tahoma, Verdana, sans-serif;
 
   font-size: 15px;
+
   font-weight: 700;
   font-style: italic;
 
-  text-shadow:
-    1px 1px 2px rgba(0, 70, 0, 0.7);
+  text-shadow: 1px 1px 2px rgba(0, 70, 0, 0.7);
 
   cursor: pointer;
 }
@@ -251,57 +243,50 @@
 
 .start-button:active,
 .start-button-active {
-  background:
-    linear-gradient(
-      to bottom,
-      #318d2e,
-      #55b849
-    );
+  background: linear-gradient(to bottom, #318d2e, #55b849);
+
+  box-shadow: inset 1px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.start-button:focus-visible {
+  outline: 1px dotted rgba(255, 255, 255, 0.9);
+
+  outline-offset: -4px;
+}
+
+.start-button-avatar {
+  width: 28px;
+  height: 28px;
+
+  flex: 0 0 auto;
+
+  border: 1px solid rgba(255, 255, 255, 0.7);
+
+  border-radius: 4px;
+
+  object-fit: cover;
 
   box-shadow:
-    inset 1px 2px 4px rgba(0, 0, 0, 0.25);
+    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.2);
 }
-
-.start-logo {
-  display: grid;
-  place-items: center;
-
-  width: 22px;
-  height: 22px;
-
-  border-radius: 3px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #c9e7ff
-    );
-
-  color: #2861c4;
-
-  font-size: 13px;
-  font-style: normal;
-
-  text-shadow: none;
-
-  transform: rotate(-3deg);
-}
-
 
 /* =========================================================
    TASKBAR APPLICATION AREA
    ========================================================= */
 
 .taskbar-applications {
-  flex: 1;
+  display: flex;
+  align-items: center;
+
+  flex: 1 1 auto;
 
   min-width: 0;
 
-  border-left:
-    1px solid rgba(0, 43, 135, 0.28);
-}
+  overflow: hidden;
 
+  border-left: 1px solid rgba(0, 43, 135, 0.28);
+}
 
 /* =========================================================
    SYSTEM TRAY
@@ -311,25 +296,22 @@
   display: flex;
   align-items: center;
 
+  flex: 0 0 auto;
+
   gap: 10px;
 
   min-width: 104px;
+  height: 100%;
 
   padding: 0 12px;
 
-  border-left:
-    1px solid rgba(0, 61, 160, 0.65);
+  overflow: hidden;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #20a4e8,
-      #1698db 50%,
-      #118bc9
-    );
+  border-left: 1px solid rgba(0, 61, 160, 0.65);
 
-  box-shadow:
-    inset 1px 0 rgba(90, 190, 240, 0.45);
+  background: linear-gradient(to bottom, #20a4e8, #1698db 50%, #118bc9);
+
+  box-shadow: inset 1px 0 rgba(90, 190, 240, 0.45);
 
   color: white;
 
@@ -341,14 +323,14 @@
 
   font-size: 10px;
 
-  text-shadow:
-    0 0 3px rgba(40, 120, 30, 0.6);
+  text-shadow: 0 0 3px rgba(40, 120, 30, 0.6);
 }
 
 .system-tray time {
   margin-left: auto;
-}
 
+  white-space: nowrap;
+}
 
 /* =========================================================
    START MENU
@@ -357,12 +339,17 @@
 .start-menu {
   position: absolute;
 
-  z-index: 900;
+  z-index: 1100;
 
   left: 0;
-  bottom: 38px;
+  bottom: var(--taskbar-height);
 
-  width: 390px;
+  display: flex;
+  flex-direction: column;
+
+  width: min(390px, calc(100% - 8px));
+
+  max-height: calc(100% - var(--taskbar-height) - 8px);
 
   overflow: hidden;
 
@@ -373,10 +360,8 @@
 
   background: white;
 
-  box-shadow:
-    4px -5px 18px rgba(0, 0, 0, 0.34);
+  box-shadow: 4px -5px 18px rgba(0, 0, 0, 0.34);
 }
-
 
 /* =========================================================
    START MENU HEADER
@@ -386,45 +371,41 @@
   display: flex;
   align-items: center;
 
+  flex: 0 0 auto;
+
   gap: 12px;
 
   min-height: 72px;
 
   padding: 8px 12px;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #2d7ce2,
-      #1d64ce
-    );
+  background: linear-gradient(to bottom, #2d7ce2, #1d64ce);
 
-  border-bottom:
-    2px solid #f0a83c;
+  border-bottom: 2px solid #f0a83c;
 
   color: white;
 
-  text-shadow:
-    1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .start-menu-header img {
   width: 52px;
   height: 52px;
 
+  flex: 0 0 auto;
+
   object-fit: cover;
 
   border: 2px solid white;
+
   border-radius: 4px;
 
-  box-shadow:
-    0 2px 5px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 .start-menu-header strong {
   font-size: 17px;
 }
-
 
 /* =========================================================
    START MENU BODY
@@ -434,41 +415,44 @@
   display: grid;
 
   grid-template-columns:
-    1.08fr 0.92fr;
+    minmax(0, 1.08fr)
+    minmax(0, 0.92fr);
 
-  min-height: 310px;
+  flex: 1 1 auto;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .start-menu-primary {
+  min-width: 0;
+
   padding: 8px;
 
   background: white;
 }
 
 .start-menu-secondary {
+  min-width: 0;
+
   padding: 8px;
 
-  border-left:
-    1px solid #95bdee;
+  border-left: 1px solid #95bdee;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #d8e9fb,
-      #c8def5
-    );
+  background: linear-gradient(to bottom, #d8e9fb, #c8def5);
 }
 
 .start-menu-primary button,
 .start-menu-secondary button {
   width: 100%;
+  min-width: 0;
 
   border: 0;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    sans-serif;
+  font-family: Tahoma, Verdana, sans-serif;
 
   cursor: pointer;
 }
@@ -498,7 +482,7 @@
   width: 38px;
   height: 38px;
 
-  flex-shrink: 0;
+  flex: 0 0 auto;
 
   object-fit: contain;
 }
@@ -506,6 +490,8 @@
 .start-menu-primary button > span:last-child {
   display: flex;
   flex-direction: column;
+
+  min-width: 0;
 
   gap: 3px;
 }
@@ -515,9 +501,14 @@
 }
 
 .start-menu-primary small {
+  overflow: hidden;
+
   color: #777;
 
   font-size: 9px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .start-menu-primary button:hover small {
@@ -550,10 +541,8 @@
 
   margin: 6px 5px;
 
-  background:
-    rgba(90, 125, 170, 0.35);
+  background: rgba(90, 125, 170, 0.35);
 }
-
 
 /* =========================================================
    START MENU FOOTER
@@ -561,65 +550,77 @@
 
 .start-menu-footer {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
+
+  flex: 0 0 auto;
 
   gap: 8px;
 
-  height: 50px;
+  min-height: 50px;
 
-  padding: 0 12px;
+  padding: 6px 12px;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #2c7ae0,
-      #1e64cc
-    );
+  background: linear-gradient(to bottom, #2c7ae0, #1e64cc);
 
-  border-top:
-    1px solid #0c4dad;
+  border-top: 1px solid #0c4dad;
 }
 
 .start-menu-footer button {
   padding: 6px 10px;
 
-  border:
-    1px solid rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.7);
 
   border-radius: 3px;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #f9a77a,
-      #dc5b37
-    );
+  background: linear-gradient(to bottom, #f9a77a, #dc5b37);
 
   color: white;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    sans-serif;
+  font-family: Tahoma, Verdana, sans-serif;
 
   font-size: 10px;
 
   cursor: pointer;
 
-  text-shadow:
-    1px 1px rgba(0, 0, 0, 0.25);
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
 }
 
 .start-menu-footer button:first-child {
-  background:
-    linear-gradient(
-      to bottom,
-      #6aa3e9,
-      #376fc4
-    );
+  background: linear-gradient(to bottom, #6aa3e9, #376fc4);
 }
 
+/* =========================================================
+   SHORT DESKTOPS
+   ========================================================= */
+
+@media (max-height: 620px) {
+  .start-menu-header {
+    min-height: 58px;
+  }
+
+  .start-menu-header img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .start-menu-content {
+    min-height: 0;
+  }
+
+  .start-menu-primary button {
+    min-height: 46px;
+  }
+
+  .start-menu-program-image {
+    width: 32px;
+    height: 32px;
+  }
+
+  .start-menu-footer {
+    min-height: 42px;
+  }
+}
 
 /* =========================================================
    MOBILE
@@ -640,33 +641,86 @@
     height: 44px;
   }
 
-  .taskbar {
-    height: 42px;
-  }
-
   .start-button {
     min-width: 95px;
+
+    padding-right: 11px;
 
     font-size: 13px;
   }
 
   .start-menu {
-    bottom: 42px;
-
-    width: min(390px, 100vw);
+    width: min(390px, 100%);
   }
 
   .system-tray {
-    min-width: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    padding: 0 8px;
+    flex: 0 0 auto;
+
+    gap: 7px;
+
+    width: auto;
+    min-width: 92px;
+
+    height: 100%;
+
+    padding: 0 10px;
+
+    overflow: hidden;
+
+    border-left: 1px solid rgba(0, 61, 160, 0.65);
+
+    background: linear-gradient(
+      to bottom,
+      #20a4e8 0%,
+      #1698db 50%,
+      #118bc9 100%
+    );
+
+    box-shadow: inset 1px 0 rgba(90, 190, 240, 0.45);
+
+    color: white;
+
+    font-size: 11px;
   }
 
   .tray-status {
-    display: none;
+    flex: 0 0 auto;
+
+    color: #75f06d;
+
+    font-size: 9px;
+
+    line-height: 1;
+
+    text-shadow: 0 0 3px rgba(40, 120, 30, 0.6);
+  }
+
+  .system-tray time {
+    display: block;
+
+    flex: 0 0 auto;
+
+    margin: 0;
+
+    min-width: 0;
+
+    color: white;
+
+    font-size: 11px;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    text-align: center;
+
+    font-variant-numeric: tabular-nums;
   }
 }
-
 
 /* =========================================================
    REDUCED MOTION
@@ -679,21 +733,22 @@
   }
 }
 
+@media (max-width: 600px) {
+  .desktop {
+    --taskbar-height: 42px;
+  }
 
+  .system-tray {
+    min-width: 78px;
 
-/* =========================================================
-   START BUTTON AVATAR
-   ========================================================= */
+    gap: 5px;
 
-.start-button-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 4px;
-  object-fit: cover;
-  flex: 0 0 auto;
+    padding:
+      0
+      7px;
+  }
 
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.2);
+  .system-tray time {
+    font-size: 10px;
+  }
 }
