@@ -375,6 +375,8 @@ export const initialFileSystem: FileSystemItem[] = [
     type: "directory",
     parentId: "projects",
 
+    iconId: "project-tnt-basketball",
+
     hidden: false,
 
     deletable: false,
@@ -450,6 +452,8 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "Médicos & Dentistas",
     type: "directory",
     parentId: "projects",
+
+    iconId: "project-medicos-dentistas",
 
     hidden: false,
 
