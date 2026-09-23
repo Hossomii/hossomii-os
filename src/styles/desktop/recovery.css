@@ -1,0 +1,666 @@
+/* =========================================================
+   HOSSOMII OS
+   Recovery Console
+   Classic blue recovery environment
+   ========================================================= */
+
+
+/* =========================================================
+   ENVIRONMENT
+   ========================================================= */
+
+.recovery-environment {
+  --recovery-blue: #0000aa;
+  --recovery-white: #ffffff;
+  --recovery-gray: #c0c0c0;
+
+  position: fixed;
+  inset: 0;
+
+  z-index: 30000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+
+  padding:
+    clamp(
+      16px,
+      4vw,
+      48px
+    );
+
+  overflow: hidden;
+
+  overscroll-behavior: none;
+
+  background:
+    var(--recovery-blue);
+
+  color:
+    var(--recovery-white);
+
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
+
+  font-size:
+    clamp(
+      12px,
+      1.1vw,
+      16px
+    );
+
+  font-weight: 400;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================================
+   TERMINAL
+   ========================================================= */
+
+.recovery-terminal {
+  display: flex;
+  flex-direction: column;
+
+  width:
+    min(
+      680px,
+      100%
+    );
+
+  /*
+   * Important:
+   * explicit height keeps the command input visible.
+   */
+  height:
+    min(
+      640px,
+      calc(
+        100dvh - 40px
+      )
+    );
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background:
+    transparent;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.recovery-header {
+  position: relative;
+
+  z-index: 2;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  justify-content: center;
+
+  margin-bottom:
+    clamp(
+      20px,
+      4vh,
+      34px
+    );
+
+  background:
+    var(--recovery-blue);
+
+  text-align: center;
+}
+
+.recovery-title-badge {
+  display: inline-block;
+
+  max-width: 100%;
+
+  padding:
+    2px 8px;
+
+  background:
+    var(--recovery-gray);
+
+  color:
+    var(--recovery-blue);
+
+  font-size:
+    clamp(
+      11px,
+      1.2vw,
+      16px
+    );
+
+  font-weight: 400;
+
+  line-height: 1.25;
+
+  white-space: normal;
+}
+
+
+/* =========================================================
+   SCROLLABLE OUTPUT
+   ========================================================= */
+
+.recovery-output {
+  position: relative;
+
+  flex: 1 1 auto;
+
+  min-width: 0;
+  min-height: 0;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding:
+    0 4px 14px 0;
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: contain;
+
+  background:
+    transparent;
+
+  color:
+    var(--recovery-white);
+
+  font-family: inherit;
+
+  font-size: inherit;
+  font-weight: 400;
+
+  line-height: 1.55;
+
+  /*
+   * Scroll still works,
+   * but the scrollbar is invisible.
+   */
+  scrollbar-width: none;
+
+  -ms-overflow-style: none;
+}
+
+.recovery-output::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+
+  display: none;
+}
+
+
+/* =========================================================
+   LINES
+   ========================================================= */
+
+.recovery-line {
+  width: 100%;
+  max-width: 100%;
+
+  min-height:
+    1.5em;
+
+  box-sizing: border-box;
+
+  white-space:
+    pre-wrap;
+
+  overflow-wrap:
+    anywhere;
+
+  word-break:
+    break-word;
+}
+
+.recovery-line-normal {
+  margin:
+    0 0 6px;
+}
+
+.recovery-line-activity {
+  margin:
+    0 0 6px;
+}
+
+.recovery-line-prompt {
+  margin:
+    14px 0 8px;
+}
+
+.recovery-line-section {
+  margin:
+    clamp(
+      16px,
+      3vh,
+      24px
+    )
+    0
+    10px;
+
+  font-size: inherit;
+
+  font-weight: 400;
+}
+
+.recovery-line-section:first-child {
+  margin-top: 0;
+}
+
+.recovery-line-section::after {
+  display: none;
+}
+
+.recovery-line-note {
+  max-width: 100%;
+
+  margin:
+    7px 0 12px;
+
+  color:
+    var(--recovery-white);
+
+  font-size: inherit;
+  font-style: normal;
+
+  line-height: 1.55;
+}
+
+
+/* =========================================================
+   TOKENS
+   ========================================================= */
+
+.recovery-token,
+.recovery-token-text,
+.recovery-token-status,
+.recovery-token-ok,
+.recovery-token-error,
+.recovery-token-path,
+.recovery-token-file,
+.recovery-token-command,
+.recovery-token-muted,
+.recovery-token-accent,
+.recovery-token-prompt {
+  max-width: 100%;
+
+  color:
+    var(--recovery-white);
+
+  font-weight: 400;
+
+  white-space:
+    pre-wrap;
+
+  overflow-wrap:
+    anywhere;
+}
+
+.recovery-token-status,
+.recovery-token-ok {
+  display:
+    inline-block;
+
+  min-width: 8ch;
+}
+
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+.recovery-inline-spinner {
+  display: none;
+}
+
+
+/* =========================================================
+   COMMAND INPUT
+   Always visible
+   ========================================================= */
+
+.recovery-command-line {
+  position: relative;
+
+  z-index: 3;
+
+  flex: 0 0 auto;
+
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+
+  width: 100%;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+
+  margin: 0;
+
+  padding:
+    12px 0 4px;
+
+  border: 0;
+
+  background:
+    var(--recovery-blue);
+
+  color:
+    var(--recovery-white);
+
+  font-family: inherit;
+
+  font-size: inherit;
+  font-weight: 400;
+}
+
+.recovery-prompt-path {
+  flex: 0 0 auto;
+
+  color:
+    var(--recovery-white);
+
+  white-space: nowrap;
+}
+
+.recovery-prompt-chevron {
+  flex: 0 0 auto;
+
+  color:
+    var(--recovery-white);
+}
+
+.recovery-command-line input {
+  flex: 1 1 auto;
+
+  min-width: 0;
+  width: 0;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    var(--recovery-white);
+
+  font-family: inherit;
+
+  font-size: inherit;
+  font-weight: 400;
+
+  line-height: inherit;
+
+  caret-color:
+    var(--recovery-white);
+}
+
+.recovery-command-line input:disabled {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   RESTORED
+   ========================================================= */
+
+.recovery-restored-message {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  margin-top: 20px;
+
+  padding: 0;
+
+  border: 0;
+
+  color:
+    var(--recovery-white);
+}
+
+.recovery-restored-message strong,
+.recovery-restored-message span {
+  color:
+    var(--recovery-white);
+
+  font-size: inherit;
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.recovery-footer {
+  display: none;
+}
+
+
+/* =========================================================
+   SHORT DESKTOP / NOTEBOOK
+   ========================================================= */
+
+@media (
+  max-height: 720px
+) {
+  .recovery-environment {
+    padding:
+      16px 28px;
+  }
+
+  .recovery-terminal {
+    height:
+      calc(
+        100dvh - 32px
+      );
+  }
+
+  .recovery-header {
+    margin-bottom:
+      18px;
+  }
+
+  .recovery-line-section {
+    margin-top:
+      14px;
+  }
+
+  .recovery-command-line {
+    padding-top:
+      9px;
+  }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (
+  max-width: 700px
+) {
+  .recovery-environment {
+    padding:
+      20px;
+  }
+
+  .recovery-terminal {
+    width: 100%;
+
+    height:
+      calc(
+        100dvh - 40px
+      );
+  }
+
+  .recovery-title-badge {
+    padding:
+      2px 6px;
+  }
+
+  .recovery-token-status,
+  .recovery-token-ok {
+    min-width: 7ch;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (
+  max-width: 480px
+) {
+  .recovery-environment {
+    align-items:
+      stretch;
+
+    justify-content:
+      stretch;
+
+    padding:
+      14px 12px 10px;
+
+    font-size:
+      11px;
+
+    line-height:
+      1.45;
+  }
+
+  .recovery-terminal {
+    width: 100%;
+    height: 100%;
+
+    max-height: none;
+  }
+
+  .recovery-header {
+    flex: 0 0 auto;
+
+    justify-content:
+      flex-start;
+
+    margin-bottom:
+      18px;
+
+    text-align: left;
+  }
+
+  .recovery-title-badge {
+    font-size:
+      10px;
+
+    line-height:
+      1.3;
+  }
+
+  .recovery-output {
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    padding-right: 0;
+
+    line-height:
+      1.5;
+  }
+
+  .recovery-line {
+    min-height:
+      1.4em;
+  }
+
+  .recovery-line-section {
+    margin:
+      14px 0 8px;
+  }
+
+  .recovery-line-note {
+    margin:
+      6px 0 10px;
+  }
+
+  .recovery-token-status,
+  .recovery-token-ok {
+    min-width: 6ch;
+  }
+
+  .recovery-command-line {
+    flex: 0 0 auto;
+
+    gap: 3px;
+
+    padding:
+      8px 0 3px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (
+  max-width: 360px
+) {
+  .recovery-environment {
+    padding:
+      10px 8px 8px;
+
+    font-size:
+      10px;
+  }
+
+  .recovery-title-badge {
+    font-size:
+      9px;
+  }
+
+  .recovery-token-status,
+  .recovery-token-ok {
+    min-width: 5ch;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
+  .recovery-output {
+    scroll-behavior: auto;
+  }
+}

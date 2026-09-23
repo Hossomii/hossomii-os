@@ -1,15 +1,26 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
-import type { OSWindow } from "../../types/window";
+import type {
+  OSWindow,
+} from "../../types/window";
+
+import profileAvatar from "../../assets/profile-avatar.webp";
 
 type TaskbarProps = {
-  startMenuOpen: boolean;
+  startMenuOpen:
+    boolean;
 
-  windows: OSWindow[];
+  windows:
+    OSWindow[];
 
-  activeWindowId: OSWindow["id"] | null;
+  activeWindowId:
+    OSWindow["id"] | null;
 
-  onStartToggle: () => void;
+  onStartToggle:
+    () => void;
 
   onWindowClick: (
     id: OSWindow["id"]
@@ -23,16 +34,29 @@ export function Taskbar({
   onStartToggle,
   onWindowClick,
 }: TaskbarProps) {
-  const [currentTime, setCurrentTime] =
-    useState(new Date());
+  const [
+    currentTime,
+    setCurrentTime,
+  ] =
+    useState(
+      new Date()
+    );
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
+    const timer =
+      window.setInterval(
+        () => {
+          setCurrentTime(
+            new Date()
+          );
+        },
+        1000
+      );
 
     return () => {
-      window.clearInterval(timer);
+      window.clearInterval(
+        timer
+      );
     };
   }, []);
 
@@ -43,7 +67,9 @@ export function Taskbar({
         hour: "2-digit",
         minute: "2-digit",
       }
-    ).format(currentTime);
+    ).format(
+      currentTime
+    );
 
   const formattedDate =
     new Intl.DateTimeFormat(
@@ -53,72 +79,109 @@ export function Taskbar({
         month: "2-digit",
         year: "numeric",
       }
-    ).format(currentTime);
+    ).format(
+      currentTime
+    );
 
   return (
     <footer className="taskbar">
       <button
-        className={`start-button ${
+        type="button"
+        className={[
+          "start-button",
+
           startMenuOpen
             ? "start-button-active"
-            : ""
-        }`}
-        type="button"
+            : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        aria-expanded={
+          startMenuOpen
+        }
+        aria-controls="hossomii-start-menu"
         onClick={(event) => {
+          /*
+           * Important:
+           * prevents Desktop's click
+           * handler from immediately
+           * closing the menu.
+           */
           event.stopPropagation();
 
           onStartToggle();
         }}
       >
-        <span className="start-logo">
-          H
-        </span>
+        <img
+          src={
+            profileAvatar
+          }
+          alt=""
+          className="start-button-avatar"
+        />
 
-        <span>iniciar</span>
+        <span>
+          Iniciar
+        </span>
       </button>
 
       <div className="taskbar-applications">
-        {windows.map((windowItem) => {
-          const isActive =
-            activeWindowId === windowItem.id &&
-            !windowItem.minimized;
+        {windows.map(
+          (
+            windowItem
+          ) => {
+            const isActive =
+              activeWindowId ===
+                windowItem.id &&
+              !windowItem.minimized;
 
-          return (
-            <button
-              key={windowItem.id}
-              className={[
-                "taskbar-window-button",
-
-                windowItem.minimized
-                  ? "taskbar-window-minimized"
-                  : "",
-
-                isActive
-                  ? "taskbar-window-active"
-                  : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-
-                onWindowClick(
+            return (
+              <button
+                key={
                   windowItem.id
-                );
-              }}
-            >
-              <img
-                src={windowItem.icon}
-                alt=""
-              />
+                }
+                className={[
+                  "taskbar-window-button",
 
-              <span>
-                {windowItem.title}
-              </span>
-            </button>
-          );
-        })}
+                  windowItem.minimized
+                    ? "taskbar-window-minimized"
+                    : "",
+
+                  isActive
+                    ? "taskbar-window-active"
+                    : "",
+                ]
+                  .filter(
+                    Boolean
+                  )
+                  .join(" ")}
+                type="button"
+                onClick={(
+                  event
+                ) => {
+                  event.stopPropagation();
+
+                  onWindowClick(
+                    windowItem.id
+                  );
+                }}
+              >
+                <img
+                  src={
+                    windowItem.icon
+                  }
+                  alt=""
+                />
+
+                <span>
+                  {
+                    windowItem.title
+                  }
+                </span>
+              </button>
+            );
+          }
+        )}
       </div>
 
       <div className="system-tray">
@@ -130,8 +193,12 @@ export function Taskbar({
         </span>
 
         <time
-          dateTime={currentTime.toISOString()}
-          title={formattedDate}
+          dateTime={
+            currentTime.toISOString()
+          }
+          title={
+            formattedDate
+          }
         >
           {formattedTime}
         </time>

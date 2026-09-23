@@ -8,56 +8,201 @@ import type {
 
 type WindowStore = {
   windows: OSWindow[];
+
   topZIndex: number;
 
-  openWindow: (config: OpenWindowConfig) => void;
+  openWindow: (
+    config: OpenWindowConfig
+  ) => void;
 
-  closeWindow: (id: OSWindow["id"]) => void;
+  closeWindow: (
+    id: OSWindow["id"]
+  ) => void;
 
-  minimizeWindow: (id: OSWindow["id"]) => void;
+  minimizeWindow: (
+    id: OSWindow["id"]
+  ) => void;
 
-  restoreWindow: (id: OSWindow["id"]) => void;
+  restoreWindow: (
+    id: OSWindow["id"]
+  ) => void;
 
-  toggleMaximizeWindow: (id: OSWindow["id"]) => void;
+  toggleMaximizeWindow: (
+    id: OSWindow["id"]
+  ) => void;
 
-  focusWindow: (id: OSWindow["id"]) => void;
-
-  resetWindows: () => void;
+  focusWindow: (
+    id: OSWindow["id"]
+  ) => void;
 
   moveWindow: (
     id: OSWindow["id"],
     x: number,
     y: number
   ) => void;
+
+  resizeWindow: (
+    id: OSWindow["id"],
+    bounds: WindowBounds
+  ) => void;
+
+  fitWindowsToViewport:
+    () => void;
+
+  resetWindows:
+    () => void;
 };
 
-const TASKBAR_HEIGHT = 38;
+const DEFAULT_TASKBAR_HEIGHT =
+  38;
 
-function getInitialWindowBounds(): WindowBounds {
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+const MIN_WINDOW_WIDTH =
+  340;
 
-  const width = Math.min(
-    760,
-    viewportWidth - 32
+const MIN_WINDOW_HEIGHT =
+  220;
+
+const WINDOW_MARGIN =
+  8;
+
+function clamp(
+  value: number,
+  minimum: number,
+  maximum: number
+) {
+  return Math.min(
+    Math.max(
+      value,
+      minimum
+    ),
+    maximum
   );
+}
 
-  const height = Math.min(
-    520,
-    viewportHeight - TASKBAR_HEIGHT - 32
-  );
+function getTaskbarHeight() {
+  if (
+    typeof document ===
+    "undefined"
+  ) {
+    return (
+      DEFAULT_TASKBAR_HEIGHT
+    );
+  }
+
+  const rawValue =
+    getComputedStyle(
+      document.documentElement
+    ).getPropertyValue(
+      "--taskbar-height"
+    );
+
+  const parsedValue =
+    Number.parseFloat(
+      rawValue
+    );
+
+  if (
+    Number.isNaN(
+      parsedValue
+    )
+  ) {
+    return (
+      DEFAULT_TASKBAR_HEIGHT
+    );
+  }
+
+  return parsedValue;
+}
+
+function getWorkspaceSize() {
+  const width =
+    Math.max(
+      0,
+      window.innerWidth
+    );
+
+  const height =
+    Math.max(
+      0,
+      window.innerHeight -
+        getTaskbarHeight()
+    );
 
   return {
-    x: Math.max(
-      8,
-      Math.round((viewportWidth - width) / 2)
+    width,
+    height,
+  };
+}
+
+function constrainWindowBounds(
+  bounds: WindowBounds
+): WindowBounds {
+  const workspace =
+    getWorkspaceSize();
+
+  const availableWidth =
+    Math.max(
+      1,
+      workspace.width
+    );
+
+  const availableHeight =
+    Math.max(
+      1,
+      workspace.height
+    );
+
+  const minimumWidth =
+    Math.min(
+      MIN_WINDOW_WIDTH,
+      availableWidth
+    );
+
+  const minimumHeight =
+    Math.min(
+      MIN_WINDOW_HEIGHT,
+      availableHeight
+    );
+
+  const width =
+    clamp(
+      bounds.width,
+      minimumWidth,
+      availableWidth
+    );
+
+  const height =
+    clamp(
+      bounds.height,
+      minimumHeight,
+      availableHeight
+    );
+
+  const maxX =
+    Math.max(
+      0,
+      availableWidth -
+        width
+    );
+
+  const maxY =
+    Math.max(
+      0,
+      availableHeight -
+        height
+    );
+
+  return {
+    x: clamp(
+      bounds.x,
+      0,
+      maxX
     ),
 
-    y: Math.max(
-      8,
-      Math.round(
-        (viewportHeight - TASKBAR_HEIGHT - height) / 2
-      )
+    y: clamp(
+      bounds.y,
+      0,
+      maxY
     ),
 
     width,
@@ -65,233 +210,537 @@ function getInitialWindowBounds(): WindowBounds {
   };
 }
 
+function getInitialWindowBounds():
+  WindowBounds {
+  const workspace =
+    getWorkspaceSize();
+
+  const width =
+    Math.min(
+      760,
+      Math.max(
+        1,
+        workspace.width -
+          WINDOW_MARGIN * 4
+      )
+    );
+
+  const height =
+    Math.min(
+      520,
+      Math.max(
+        1,
+        workspace.height -
+          WINDOW_MARGIN * 4
+      )
+    );
+
+  return constrainWindowBounds({
+    x:
+      Math.round(
+        (
+          workspace.width -
+          width
+        ) / 2
+      ),
+
+    y:
+      Math.round(
+        (
+          workspace.height -
+          height
+        ) / 2
+      ),
+
+    width,
+    height,
+  });
+}
+
 export const useWindowStore =
-  create<WindowStore>((set) => ({
-    windows: [],
+  create<WindowStore>(
+    (set, get) => ({
+      windows: [],
 
-    topZIndex: 100,
+      topZIndex: 100,
 
-    openWindow: (config) => {
-      set((state) => {
+      openWindow: (
+        config
+      ) => {
+        const windowId =
+          config.instanceId
+            ? `${config.appId}:${config.instanceId}`
+            : config.appId;
+
         const existingWindow =
-          state.windows.find(
-            (windowItem) =>
-              windowItem.id === config.appId
+          get().windows.find(
+            (
+              windowItem
+            ) =>
+              windowItem.id ===
+              windowId
           );
 
         const nextZIndex =
-          state.topZIndex + 1;
+          get().topZIndex +
+          1;
 
-        if (existingWindow) {
-          return {
-            topZIndex: nextZIndex,
+        if (
+          existingWindow
+        ) {
+          set((state) => ({
+            topZIndex:
+              nextZIndex,
 
-            windows: state.windows.map(
-              (windowItem) =>
-                windowItem.id === config.appId
-                  ? {
-                      ...windowItem,
+            windows:
+              state.windows.map(
+                (
+                  windowItem
+                ) => {
+                  if (
+                    windowItem.id !==
+                    windowId
+                  ) {
+                    return (
+                      windowItem
+                    );
+                  }
 
-                      minimized: false,
+                  return {
+                    ...windowItem,
 
-                      zIndex: nextZIndex,
-                    }
-                  : windowItem
-            ),
-          };
+                    title:
+                      config.title,
+
+                    icon:
+                      config.icon,
+
+                    data:
+                      config.data ??
+                      windowItem.data,
+
+                    minimized:
+                      false,
+
+                    zIndex:
+                      nextZIndex,
+                  };
+                }
+              ),
+          }));
+
+          return;
         }
 
         const bounds =
           getInitialWindowBounds();
 
-        const newWindow: OSWindow = {
-          id: config.appId,
-          appId: config.appId,
+        set((state) => ({
+          topZIndex:
+            nextZIndex,
 
-          title: config.title,
-          icon: config.icon,
-
-          ...bounds,
-
-          minimized: false,
-          maximized: false,
-
-          zIndex: nextZIndex,
-
-          restoreBounds: null,
-        };
-
-        return {
           windows: [
             ...state.windows,
-            newWindow,
+
+            {
+              id: windowId,
+
+              appId:
+                config.appId,
+
+              title:
+                config.title,
+
+              icon:
+                config.icon,
+
+              x:
+                bounds.x,
+
+              y:
+                bounds.y,
+
+              width:
+                bounds.width,
+
+              height:
+                bounds.height,
+
+              minimized:
+                false,
+
+              maximized:
+                false,
+
+              zIndex:
+                nextZIndex,
+
+              restoreBounds:
+                null,
+
+              data:
+                config.data,
+            },
           ],
+        }));
+      },
 
-          topZIndex: nextZIndex,
-        };
-      });
-    },
+      closeWindow: (
+        id
+      ) => {
+        set((state) => ({
+          windows:
+            state.windows.filter(
+              (
+                windowItem
+              ) =>
+                windowItem.id !==
+                id
+            ),
+        }));
+      },
 
-    closeWindow: (id) => {
-      set((state) => ({
-        windows: state.windows.filter(
-          (windowItem) =>
-            windowItem.id !== id
-        ),
-      }));
-    },
+      minimizeWindow: (
+        id
+      ) => {
+        set((state) => ({
+          windows:
+            state.windows.map(
+              (
+                windowItem
+              ) =>
+                windowItem.id ===
+                id
+                  ? {
+                      ...windowItem,
 
-    minimizeWindow: (id) => {
-      set((state) => ({
-        windows: state.windows.map(
-          (windowItem) =>
-            windowItem.id === id
-              ? {
-                  ...windowItem,
-                  minimized: true,
+                      minimized:
+                        true,
+                    }
+                  : windowItem
+            ),
+        }));
+      },
+
+      restoreWindow: (
+        id
+      ) => {
+        set((state) => {
+          const nextZIndex =
+            state.topZIndex +
+            1;
+
+          return {
+            topZIndex:
+              nextZIndex,
+
+            windows:
+              state.windows.map(
+                (
+                  windowItem
+                ) =>
+                  windowItem.id ===
+                  id
+                    ? {
+                        ...windowItem,
+
+                        minimized:
+                          false,
+
+                        zIndex:
+                          nextZIndex,
+                      }
+                    : windowItem
+              ),
+          };
+        });
+      },
+
+      focusWindow: (
+        id
+      ) => {
+        set((state) => {
+          const nextZIndex =
+            state.topZIndex +
+            1;
+
+          return {
+            topZIndex:
+              nextZIndex,
+
+            windows:
+              state.windows.map(
+                (
+                  windowItem
+                ) =>
+                  windowItem.id ===
+                  id
+                    ? {
+                        ...windowItem,
+
+                        zIndex:
+                          nextZIndex,
+                      }
+                    : windowItem
+              ),
+          };
+        });
+      },
+
+      moveWindow: (
+        id,
+        x,
+        y
+      ) => {
+        set((state) => ({
+          windows:
+            state.windows.map(
+              (
+                windowItem
+              ) => {
+                if (
+                  windowItem.id !==
+                    id ||
+                  windowItem.maximized
+                ) {
+                  return (
+                    windowItem
+                  );
                 }
-              : windowItem
-        ),
-      }));
-    },
 
-    restoreWindow: (id) => {
-      set((state) => {
-        const nextZIndex =
-          state.topZIndex + 1;
+                const bounds =
+                  constrainWindowBounds(
+                    {
+                      x,
+                      y,
 
-        return {
-          topZIndex: nextZIndex,
+                      width:
+                        windowItem.width,
 
-          windows: state.windows.map(
-            (windowItem) =>
-              windowItem.id === id
-                ? {
-                    ...windowItem,
-
-                    minimized: false,
-
-                    zIndex:
-                      nextZIndex,
-                  }
-                : windowItem
-          ),
-        };
-      });
-    },
-
-    focusWindow: (id) => {
-      set((state) => {
-        const nextZIndex =
-          state.topZIndex + 1;
-
-        return {
-          topZIndex: nextZIndex,
-
-          windows: state.windows.map(
-            (windowItem) =>
-              windowItem.id === id
-                ? {
-                    ...windowItem,
-
-                    zIndex:
-                      nextZIndex,
-                  }
-                : windowItem
-          ),
-        };
-      });
-    },
-
-    moveWindow: (id, x, y) => {
-      set((state) => ({
-        windows: state.windows.map(
-          (windowItem) =>
-            windowItem.id === id &&
-            !windowItem.maximized
-              ? {
-                  ...windowItem,
-                  x,
-                  y,
-                }
-              : windowItem
-        ),
-      }));
-    },
-
-    resetWindows: () => {
-      set({
-        windows: [],
-        topZIndex: 100,
-      });
-    },
-
-    toggleMaximizeWindow: (id) => {
-      set((state) => {
-        const nextZIndex =
-          state.topZIndex + 1;
-
-        return {
-          topZIndex: nextZIndex,
-
-          windows: state.windows.map(
-            (windowItem) => {
-              if (windowItem.id !== id) {
-                return windowItem;
-              }
-
-              if (windowItem.maximized) {
-                const restoreBounds =
-                  windowItem.restoreBounds;
-
-                if (!restoreBounds) {
-                  return windowItem;
-                }
+                      height:
+                        windowItem.height,
+                    }
+                  );
 
                 return {
                   ...windowItem,
 
-                  ...restoreBounds,
+                  x:
+                    bounds.x,
 
-                  maximized: false,
-
-                  restoreBounds: null,
-
-                  zIndex: nextZIndex,
+                  y:
+                    bounds.y,
                 };
               }
+            ),
+        }));
+      },
 
-              const restoreBounds: WindowBounds = {
-                x: windowItem.x,
-                y: windowItem.y,
-                width:
-                  windowItem.width,
-                height:
-                  windowItem.height,
-              };
+      resizeWindow: (
+        id,
+        bounds
+      ) => {
+        set((state) => ({
+          windows:
+            state.windows.map(
+              (
+                windowItem
+              ) => {
+                if (
+                  windowItem.id !==
+                    id ||
+                  windowItem.maximized
+                ) {
+                  return (
+                    windowItem
+                  );
+                }
 
-              return {
-                ...windowItem,
+                const nextBounds =
+                  constrainWindowBounds(
+                    bounds
+                  );
 
-                x: 0,
-                y: 0,
+                return {
+                  ...windowItem,
 
-                width:
-                  window.innerWidth,
+                  ...nextBounds,
+                };
+              }
+            ),
+        }));
+      },
 
-                height:
-                  window.innerHeight -
-                  TASKBAR_HEIGHT,
+      fitWindowsToViewport:
+        () => {
+          set((state) => {
+            const workspace =
+              getWorkspaceSize();
 
-                maximized: true,
+            return {
+              windows:
+                state.windows.map(
+                  (
+                    windowItem
+                  ) => {
+                    if (
+                      windowItem.maximized
+                    ) {
+                      const restoreBounds =
+                        windowItem.restoreBounds
+                          ? constrainWindowBounds(
+                              windowItem.restoreBounds
+                            )
+                          : null;
 
-                restoreBounds,
+                      return {
+                        ...windowItem,
 
-                zIndex: nextZIndex,
-              };
-            }
-          ),
-        };
-      });
-    },
-  }));
+                        x: 0,
+                        y: 0,
+
+                        width:
+                          workspace.width,
+
+                        height:
+                          workspace.height,
+
+                        restoreBounds,
+                      };
+                    }
+
+                    return {
+                      ...windowItem,
+
+                      ...constrainWindowBounds(
+                        {
+                          x:
+                            windowItem.x,
+
+                          y:
+                            windowItem.y,
+
+                          width:
+                            windowItem.width,
+
+                          height:
+                            windowItem.height,
+                        }
+                      ),
+                    };
+                  }
+                ),
+            };
+          });
+        },
+
+      resetWindows: () => {
+        set({
+          windows: [],
+          topZIndex: 100,
+        });
+      },
+
+      toggleMaximizeWindow:
+        (id) => {
+          set((state) => {
+            const nextZIndex =
+              state.topZIndex +
+              1;
+
+            const workspace =
+              getWorkspaceSize();
+
+            return {
+              topZIndex:
+                nextZIndex,
+
+              windows:
+                state.windows.map(
+                  (
+                    windowItem
+                  ) => {
+                    if (
+                      windowItem.id !==
+                      id
+                    ) {
+                      return (
+                        windowItem
+                      );
+                    }
+
+                    if (
+                      windowItem.maximized
+                    ) {
+                      const restoreBounds =
+                        windowItem.restoreBounds;
+
+                      if (
+                        !restoreBounds
+                      ) {
+                        return (
+                          windowItem
+                        );
+                      }
+
+                      return {
+                        ...windowItem,
+
+                        ...constrainWindowBounds(
+                          restoreBounds
+                        ),
+
+                        maximized:
+                          false,
+
+                        restoreBounds:
+                          null,
+
+                        zIndex:
+                          nextZIndex,
+                      };
+                    }
+
+                    const restoreBounds:
+                      WindowBounds =
+                        {
+                          x:
+                            windowItem.x,
+
+                          y:
+                            windowItem.y,
+
+                          width:
+                            windowItem.width,
+
+                          height:
+                            windowItem.height,
+                        };
+
+                    return {
+                      ...windowItem,
+
+                      x: 0,
+                      y: 0,
+
+                      width:
+                        workspace.width,
+
+                      height:
+                        workspace.height,
+
+                      maximized:
+                        true,
+
+                      restoreBounds,
+
+                      zIndex:
+                        nextZIndex,
+                    };
+                  }
+                ),
+            };
+          });
+        },
+    })
+  );

@@ -1,0 +1,233 @@
+/* =========================================================
+   HOSSOMII OS
+   Command Terminal
+   ========================================================= */
+
+.terminal-app {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  overflow: hidden;
+
+  background:
+    #050505;
+
+  color:
+    #e6e6e6;
+
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
+
+  font-size: 12px;
+
+  cursor: text;
+
+  user-select: text;
+}
+
+.terminal-output {
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding:
+    10px
+    11px
+    14px;
+
+  overflow-x: auto;
+  overflow-y: auto;
+
+  background:
+    #050505;
+
+  scrollbar-color:
+    #777777
+    #111111;
+}
+
+.terminal-line {
+  min-height: 1.45em;
+
+  color:
+    #e6e6e6;
+
+  line-height: 1.45;
+
+  white-space: pre-wrap;
+
+  overflow-wrap:
+    anywhere;
+}
+
+.terminal-line-command {
+  color:
+    #ffffff;
+}
+
+.terminal-line-error {
+  color:
+    #ff8d8d;
+}
+
+.terminal-line-muted {
+  color:
+    #8f8f8f;
+}
+
+.terminal-line-accent {
+  color:
+    #9ac8ff;
+}
+
+
+/* =========================================================
+   PROMPT
+   ========================================================= */
+
+.terminal-prompt {
+  display: flex;
+  align-items: flex-start;
+
+  width: 100%;
+
+  min-width: 0;
+
+  margin: 0;
+  padding: 0;
+
+  color:
+    #e6e6e6;
+}
+
+.terminal-prompt label {
+  flex: 0 0 auto;
+
+  min-height: 1.45em;
+
+  line-height: 1.45;
+
+  white-space: nowrap;
+}
+
+.terminal-prompt input {
+  flex: 1 1 auto;
+
+  width: 100%;
+
+  min-width: 24px;
+
+  margin: 0;
+  padding: 0 0 0 5px;
+
+  border: 0;
+  outline: 0;
+
+  background:
+    transparent;
+
+  color:
+    #ffffff;
+
+  caret-color:
+    #ffffff;
+
+  font:
+    inherit;
+
+  line-height: 1.45;
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+.terminal-app ::selection {
+  background:
+    #d8d8d8;
+
+  color:
+    #000000;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.terminal-output::-webkit-scrollbar {
+  width: 13px;
+  height: 13px;
+}
+
+.terminal-output::-webkit-scrollbar-track {
+  background:
+    #111111;
+}
+
+.terminal-output::-webkit-scrollbar-thumb {
+  border:
+    2px solid #111111;
+
+  background:
+    #747474;
+}
+
+.terminal-output::-webkit-scrollbar-thumb:hover {
+  background:
+    #8c8c8c;
+}
+
+
+/* =========================================================
+   HIGH CONTRAST
+   ========================================================= */
+
+.desktop[data-theme="high-contrast"]
+  .terminal-app,
+.desktop[data-theme="high-contrast"]
+  .terminal-output {
+  background:
+    #000000;
+
+  color:
+    #ffffff;
+}
+
+.desktop[data-theme="high-contrast"]
+  .terminal-line-accent {
+  color:
+    #00ffff;
+}
+
+.desktop[data-theme="high-contrast"]
+  .terminal-line-error {
+  color:
+    #ffff00;
+}
+
+
+/* =========================================================
+   SMALL WINDOW
+   ========================================================= */
+
+@container (max-width: 460px) {
+  .terminal-app {
+    font-size: 11px;
+  }
+
+  .terminal-output {
+    padding:
+      8px
+      7px
+      12px;
+  }
+}

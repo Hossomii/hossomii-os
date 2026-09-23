@@ -1,0 +1,30 @@
+@import "./shell.css";
+
+@import "./windows.css";
+
+@import "./explorer.css";
+
+@import "./dialogs.css";
+
+@import "./applications.css";
+
+@import "./project-viewer.css";
+
+@import "./control-panel.css";
+
+@import "./terminal.css";
+
+@import "./critical-flow.css";
+
+@import "./critical-transition.css";
+
+@import "./recovery.css";
+
+@import "./achievements.css";
+
+/*
+ * Must remain last.
+ * Theme rules override the
+ * classic default styles.
+ */
+@import "./themes.css";

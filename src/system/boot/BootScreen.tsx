@@ -23,8 +23,6 @@ export function BootScreen() {
 
         <div className="xp-session-content xp-welcome-content">
           <div className="xp-brand">
-            <span className="xp-brand-mark">H</span>
-
             <div>
               <strong>HOSSOMII OS</strong>
               <span>Estação de trabalho pessoal</span>

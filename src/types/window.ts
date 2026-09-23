@@ -3,7 +3,12 @@ export type WindowAppId =
   | "projects"
   | "documents"
   | "terminal"
-  | "recycle-bin";
+  | "recycle-bin"
+  | "notepad"
+  | "pdf-viewer"
+  | "image-viewer"
+  | "project-viewer"
+  | "control-panel";
 
 export type WindowBounds = {
   x: number;
@@ -12,8 +17,25 @@ export type WindowBounds = {
   height: number;
 };
 
+export type WindowResizeDirection =
+  | "n"
+  | "ne"
+  | "e"
+  | "se"
+  | "s"
+  | "sw"
+  | "w"
+  | "nw";
+
+export type WindowData = {
+  fileId?: string;
+
+  projectId?: string;
+};
+
 export type OSWindow = {
-  id: WindowAppId;
+  id: string;
+
   appId: WindowAppId;
 
   title: string;
@@ -30,11 +52,32 @@ export type OSWindow = {
 
   zIndex: number;
 
-  restoreBounds: WindowBounds | null;
+  restoreBounds:
+    WindowBounds | null;
+
+  data?: WindowData;
 };
 
 export type OpenWindowConfig = {
   appId: WindowAppId;
+
   title: string;
   icon: string;
+
+  /*
+   * Diferencia várias janelas
+   * da mesma aplicação.
+   *
+   * Exemplo:
+   * notepad:about-file
+   * notepad:readme-file
+   */
+  instanceId?: string;
+
+  /*
+   * Informações que a aplicação
+   * precisa para saber o que
+   * deve exibir.
+   */
+  data?: WindowData;
 };
