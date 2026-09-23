@@ -2,6 +2,7 @@ import type { FileSystemItem } from "../../../types/filesystem";
 
 import documentsIcon from "../../../assets/icons/documents.webp";
 import projectsIcon from "../../../assets/icons/projects.webp";
+import { getFileSystemIcon } from "../../../system/filesystem/iconRegistry";
 
 type ExplorerDirectoryViewProps = {
   currentItem: FileSystemItem | undefined;
@@ -46,6 +47,12 @@ export function ExplorerDirectoryView({
   }
 
   function renderItemIcon(item: FileSystemItem) {
+    const customIcon = getFileSystemIcon(item.iconId);
+
+    if (customIcon) {
+      return <img src={customIcon} alt="" draggable={false} />;
+    }
+
     if (item.id === "documents") {
       return <img src={documentsIcon} alt="" />;
     }

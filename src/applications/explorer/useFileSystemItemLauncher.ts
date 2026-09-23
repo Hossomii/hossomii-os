@@ -1,10 +1,6 @@
-import {
-  useFileSystemStore,
-} from "../../stores/filesystemStore";
+import { useFileSystemStore } from "../../stores/filesystemStore";
 
-import {
-  useWindowStore,
-} from "../../stores/windowStore";
+import { useWindowStore } from "../../stores/windowStore";
 
 import computerIcon from "../../assets/icons/computer.webp";
 import documentsIcon from "../../assets/icons/documents.webp";
@@ -12,23 +8,17 @@ import projectsIcon from "../../assets/icons/projects.webp";
 import terminalIcon from "../../assets/icons/terminal.webp";
 import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
 
-import type {
-  FileSystemItem,
-} from "../../types/filesystem";
+import { getFileSystemIcon } from "../../system/filesystem/iconRegistry";
 
-import type {
-  WindowAppId,
-} from "../../types/window";
+import type { FileSystemItem } from "../../types/filesystem";
+
+import type { WindowAppId } from "../../types/window";
 
 type UseFileSystemItemLauncherParams = {
-  navigateTo: (
-    location: string
-  ) => void;
+  navigateTo: (location: string) => void;
 };
 
-function getApplicationIcon(
-  appId: WindowAppId
-) {
+function getApplicationIcon(appId: WindowAppId) {
   switch (appId) {
     case "computer":
       return computerIcon;
@@ -63,7 +53,7 @@ function getApplicationTitle(
     {
       type: "application";
     }
-  >
+  >,
 ) {
   switch (item.appId) {
     case "terminal":
@@ -80,86 +70,49 @@ function getApplicationTitle(
 export function useFileSystemItemLauncher({
   navigateTo,
 }: UseFileSystemItemLauncherParams) {
-  const getItem =
-    useFileSystemStore(
-      (state) =>
-        state.getItem
-    );
+  const getItem = useFileSystemStore((state) => state.getItem);
 
-  const openWindow =
-    useWindowStore(
-      (state) =>
-        state.openWindow
-    );
+  const openWindow = useWindowStore((state) => state.openWindow);
 
-  function openItem(
-    item: FileSystemItem
-  ) {
-    if (
-      item.type ===
-      "directory"
-    ) {
-      navigateTo(
-        item.id
-      );
+  function openItem(item: FileSystemItem) {
+    if (item.type === "directory") {
+      navigateTo(item.id);
 
       return;
     }
 
-    if (
-      item.type ===
-      "shortcut"
-    ) {
-      const targetItem =
-        getItem(
-          item.targetId
-        );
+    if (item.type === "shortcut") {
+      const targetItem = getItem(item.targetId);
 
       if (!targetItem) {
         return;
       }
 
-      openItem(
-        targetItem
-      );
+      openItem(targetItem);
 
       return;
     }
 
-    if (
-      item.type ===
-      "application"
-    ) {
-      if (
-        item.appId ===
-        "project-viewer"
-      ) {
-        const projectId =
-          item.data
-            ?.projectId;
+    if (item.type === "application") {
+      if (item.appId === "project-viewer") {
+        const projectId = item.data?.projectId;
 
         if (!projectId) {
           return;
         }
 
-        const project =
-          getItem(
-            projectId
-          );
+        const project = getItem(projectId);
+
+        const projectIcon = getFileSystemIcon(project?.iconId);
 
         openWindow({
-          appId:
-            "project-viewer",
+          appId: "project-viewer",
 
-          instanceId:
-            item.instanceId ??
-            projectId,
+          instanceId: item.instanceId ?? projectId,
 
-          title:
-            `${project?.name ?? "Projeto"} - HOSSOMII Portfolio`,
+          title: `${project?.name ?? "Projeto"} - HOSSOMII Portfolio`,
 
-          icon:
-            projectsIcon,
+          icon: projectIcon ?? projectsIcon,
 
           data: {
             projectId,
@@ -170,133 +123,85 @@ export function useFileSystemItemLauncher({
       }
 
       openWindow({
-        appId:
-          item.appId,
+        appId: item.appId,
 
-        instanceId:
-          item.instanceId,
+        instanceId: item.instanceId,
 
-        title:
-          getApplicationTitle(
-            item
-          ),
+        title: getApplicationTitle(item),
 
-        icon:
-          getApplicationIcon(
-            item.appId
-          ),
+        icon: getApplicationIcon(item.appId),
 
-        data:
-          item.data,
+        data: item.data,
       });
 
       return;
     }
 
-    const extension =
-      item.extension
-        .toLowerCase();
+    const extension = item.extension.toLowerCase();
 
-    const imageExtensions = [
-      "webp",
-      "png",
-      "jpg",
-      "jpeg",
-    ];
+    const imageExtensions = ["webp", "png", "jpg", "jpeg"];
 
-    if (
-      extension ===
-      "txt"
-    ) {
+    if (extension === "txt") {
       openWindow({
-        appId:
-          "notepad",
+        appId: "notepad",
 
-        instanceId:
-          item.id,
+        instanceId: item.id,
 
-        title:
-          `${item.name} - Bloco de Notas`,
+        title: `${item.name} - Bloco de Notas`,
 
-        icon:
-          documentsIcon,
+        icon: documentsIcon,
 
         data: {
-          fileId:
-            item.id,
+          fileId: item.id,
         },
       });
 
       return;
     }
 
-    if (
-      extension ===
-      "pdf"
-    ) {
+    if (extension === "pdf") {
       openWindow({
-        appId:
-          "pdf-viewer",
+        appId: "pdf-viewer",
 
-        instanceId:
-          item.id,
+        instanceId: item.id,
 
-        title:
-          `${item.name} - Visualizador de PDF`,
+        title: `${item.name} - Visualizador de PDF`,
 
-        icon:
-          documentsIcon,
+        icon: documentsIcon,
 
         data: {
-          fileId:
-            item.id,
+          fileId: item.id,
         },
       });
 
       return;
     }
 
-    if (
-      imageExtensions.includes(
-        extension
-      )
-    ) {
+    if (imageExtensions.includes(extension)) {
       openWindow({
-        appId:
-          "image-viewer",
+        appId: "image-viewer",
 
-        instanceId:
-          item.id,
+        instanceId: item.id,
 
-        title:
-          `${item.name} - Visualizador de Imagens`,
+        title: `${item.name} - Visualizador de Imagens`,
 
-        icon:
-          documentsIcon,
+        icon: documentsIcon,
 
         data: {
-          fileId:
-            item.id,
+          fileId: item.id,
         },
       });
 
       return;
     }
 
-    if (
-      extension ===
-      "sys"
-    ) {
-      console.log(
-        `Arquivo de sistema: ${item.name}`
-      );
+    if (extension === "sys") {
+      console.log(`Arquivo de sistema: ${item.name}`);
 
       return;
     }
 
-    console.log(
-      `Nenhum aplicativo associado a: ${item.name}`
-    );
+    console.log(`Nenhum aplicativo associado a: ${item.name}`);
   }
 
   return {

@@ -9,10 +9,19 @@ export type FileSystemItemType =
   | "application"
   | "shortcut";
 
+  export type FileSystemIconId =
+  | "computer"
+  | "terminal"
+  | "recycle-bin"
+  | "project-tnt-basketball"
+  | "project-medicos-dentistas";
+
 type BaseFileSystemItem = {
   id: string;
   name: string;
   parentId: string | null;
+
+  iconId?: FileSystemIconId;
 
   hidden: boolean;
 

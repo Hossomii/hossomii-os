@@ -178,6 +178,7 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "project.exe",
     type: "application",
     parentId: "project-tnt-basketball",
+    iconId: "project-tnt-basketball",
 
     appId: "project-viewer",
     instanceId: "project-tnt-basketball",
@@ -264,6 +265,7 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "project.exe",
     type: "application",
     parentId: "project-medicos-dentistas",
+    iconId: "project-medicos-dentistas",
 
     appId: "project-viewer",
     instanceId: "project-medicos-dentistas",
@@ -508,6 +510,7 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "Meu Computador",
     type: "application",
     parentId: "programs",
+    iconId: "computer",
 
     appId: "computer",
 
@@ -526,6 +529,7 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "Terminal",
     type: "application",
     parentId: "programs",
+    iconId: "terminal",
 
     appId: "terminal",
 
@@ -544,6 +548,7 @@ export const initialFileSystem: FileSystemItem[] = [
     name: "Lixeira",
     type: "application",
     parentId: "programs",
+    iconId: "recycle-bin",
 
     appId: "recycle-bin",
 
