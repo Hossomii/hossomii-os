@@ -20,6 +20,8 @@ type FileSystemStore = {
 
   trashItem: (id: string) => boolean;
 
+  trashCriticalItem: (id: string) => boolean;
+
   restoreItem: (id: string) => boolean;
 
   resetFileSystem: () => void;
@@ -29,6 +31,28 @@ function createInitialItems(): FileSystemItem[] {
   return initialFileSystem.map((item) => ({
     ...item,
   }));
+}
+
+function moveItemToTrash(
+  items: FileSystemItem[],
+  id: string
+): FileSystemItem[] {
+  return items.map((currentItem) => {
+    if (currentItem.id !== id) {
+      return currentItem;
+    }
+
+    return {
+      ...currentItem,
+
+      originalParentId:
+        currentItem.parentId,
+
+      parentId: null,
+
+      trashed: true,
+    };
+  });
 }
 
 export const useFileSystemStore =
@@ -76,44 +100,56 @@ export const useFileSystemStore =
 
       const path: FileSystemItem[] = [];
 
-      const visitedIds = new Set<string>();
+      const visitedIds =
+        new Set<string>();
 
-      let currentItem = items.find(
-        (item) => item.id === id
-      );
+      let currentItem =
+        items.find(
+          (item) =>
+            item.id === id
+        );
 
       while (currentItem) {
         if (
-          visitedIds.has(currentItem.id)
+          visitedIds.has(
+            currentItem.id
+          )
         ) {
           break;
         }
 
-        visitedIds.add(currentItem.id);
+        visitedIds.add(
+          currentItem.id
+        );
 
-        path.unshift(currentItem);
+        path.unshift(
+          currentItem
+        );
 
         if (
-          currentItem.parentId === null
+          currentItem.parentId ===
+          null
         ) {
           break;
         }
 
-        currentItem = items.find(
-          (item) =>
-            item.id ===
-            currentItem?.parentId
-        );
+        currentItem =
+          items.find(
+            (item) =>
+              item.id ===
+              currentItem?.parentId
+          );
       }
 
       return path;
     },
 
     trashItem: (id) => {
-      const item = get().items.find(
-        (currentItem) =>
-          currentItem.id === id
-      );
+      const item =
+        get().items.find(
+          (currentItem) =>
+            currentItem.id === id
+        );
 
       if (!item) {
         return false;
@@ -123,41 +159,78 @@ export const useFileSystemStore =
         return false;
       }
 
+      /*
+       * Critical items must never
+       * be deleted through the
+       * normal filesystem path.
+       *
+       * They are handled by the
+       * critical deletion flow.
+       */
+      if (item.critical) {
+        return false;
+      }
+
       if (item.trashed) {
         return false;
       }
 
       set((state) => ({
-        items: state.items.map(
-          (currentItem) => {
-            if (
-              currentItem.id !== id
-            ) {
-              return currentItem;
-            }
+        items:
+          moveItemToTrash(
+            state.items,
+            id
+          ),
+      }));
 
-            return {
-              ...currentItem,
+      return true;
+    },
 
-              originalParentId:
-                currentItem.parentId,
+    trashCriticalItem: (id) => {
+      const item =
+        get().items.find(
+          (currentItem) =>
+            currentItem.id === id
+        );
 
-              parentId: null,
+      if (!item) {
+        return false;
+      }
 
-              trashed: true,
-            };
-          }
-        ),
+      if (!item.deletable) {
+        return false;
+      }
+
+      /*
+       * This operation is intentionally
+       * restricted to items explicitly
+       * marked as critical.
+       */
+      if (!item.critical) {
+        return false;
+      }
+
+      if (item.trashed) {
+        return false;
+      }
+
+      set((state) => ({
+        items:
+          moveItemToTrash(
+            state.items,
+            id
+          ),
       }));
 
       return true;
     },
 
     restoreItem: (id) => {
-      const item = get().items.find(
-        (currentItem) =>
-          currentItem.id === id
-      );
+      const item =
+        get().items.find(
+          (currentItem) =>
+            currentItem.id === id
+        );
 
       if (!item) {
         return false;
@@ -172,26 +245,30 @@ export const useFileSystemStore =
       }
 
       set((state) => ({
-        items: state.items.map(
-          (currentItem) => {
-            if (
-              currentItem.id !== id
-            ) {
-              return currentItem;
+        items:
+          state.items.map(
+            (currentItem) => {
+              if (
+                currentItem.id !==
+                id
+              ) {
+                return currentItem;
+              }
+
+              return {
+                ...currentItem,
+
+                parentId:
+                  currentItem.originalParentId,
+
+                originalParentId:
+                  null,
+
+                trashed:
+                  false,
+              };
             }
-
-            return {
-              ...currentItem,
-
-              parentId:
-                currentItem.originalParentId,
-
-              originalParentId: null,
-
-              trashed: false,
-            };
-          }
-        ),
+          ),
       }));
 
       return true;
@@ -199,7 +276,8 @@ export const useFileSystemStore =
 
     resetFileSystem: () => {
       set({
-        items: createInitialItems(),
+        items:
+          createInitialItems(),
       });
     },
   }));
