@@ -1,35 +1,126 @@
+import {
+  useState,
+} from "react";
+
+import {
+  type BrowserInternalPage,
+} from "./browser-links";
+
+import {
+  BrowserHome,
+} from "./components/BrowserHome";
+
+import {
+  BrowserProfilePage,
+} from "./pages/BrowserProfilePage";
+
+import {
+  BrowserNewsPage,
+} from "./pages/BrowserNewsPage";
+
 export function BrowserApp() {
+  const [
+    currentPage,
+    setCurrentPage,
+  ] =
+    useState<BrowserInternalPage>(
+      "home"
+    );
+
+  function openExternal(
+    url: string
+  ) {
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+
+  function goHome() {
+    setCurrentPage(
+      "home"
+    );
+  }
+
+  function goBack() {
+    if (
+      currentPage !==
+      "home"
+    ) {
+      goHome();
+    }
+  }
+
+  const currentTitle =
+    currentPage ===
+    "profile"
+      ? "Anthony Online"
+      : currentPage ===
+          "news"
+        ? "HOSSOMII News"
+        : "HOSSOMII Web";
+
   return (
     <div className="browser-app">
       <header className="browser-toolbar">
-        <button type="button" disabled aria-label="Voltar">
+        <button
+          type="button"
+          disabled={
+            currentPage ===
+            "home"
+          }
+          aria-label="Voltar"
+          onClick={goBack}
+        >
           ←
         </button>
 
-        <button type="button" disabled aria-label="Avançar">
+        <button
+          type="button"
+          disabled
+          aria-label="Avançar"
+        >
           →
         </button>
 
-        <button type="button" disabled>
+        <button
+          type="button"
+          disabled={
+            currentPage ===
+            "home"
+          }
+          onClick={goHome}
+        >
           Início
         </button>
 
-        <div className="browser-site-title">HOSSOMII Web</div>
+        <div className="browser-site-title">
+          {currentTitle}
+        </div>
       </header>
 
-      <main className="browser-home-placeholder">
-        <div className="browser-home-panel">
-          <span className="browser-home-eyebrow">
-            HOSSOMII INTERNET SERVICE
-          </span>
+      {currentPage ===
+        "home" && (
+        <BrowserHome
+          onOpenInternal={
+            setCurrentPage
+          }
+          onOpenExternal={
+            openExternal
+          }
+        />
+      )}
 
-          <h1>Bem-vindo à Internet</h1>
+      {currentPage ===
+        "profile" && (
+        <BrowserProfilePage />
+      )}
 
-          <p>Seus sites favoritos estarão disponíveis aqui.</p>
-
-          <div className="browser-connection-status">● Conectado</div>
-        </div>
-      </main>
+      {currentPage ===
+        "news" && (
+        <BrowserNewsPage />
+      )}
     </div>
   );
 }
