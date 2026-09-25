@@ -1,63 +1,34 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  type BrowserInternalPage,
-} from "./browser-links";
+import { type BrowserInternalPage } from "./browser-links";
 
-import {
-  BrowserHome,
-} from "./components/BrowserHome";
+import { BrowserHome } from "./components/BrowserHome";
 
-import {
-  BrowserProfilePage,
-} from "./pages/BrowserProfilePage";
+import { BrowserProfilePage } from "./pages/BrowserProfilePage";
 
-import {
-  BrowserNewsPage,
-} from "./pages/BrowserNewsPage";
+import { BrowserNewsPage } from "./pages/BrowserNewsPage";
 
 export function BrowserApp() {
-  const [
-    currentPage,
-    setCurrentPage,
-  ] =
-    useState<BrowserInternalPage>(
-      "home"
-    );
+  const [currentPage, setCurrentPage] = useState<BrowserInternalPage>("home");
 
-  function openExternal(
-    url: string
-  ) {
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
-    );
+  function openExternal(url: string) {
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   function goHome() {
-    setCurrentPage(
-      "home"
-    );
+    setCurrentPage("home");
   }
 
   function goBack() {
-    if (
-      currentPage !==
-      "home"
-    ) {
+    if (currentPage !== "home") {
       goHome();
     }
   }
 
   const currentTitle =
-    currentPage ===
-    "profile"
+    currentPage === "profile"
       ? "Anthony Online"
-      : currentPage ===
-          "news"
+      : currentPage === "news"
         ? "HOSSOMII News"
         : "HOSSOMII Web";
 
@@ -66,61 +37,40 @@ export function BrowserApp() {
       <header className="browser-toolbar">
         <button
           type="button"
-          disabled={
-            currentPage ===
-            "home"
-          }
+          disabled={currentPage === "home"}
           aria-label="Voltar"
           onClick={goBack}
         >
           ←
         </button>
 
-        <button
-          type="button"
-          disabled
-          aria-label="Avançar"
-        >
+        <button type="button" disabled aria-label="Avançar">
           →
         </button>
 
         <button
           type="button"
-          disabled={
-            currentPage ===
-            "home"
-          }
+          disabled={currentPage === "home"}
           onClick={goHome}
         >
           Início
         </button>
 
-        <div className="browser-site-title">
-          {currentTitle}
-        </div>
+        <div className="browser-site-title">{currentTitle}</div>
       </header>
 
-      {currentPage ===
-        "home" && (
+      {currentPage === "home" && (
         <BrowserHome
-          onOpenInternal={
-            setCurrentPage
-          }
-          onOpenExternal={
-            openExternal
-          }
+          onOpenInternal={setCurrentPage}
+          onOpenExternal={openExternal}
         />
       )}
 
-      {currentPage ===
-        "profile" && (
-        <BrowserProfilePage />
+      {currentPage === "profile" && (
+        <BrowserProfilePage onOpenExternal={openExternal} />
       )}
 
-      {currentPage ===
-        "news" && (
-        <BrowserNewsPage />
-      )}
+      {currentPage === "news" && <BrowserNewsPage />}
     </div>
   );
 }
