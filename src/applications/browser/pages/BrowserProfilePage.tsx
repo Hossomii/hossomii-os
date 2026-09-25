@@ -29,48 +29,88 @@ export function BrowserProfilePage({
   return (
     <main className="browser-profile">
       <div className="profile-site">
-        <header className="profile-masthead">
-          <div>
-            <span className="profile-network-label">
-              HOSSOMII NETWORK
+        <header className="profile-pop-header">
+          <div className="profile-pop-logo">
+            <span className="profile-pop-star">
+              ★
             </span>
 
-            <h1>
-              Anthony Online!
-            </h1>
+            <div>
+              <small>
+                HOSSOMII NETWORK PRESENTS
+              </small>
 
-            <p>
-              software • projetos • internet • coisas estranhas
-            </p>
+              <h1>
+                Anthony Online!
+              </h1>
+
+              <p>
+                my tiny corner of the internet ☆
+              </p>
+            </div>
           </div>
 
-          <div className="profile-login-status">
-            <strong>
+          <div className="profile-pop-status">
+            <span>
               ● ONLINE
+            </span>
+
+            <strong>
+              anthony.exe
             </strong>
 
-            <span>
-              user: anthony
-            </span>
+            <small>
+              mood: building stuff
+            </small>
           </div>
         </header>
 
-        <nav className="profile-nav">
-          <span>HOME</span>
-          <span>PROFILE</span>
-          <span>PROJECTS</span>
-          <span>NETWORK</span>
-          <span>GUESTBOOK</span>
+        <div className="profile-pop-ticker">
+          <span>
+            ★ SOFTWARE
+          </span>
+
+          <span>
+            ♥ INTERNET
+          </span>
+
+          <span>
+            ✦ CYBERSECURITY
+          </span>
+
+          <span>
+            ★ PROJECTS
+          </span>
+
+          <span>
+            ☺ CURIOSITY
+          </span>
+
+          <span>
+            ✦ HOSSOMII OS
+          </span>
+        </div>
+
+        <nav className="profile-pop-nav">
+          <span>♡ home</span>
+          <span>☆ about me</span>
+          <span>✦ projects</span>
+          <span>☁ links</span>
+          <span>✉ guestbook</span>
         </nav>
 
-        <div className="profile-layout">
-          <aside className="profile-sidebar">
-            <section className="profile-card">
+        <div className="profile-pop-layout">
+          <aside className="profile-pop-left">
+            <section className="profile-widget profile-widget-pink">
               <h2>
-                Anthony
+                ♡ my profile
               </h2>
 
-              <div className="profile-avatar-frame">
+              <div className="profile-pop-avatar">
+                <div className="profile-avatar-decoration">
+                  ★
+                </div>
+
                 <img
                   src={
                     profileAvatar
@@ -80,57 +120,71 @@ export function BrowserProfilePage({
                     false
                   }
                 />
+
+                <span>
+                  anthony.jpg
+                </span>
               </div>
 
-              <dl className="profile-info-list">
+              <dl className="profile-pop-details">
                 <div>
                   <dt>
-                    Status
+                    name
                   </dt>
 
                   <dd>
-                    online
+                    Anthony
                   </dd>
                 </div>
 
                 <div>
                   <dt>
-                    Área
+                    status
                   </dt>
 
                   <dd>
-                    Software
+                    online ★
                   </dd>
                 </div>
 
                 <div>
                   <dt>
-                    Interesse
+                    occupation
                   </dt>
 
                   <dd>
-                    Engenharia
+                    developer
                   </dd>
                 </div>
 
                 <div>
                   <dt>
-                    Mood
+                    studying
                   </dt>
 
                   <dd>
-                    construindo
+                    software eng.
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>
+                    current mood
+                  </dt>
+
+                  <dd>
+                    curious :)
                   </dd>
                 </div>
               </dl>
             </section>
 
-            <section className="profile-card">
+            <section className="profile-widget profile-widget-yellow">
               <h2>
-                Contact.exe
+                ☆ find me online
               </h2>
 
-              <div className="profile-side-actions">
+              <div className="profile-pop-links">
                 <button
                   type="button"
                   onClick={() =>
@@ -139,7 +193,7 @@ export function BrowserProfilePage({
                     )
                   }
                 >
-                  LinkedIn ↗
+                  linkedin.exe ↗
                 </button>
 
                 <button
@@ -150,40 +204,41 @@ export function BrowserProfilePage({
                     )
                   }
                 >
-                  GitHub ↗
+                  github.exe ↗
                 </button>
               </div>
             </section>
 
-            <section className="profile-card">
-              <h2>
-                Web Status
-              </h2>
+            <div className="profile-sticker profile-sticker-lime">
+              <strong>
+                100%
+              </strong>
 
-              <div className="profile-status-box">
-                <strong>
-                  CURRENT ACTIVITY
-                </strong>
-
-                <p>
-                  Construindo o HOSSOMII OS e explorando
-                  novas formas de criar software.
-                </p>
-              </div>
-            </section>
+              <span>
+                INTERNET
+                <br />
+                USER
+              </span>
+            </div>
           </aside>
 
-          <section className="profile-main">
-            <section className="profile-welcome">
-              <div className="profile-welcome-title">
-                <span>
-                  ★
-                </span>
+          <section className="profile-pop-main">
+            <section className="profile-pop-welcome">
+              <span className="profile-floating-star profile-floating-star-one">
+                ★
+              </span>
 
-                <h2>
-                  Bem-vindo ao meu canto da internet!
-                </h2>
-              </div>
+              <span className="profile-floating-star profile-floating-star-two">
+                ✦
+              </span>
+
+              <span className="profile-welcome-label">
+                WELCOME 2 MY PAGE!!
+              </span>
+
+              <h2>
+                hi, internet! :)
+              </h2>
 
               <p>
                 Sou desenvolvedor de software e estudante
@@ -191,52 +246,82 @@ export function BrowserProfilePage({
               </p>
 
               <p>
-                Gosto de construir sistemas, entender como
-                as coisas funcionam, explorar segurança e
-                transformar ideias em produtos interativos.
+                Gosto de entender como sistemas funcionam,
+                construir coisas, experimentar tecnologias
+                e explorar segurança.
               </p>
 
               <p>
-                Este perfil faz parte do HOSSOMII OS e foi
-                criado como uma interpretação divertida das
-                páginas pessoais e comunidades da web dos
-                anos 2000.
+                Esta página é meu pequeno espaço digital
+                dentro do HOSSOMII OS.
               </p>
+
+              <div className="profile-welcome-signature">
+                — Anthony ♡
+              </div>
             </section>
 
-            <section className="profile-section">
+            <section className="profile-pop-projects">
               <header>
-                <h2>
-                  :: Projetos recentes
-                </h2>
+                <div>
+                  <span>
+                    ✦
+                  </span>
 
-                <span>
-                  {portfolioProjects.length} ONLINE
-                </span>
+                  <h2>
+                    cool stuff i've made
+                  </h2>
+                </div>
+
+                <strong>
+                  {portfolioProjects.length}
+                  {" "}
+                  PROJECTS
+                </strong>
               </header>
 
-              <div className="profile-project-list">
+              <div className="profile-pop-project-grid">
                 {portfolioProjects.map(
                   (
-                    project
+                    project,
+                    index
                   ) => (
                     <article
                       key={
                         project.id
                       }
-                      className="profile-project"
+                      className={[
+                        "profile-pop-project",
+                        index %
+                            2 ===
+                          0
+                          ? "profile-pop-project-cyan"
+                          : "profile-pop-project-purple",
+                      ]
+                        .filter(
+                          Boolean
+                        )
+                        .join(
+                          " "
+                        )}
                     >
-                      <div className="profile-project-heading">
-                        <strong>
-                          {
-                            project.name
-                          }
-                        </strong>
-
-                        <span>
-                          PROJECT
-                        </span>
+                      <div className="profile-project-number">
+                        0
+                        {
+                          index +
+                          1
+                        }
                       </div>
+
+                      <span className="profile-project-sticker">
+                        NEW!
+                      </span>
+
+                      <h3>
+                        {
+                          project.name
+                        }
+                      </h3>
 
                       <p>
                         {
@@ -244,7 +329,7 @@ export function BrowserProfilePage({
                         }
                       </p>
 
-                      <div className="profile-project-tech">
+                      <div className="profile-pop-tech">
                         {project.technologies
                           .slice(
                             0,
@@ -267,7 +352,7 @@ export function BrowserProfilePage({
                           )}
                       </div>
 
-                      <div className="profile-project-actions">
+                      <div className="profile-pop-project-actions">
                         {project.githubUrl && (
                           <button
                             type="button"
@@ -277,7 +362,7 @@ export function BrowserProfilePage({
                               )
                             }
                           >
-                            código ↗
+                            view source ↗
                           </button>
                         )}
 
@@ -290,7 +375,7 @@ export function BrowserProfilePage({
                               )
                             }
                           >
-                            visitar ↗
+                            visit site ↗
                           </button>
                         )}
                       </div>
@@ -300,25 +385,35 @@ export function BrowserProfilePage({
               </div>
             </section>
 
-            <section className="profile-section">
-              <header>
-                <h2>
-                  :: Tech Box
-                </h2>
-
+            <section className="profile-pop-techbox">
+              <div className="profile-techbox-title">
                 <span>
-                  INSTALLED
+                  ★
                 </span>
-              </header>
 
-              <div className="profile-tech-cloud">
+                <h2>
+                  what's installed in my brain?
+                </h2>
+              </div>
+
+              <div className="profile-pop-tech-cloud">
                 {technologies.map(
                   (
-                    technology
+                    technology,
+                    index
                   ) => (
                     <span
                       key={
                         technology
+                      }
+                      className={
+                        `profile-tech-color-${
+                          (
+                            index %
+                            5
+                          ) +
+                          1
+                        }`
                       }
                     >
                       {
@@ -330,115 +425,139 @@ export function BrowserProfilePage({
               </div>
             </section>
 
-            <section className="profile-message-board">
-              <h2>
-                MESSAGE BOARD
-              </h2>
+            <section className="profile-pop-guestbook">
+              <div className="profile-guestbook-title">
+                <span>
+                  ✉
+                </span>
 
-              <div>
+                <h2>
+                  guestbook
+                </h2>
+              </div>
+
+              <article>
                 <strong>
-                  anthony:
+                  anthony wrote:
                 </strong>
 
                 <p>
-                  Se você chegou até aqui explorando o
-                  sistema, obrigado pela curiosidade. :)
+                  se você encontrou essa página explorando
+                  o sistema, parabéns pela curiosidade ♥
                 </p>
-              </div>
+
+                <small>
+                  posted from HOSSOMII-01
+                </small>
+              </article>
             </section>
           </section>
 
-          <aside className="profile-rightbar">
-            <section>
+          <aside className="profile-pop-right">
+            <section className="profile-widget profile-widget-cyan">
               <h2>
-                Quick Profile
+                ✦ quick facts
               </h2>
 
               <ul>
                 <li>
-                  Software Engineering
+                  software engineering
                 </li>
 
                 <li>
-                  Backend
+                  backend
                 </li>
 
                 <li>
-                  Cybersecurity
+                  cybersecurity
                 </li>
 
                 <li>
-                  Systems
+                  systems
                 </li>
 
                 <li>
-                  Interactive Web
+                  weird web stuff
                 </li>
               </ul>
             </section>
 
-            <section>
+            <section className="profile-widget profile-widget-purple">
               <h2>
-                My Network
+                ♫ now doing
               </h2>
 
-              <button
-                type="button"
-                onClick={() =>
-                  onOpenExternal(
-                    "https://github.com/Hossomii"
-                  )
-                }
-              >
-                GitHub
-              </button>
+              <div className="profile-now-doing">
+                <span>
+                  CURRENT ACTIVITY
+                </span>
 
-              <button
-                type="button"
-                onClick={() =>
-                  onOpenExternal(
-                    "https://www.linkedin.com/in/anthony-hossomii-bugs/"
-                  )
-                }
-              >
-                LinkedIn
-              </button>
+                <strong>
+                  HOSSOMII OS
+                </strong>
+
+                <p>
+                  building a fake operating system because
+                  a normal portfolio would be boring.
+                </p>
+
+                <div className="profile-progress">
+                  <span />
+                </div>
+              </div>
             </section>
 
-            <section className="profile-notice">
-              <h2>
-                NOTICE
-              </h2>
-
-              <p>
-                Esta página é melhor visualizada dentro do
-                HOSSOMII Web.
-              </p>
-            </section>
-
-            <section className="profile-web-badge">
+            <div className="profile-sticker profile-sticker-pink">
               <span>
-                BUILT WITH
+                MADE WITH
               </span>
 
               <strong>
-                HTML
+                ♥
               </strong>
 
-              <small>
-                probably
-              </small>
+              <span>
+                AND CODE
+              </span>
+            </div>
+
+            <section className="profile-widget profile-widget-green">
+              <h2>
+                ☺ web badges
+              </h2>
+
+              <div className="profile-mini-badges">
+                <span>
+                  HTML
+                </span>
+
+                <span>
+                  CSS
+                </span>
+
+                <span>
+                  JS
+                </span>
+
+                <span>
+                  2000s
+                </span>
+              </div>
             </section>
           </aside>
         </div>
 
-        <footer className="profile-footer">
+        <footer className="profile-pop-footer">
           <span>
-            Anthony Online © 2026
+            ★ Anthony Online! © 2026 ★
           </span>
 
           <span>
-            hosted by HOSSOMII Internet Service
+            best viewed with curiosity enabled
+          </span>
+
+          <span>
+            hosted somewhere inside HOSSOMII OS
           </span>
         </footer>
       </div>
