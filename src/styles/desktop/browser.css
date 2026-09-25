@@ -1,0 +1,183 @@
+.browser-app {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+
+  min-width: 0;
+  min-height: 0;
+
+  background: #ffffff;
+
+  color: #111;
+
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+}
+
+.browser-toolbar {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: 4px;
+
+  min-height: 34px;
+
+  padding: 4px 6px;
+
+  border-bottom: 1px solid #aca899;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #f7f5ea,
+      #ece9d8
+    );
+}
+
+.browser-toolbar button {
+  min-height: 24px;
+
+  padding: 2px 8px;
+
+  border: 1px solid transparent;
+
+  background: transparent;
+
+  color: #222;
+
+  font-family: inherit;
+  font-size: 11px;
+}
+
+.browser-toolbar button:not(:disabled):hover {
+  border-color: #316ac5;
+
+  background: #ffffff;
+}
+
+.browser-toolbar button:disabled {
+  color: #999;
+}
+
+.browser-site-title {
+  flex: 1;
+
+  min-width: 0;
+
+  margin-left: 6px;
+
+  padding: 4px 8px;
+
+  overflow: hidden;
+
+  border: 1px solid #9d9d9d;
+
+  background: #ffffff;
+
+  color: #333;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.browser-home-placeholder {
+  display: flex;
+  flex: 1;
+
+  align-items: flex-start;
+  justify-content: center;
+
+  min-width: 0;
+  min-height: 0;
+
+  padding: 28px;
+
+  overflow: auto;
+
+  background:
+    #ffffff;
+}
+
+.browser-home-panel {
+  width: min(
+    620px,
+    100%
+  );
+
+  border: 1px solid #8091b3;
+
+  background: #ffffff;
+
+  box-shadow:
+    3px 3px 0
+      rgba(
+        0,
+        0,
+        0,
+        0.12
+      );
+}
+
+.browser-home-eyebrow {
+  display: block;
+
+  padding: 5px 8px;
+
+  background: #174a9b;
+
+  color: #ffffff;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.browser-home-panel h1 {
+  margin: 0;
+
+  padding:
+    16px
+    18px
+    6px;
+
+  color: #174a9b;
+
+  font-size: 23px;
+}
+
+.browser-home-panel p {
+  margin: 0;
+
+  padding:
+    4px
+    18px
+    18px;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.browser-connection-status {
+  padding:
+    7px
+    18px;
+
+  border-top:
+    1px solid
+    #d1d1d1;
+
+  background: #f3f3f3;
+
+  color: #267326;
+
+  font-size: 10px;
+  font-weight: 700;
+}

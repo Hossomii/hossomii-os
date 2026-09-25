@@ -529,6 +529,26 @@ export const initialFileSystem: FileSystemItem[] = [
   },
 
   {
+    id: "browser-application",
+    name: "HOSSOMII Web",
+    type: "application",
+    parentId: "programs",
+
+    iconId: "browser",
+
+    appId: "browser",
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
     id: "terminal-application",
     name: "Terminal",
     type: "application",
@@ -575,6 +595,24 @@ export const initialFileSystem: FileSystemItem[] = [
     parentId: "desktop",
 
     targetId: "computer-application",
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
+    id: "desktop-browser",
+    name: "HOSSOMII Web",
+    type: "shortcut",
+    parentId: "desktop",
+
+    targetId: "browser-application",
 
     hidden: false,
 

@@ -14,7 +14,8 @@ export type FileSystemItemType =
   | "terminal"
   | "recycle-bin"
   | "project-tnt-basketball"
-  | "project-medicos-dentistas";
+  | "project-medicos-dentistas"
+  | "browser";
 
 type BaseFileSystemItem = {
   id: string;

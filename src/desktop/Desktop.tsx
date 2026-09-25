@@ -20,6 +20,7 @@ import documentsIcon from "../assets/icons/documents.webp";
 import terminalIcon from "../assets/icons/terminal.webp";
 import emptyTrashIcon from "../assets/icons/empty-trash.webp";
 import defaultTrashIcon from "../assets/icons/default-trash.webp";
+import browserIcon from "../assets/icons/browser.webp";
 
 import wallpaperDefault from "../assets/wallpapers/default.webp";
 import wallpaper01 from "../assets/wallpapers/wallpaper-01.webp";
@@ -39,6 +40,8 @@ import { RecycleBinApp } from "../applications/recycle-bin/RecycleBinApp";
 import { ControlPanelApp } from "../applications/control-panel/ControlPanelApp";
 
 import { DesktopIcon } from "./components/DesktopIcon";
+
+import { BrowserApp } from "../applications/browser/BrowserApp";
 
 import { StartMenu } from "./components/StartMenu";
 
@@ -138,6 +141,11 @@ export function Desktop() {
       icon: documentsIcon,
     },
     {
+      id: "browser",
+      label: "HOSSOMII Web",
+      icon: browserIcon,
+    },
+    {
       id: "terminal",
       label: "Terminal",
       icon: terminalIcon,
@@ -218,6 +226,18 @@ export function Desktop() {
         title: "Painel de Controle",
 
         icon: computerIcon,
+      });
+
+      return;
+    }
+
+    if (id === "browser") {
+      openWindow({
+        appId: "browser",
+
+        title: "HOSSOMII Web",
+
+        icon: browserIcon,
       });
 
       return;
@@ -307,6 +327,14 @@ export function Desktop() {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
               <ComputerApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "browser") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <BrowserApp />
             </WindowFrame>
           );
         }
@@ -423,9 +451,17 @@ export function Desktop() {
 
       <Taskbar
         startMenuOpen={startMenuOpen}
+        
         windows={windows}
+
         activeWindowId={activeWindow?.id ?? null}
-        onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
+
+        onBrowserOpen={() => 
+          handleOpenItem("browser")}
+
+        onStartToggle={() => 
+          setStartMenuOpen((currentState) => !currentState)}
+
         onWindowClick={handleTaskbarWindowClick}
       />
     </main>

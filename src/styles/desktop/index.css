@@ -14,6 +14,8 @@
 
 @import "./terminal.css";
 
+@import "./browser.css";
+
 @import "./critical-flow.css";
 
 @import "./critical-transition.css";
