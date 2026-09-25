@@ -70,7 +70,9 @@ export function BrowserApp() {
         <BrowserProfilePage onOpenExternal={openExternal} />
       )}
 
-      {currentPage === "news" && <BrowserNewsPage />}
+      {currentPage === "news" && (
+        <BrowserNewsPage onOpenExternal={openExternal} />
+      )}
     </div>
   );
 }

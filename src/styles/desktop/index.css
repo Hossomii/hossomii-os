@@ -18,6 +18,8 @@
 
 @import "./browser-profile.css";
 
+@import "./browser-news.css";
+
 @import "./critical-flow.css";
 
 @import "./critical-transition.css";
