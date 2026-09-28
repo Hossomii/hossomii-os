@@ -1,7 +1,20 @@
-import { useFileSystemStore } from "../../stores/filesystemStore";
-import { useWindowStore } from "../../stores/windowStore";
+import {
+  getPortfolioProject,
+} from "../../content/projects";
+
+import {
+  useFileSystemStore,
+} from "../../stores/filesystemStore";
+
+import {
+  useWindowStore,
+} from "../../stores/windowStore";
 
 import documentsIcon from "../../assets/icons/documents.webp";
+
+import type {
+  FileSystemFile,
+} from "../../types/filesystem";
 
 type ProjectViewerAppProps = {
   projectId: string;
@@ -17,21 +30,26 @@ const imageExtensions = [
 export function ProjectViewerApp({
   projectId,
 }: ProjectViewerAppProps) {
-  const items = useFileSystemStore(
-    (state) => state.items
-  );
+  const items =
+    useFileSystemStore(
+      (state) =>
+        state.items
+    );
 
-  const openWindow = useWindowStore(
-    (state) => state.openWindow
-  );
+  const openWindow =
+    useWindowStore(
+      (state) =>
+        state.openWindow
+    );
 
-  const project = items.find(
-    (item) =>
-      item.id === projectId &&
-      item.type === "directory"
-  );
+  const project =
+    getPortfolioProject(
+      projectId
+    );
 
-  if (!project) {
+  if (
+    !project
+  ) {
     return (
       <div className="project-viewer-app">
         <div className="project-viewer-error">
@@ -41,60 +59,46 @@ export function ProjectViewerApp({
     );
   }
 
-  const children = items.filter(
-    (item) =>
-      item.parentId === projectId &&
-      !item.trashed &&
-      !item.hidden
-  );
-
-  const aboutFile = children.find(
-    (item) =>
-      item.type === "file" &&
-      item.name === "sobre-o-projeto.txt"
-  );
-
-  const technologiesFile =
-    children.find(
-      (item) =>
-        item.type === "file" &&
-        item.name === "tecnologias.txt"
-    );
-
   const screenshots =
-    children
+    items
       .filter(
-        (item) =>
-          item.type === "file" &&
+        (
+          item
+        ): item is FileSystemFile =>
+          item.parentId ===
+            projectId &&
+          item.type ===
+            "file" &&
+          !item.trashed &&
+          !item.hidden &&
           imageExtensions.includes(
             item.extension.toLowerCase()
           ) &&
-          Boolean(item.resourceUrl)
+          Boolean(
+            item.resourceUrl
+          )
       )
-      .slice(0, 3);
-
-  const about =
-    aboutFile?.type === "file"
-      ? aboutFile.content
-      : undefined;
-
-  const technologies =
-    technologiesFile?.type === "file"
-      ? technologiesFile.content
-      : undefined;
+      .slice(
+        0,
+        3
+      );
 
   function openScreenshot(
     fileId: string,
     fileName: string
   ) {
     openWindow({
-      appId: "image-viewer",
+      appId:
+        "image-viewer",
 
-      instanceId: fileId,
+      instanceId:
+        fileId,
 
-      title: `${fileName} - Visualizador de Imagens`,
+      title:
+        `${fileName} - Visualizador de Imagens`,
 
-      icon: documentsIcon,
+      icon:
+        documentsIcon,
 
       data: {
         fileId,
@@ -109,7 +113,9 @@ export function ProjectViewerApp({
           HOSSOMII PORTFOLIO
         </span>
 
-        <h1>{project.name}</h1>
+        <h1>
+          {project.name}
+        </h1>
 
         <p>
           Projeto armazenado em:
@@ -120,24 +126,32 @@ export function ProjectViewerApp({
       </header>
 
       <div className="project-viewer-content">
-        {screenshots.length > 0 && (
+        {screenshots.length >
+          0 && (
           <section className="project-viewer-section">
-            <h2>Galeria</h2>
+            <h2>
+              Galeria
+            </h2>
 
             <div className="project-viewer-gallery">
               {screenshots.map(
-                (screenshot) => {
-                  if (
-                    screenshot.type !==
-                      "file" ||
-                    !screenshot.resourceUrl
-                  ) {
-                    return null;
-                  }
+                (
+                  screenshot
+                ) => {
+                  const metadata =
+                    project.screenshots.find(
+                      (
+                        item
+                      ) =>
+                        item.fileName ===
+                        screenshot.name
+                    );
 
                   return (
                     <button
-                      key={screenshot.id}
+                      key={
+                        screenshot.id
+                      }
                       type="button"
                       onClick={() =>
                         openScreenshot(
@@ -151,13 +165,18 @@ export function ProjectViewerApp({
                           screenshot.resourceUrl
                         }
                         alt={
+                          metadata?.alt ??
                           screenshot.name
                         }
-                        draggable={false}
+                        draggable={
+                          false
+                        }
                       />
 
                       <span>
-                        {screenshot.name}
+                        {
+                          screenshot.name
+                        }
                       </span>
                     </button>
                   );
@@ -168,20 +187,64 @@ export function ProjectViewerApp({
         )}
 
         <section className="project-viewer-section">
-          <h2>Sobre o projeto</h2>
+          <h2>
+            Sobre o projeto
+          </h2>
 
           <p className="project-viewer-description">
-            {about ??
-              "Informações sobre este projeto ainda não foram adicionadas."}
+            {
+              project.summary
+            }
           </p>
         </section>
 
         <section className="project-viewer-section">
-          <h2>Tecnologias e experiência</h2>
+          <h2>
+            Minha participação
+          </h2>
+
+          <p className="project-viewer-description">
+            {
+              project.role
+            }
+          </p>
+        </section>
+
+        <section className="project-viewer-section">
+          <h2>
+            Tecnologias
+          </h2>
 
           <pre className="project-viewer-technologies">
-            {technologies ??
-              "Informações técnicas ainda não foram adicionadas."}
+            {project.technologies
+              .map(
+                (
+                  technology
+                ) =>
+                  `- ${technology}`
+              )
+              .join(
+                "\n"
+              )}
+          </pre>
+        </section>
+
+        <section className="project-viewer-section">
+          <h2>
+            Principais atividades
+          </h2>
+
+          <pre className="project-viewer-technologies">
+            {project.highlights
+              .map(
+                (
+                  highlight
+                ) =>
+                  `- ${highlight}`
+              )
+              .join(
+                "\n"
+              )}
           </pre>
         </section>
 
