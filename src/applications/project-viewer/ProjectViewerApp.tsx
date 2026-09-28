@@ -180,7 +180,7 @@ export function ProjectViewerApp({
         {project.challenge && (
           <section className="project-viewer-section">
             <h2>
-              Problema
+              Desafio
             </h2>
 
             <p className="project-viewer-description">
