@@ -1,6 +1,4 @@
-import type {
-  FileSystemIconId,
-} from "../types/filesystem";
+import type { FileSystemIconId } from "../types/filesystem";
 
 export type PortfolioProjectScreenshot = {
   fileName: string;
@@ -23,15 +21,14 @@ export type PortfolioProject = {
 
   highlights: string[];
 
-  screenshots:
-    PortfolioProjectScreenshot[];
+  screenshots: PortfolioProjectScreenshot[];
 
   githubUrl?: string;
   demoUrl?: string;
 
   iconId?: FileSystemIconId;
 
-  problem?: string;
+  challenge?: string;
 
   solution?: string;
 
@@ -40,135 +37,119 @@ export type PortfolioProject = {
   learnings?: string[];
 };
 
-export const portfolioProjects:
-  PortfolioProject[] = [
-    {
-      id:
-        "project-tnt-basketball",
+export const portfolioProjects: PortfolioProject[] = [
+  {
+    id: "project-tnt-basketball",
 
-      slug:
-        "tnt-basketball",
+    slug: "tnt-basketball",
 
-      name:
-        "TNT Basketball",
+    name: "TNT Basketball",
 
-      summary:
-        "Jogo desenvolvido em Unity e C# durante uma experiência prática de desenvolvimento colaborativo.",
+    summary:
+      "Jogo arcade de basquete desenvolvido em Unity e C# como projeto final de uma experiência prática de desenvolvimento de games em equipe.",
 
-      role:
-        "Desenvolvimento de gameplay, lógica de sistemas e integração dentro da Unity.",
+    role: "Tech Lead, com atuação em sistemas de gameplay, lógica de pontuação e combos, power-ups, integração de UI, responsividade e polimento do fluxo de jogo.",
 
-      technologies: [
-        "C#",
-        "Unity",
-        "Git",
-        "GitHub",
-      ],
+    challenge:
+      "Construir uma experiência arcade rápida e competitiva que fosse simples de aprender, visualmente clara e capaz de funcionar no navegador em diferentes tamanhos de tela. Um dos principais desafios técnicos foi manter sincronizados o feedback visual da gameplay, as animações e os efeitos temporários dos power-ups enquanto diferentes sistemas interagiam entre si.",
 
-      highlights: [
-        "Programação de gameplay",
-        "Implementação de lógica de sistemas",
-        "Integração de funcionalidades na Unity",
-        "Desenvolvimento em equipe",
-        "Polimento visual do jogo",
-      ],
+    solution:
+      "A gameplay foi organizada em sistemas independentes para entrada, avaliação de arremessos, pontuação, combos, controle global da partida, power-ups, timer, áudio e feedback visual. Os efeitos temporários foram isolados em sistemas próprios e integrados ao restante da gameplay, enquanto a interface recebeu adaptações para diferentes tamanhos de tela e execução via WebGL.",
 
-      screenshots: [
-        {
-          fileName:
-            "screenshot-01.webp",
+    technologies: ["C#", "Unity 6", "WebGL", "TextMeshPro", "Git", "GitHub"],
 
-          alt:
-            "Captura de tela do TNT Basketball",
-        },
+    highlights: [
+      "Desenvolvimento de sistemas de gameplay",
+      "Implementação de pontuação, combos e multiplicadores",
+      "Sistema de power-ups com efeitos temporários",
+      "Controle de estados e bloqueio global da gameplay",
+      "Integração entre input, animação, áudio e feedback visual",
+      "Adaptação da interface para desktop, notebook e mobile landscape",
+      "Desenvolvimento e integração em equipe",
+    ],
 
-        {
-          fileName:
-            "screenshot-02.webp",
+    technicalDecisions: [
+      "Separação da gameplay em componentes com responsabilidades específicas, evitando concentrar toda a lógica em um único GameManager.",
+      "Uso de um GameplayLockSystem para representar o estado global de bloqueio da partida e permitir que outros sistemas reajam a eventos de lock e unlock.",
+      "Separação entre multiplicador de combo e multiplicadores externos de power-ups dentro do sistema de pontuação.",
+      "Implementação dos efeitos temporários dos power-ups com coroutines e restauração explícita do estado ao finalizar cada efeito.",
+      "Validação do estado da partida antes de aceitar novos inputs, evitando múltiplas resoluções de arremesso simultâneas.",
+      "Suporte de entrada para mouse e touchscreen utilizando o Input System da Unity.",
+    ],
 
-          alt:
-            "Gameplay do TNT Basketball",
-        },
+    learnings: [
+      "Integrar feedback visual, animações e efeitos temporários de power-ups exige sincronizar corretamente a lógica da gameplay com o estado visual apresentado ao jogador.",
 
-        {
-          fileName:
-            "screenshot-03.webp",
+      "Em um MVP, manter o escopo sob controle não impede um alto nível de acabamento; o projeto conseguiu ir além do resultado inicialmente esperado sem perder o foco na experiência principal.",
 
-          alt:
-            "Interface do TNT Basketball",
-        },
-      ],
+      "Uma boa entrega em equipe depende tanto da qualidade do código quanto de comunicação clara entre as pessoas envolvidas, especialmente quando diferentes sistemas e responsabilidades precisam ser integrados.",
+    ],
 
-      githubUrl:
-        "https://github.com/Hossomii/TNT-Basketball",
+    screenshots: [
+      {
+        fileName: "screenshot-01.webp",
 
-      demoUrl:
-        "https://grupo-1.itch.io/tnt-basketball",
+        alt: "Captura de tela do TNT Basketball",
+      },
 
-      iconId:
-        "project-tnt-basketball",
-    },
+      {
+        fileName: "screenshot-02.webp",
 
-    {
-      id:
-        "project-medicos-dentistas",
+        alt: "Gameplay do TNT Basketball",
+      },
 
-      slug:
-        "medicos-dentistas",
+      {
+        fileName: "screenshot-03.webp",
 
-      name:
-        "Médicos & Dentistas",
+        alt: "Interface do TNT Basketball",
+      },
+    ],
 
-      summary:
-        "Projeto web desenvolvido com foco em interface, organização de conteúdo, responsividade e experiência do usuário.",
+    githubUrl: "https://github.com/Hossomii/TNT-Basketball",
 
-      role:
-        "Desenvolvimento front-end e construção da interface da aplicação.",
+    demoUrl: "https://grupo-1.itch.io/tnt-basketball",
 
-      technologies: [
-        "React",
-        "TypeScript",
-        "JavaScript",
-        "SASS",
-        "HTML",
-        "CSS",
-      ],
+    iconId: "project-tnt-basketball",
+  },
 
-      highlights: [
-        "Desenvolvimento de interface",
-        "Componentização",
-        "Responsividade",
-        "Organização visual",
-        "Experiência do usuário",
-      ],
+  {
+    id: "project-medicos-dentistas",
 
-      screenshots: [
-        {
-          fileName:
-            "screenshot-01.webp",
+    slug: "medicos-dentistas",
 
-          alt:
-            "Captura de tela do projeto Médicos & Dentistas",
-        },
-      ],
+    name: "Médicos & Dentistas",
 
-      githubUrl:
-        "https://github.com/Hossomii/medicos-dentistas-fullstack",
+    summary:
+      "Projeto web desenvolvido com foco em interface, organização de conteúdo, responsividade e experiência do usuário.",
 
-      demoUrl:
-        "https://medicos-e-dentistas-zeta.vercel.app/",
+    role: "Desenvolvimento front-end e construção da interface da aplicação.",
 
-      iconId:
-        "project-medicos-dentistas",
-    },
-  ];
+    technologies: ["React", "TypeScript", "JavaScript", "SASS", "HTML", "CSS"],
 
-export function getPortfolioProject(
-  projectId: string
-) {
-  return portfolioProjects.find(
-    (project) =>
-      project.id ===
-      projectId
-  );
+    highlights: [
+      "Desenvolvimento de interface",
+      "Componentização",
+      "Responsividade",
+      "Organização visual",
+      "Experiência do usuário",
+    ],
+
+    screenshots: [
+      {
+        fileName: "screenshot-01.webp",
+
+        alt: "Captura de tela do projeto Médicos & Dentistas",
+      },
+    ],
+
+    githubUrl: "https://github.com/Hossomii/medicos-dentistas-fullstack",
+
+    demoUrl: "https://medicos-e-dentistas-zeta.vercel.app/",
+
+    iconId: "project-medicos-dentistas",
+  },
+];
+
+export function getPortfolioProject(projectId: string) {
+  return portfolioProjects.find((project) => project.id === projectId);
 }

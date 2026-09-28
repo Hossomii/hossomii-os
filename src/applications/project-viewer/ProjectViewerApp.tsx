@@ -177,7 +177,7 @@ export function ProjectViewerApp({
           </p>
         </section>
 
-        {project.problem && (
+        {project.challenge && (
           <section className="project-viewer-section">
             <h2>
               Problema
@@ -185,7 +185,7 @@ export function ProjectViewerApp({
 
             <p className="project-viewer-description">
               {
-                project.problem
+                project.challenge
               }
             </p>
           </section>
