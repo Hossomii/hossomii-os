@@ -2,8 +2,16 @@ import type {
   FileSystemIconId,
 } from "../types/filesystem";
 
+export type PortfolioProjectScreenshot = {
+  fileName: string;
+
+  alt: string;
+};
+
 export type PortfolioProject = {
   id: string;
+
+  slug: string;
 
   name: string;
 
@@ -15,10 +23,13 @@ export type PortfolioProject = {
 
   highlights: string[];
 
+  screenshots:
+    PortfolioProjectScreenshot[];
+
   githubUrl?: string;
   demoUrl?: string;
 
-  iconId: FileSystemIconId;
+  iconId?: FileSystemIconId;
 
   problem?: string;
 
@@ -32,9 +43,14 @@ export type PortfolioProject = {
 export const portfolioProjects:
   PortfolioProject[] = [
     {
-      id: "project-tnt-basketball",
+      id:
+        "project-tnt-basketball",
 
-      name: "TNT Basketball",
+      slug:
+        "tnt-basketball",
+
+      name:
+        "TNT Basketball",
 
       summary:
         "Jogo desenvolvido em Unity e C# durante uma experiência prática de desenvolvimento colaborativo.",
@@ -57,6 +73,32 @@ export const portfolioProjects:
         "Polimento visual do jogo",
       ],
 
+      screenshots: [
+        {
+          fileName:
+            "screenshot-01.webp",
+
+          alt:
+            "Captura de tela do TNT Basketball",
+        },
+
+        {
+          fileName:
+            "screenshot-02.webp",
+
+          alt:
+            "Gameplay do TNT Basketball",
+        },
+
+        {
+          fileName:
+            "screenshot-03.webp",
+
+          alt:
+            "Interface do TNT Basketball",
+        },
+      ],
+
       githubUrl:
         "https://github.com/Hossomii/TNT-Basketball",
 
@@ -68,9 +110,14 @@ export const portfolioProjects:
     },
 
     {
-      id: "project-medicos-dentistas",
+      id:
+        "project-medicos-dentistas",
 
-      name: "Médicos & Dentistas",
+      slug:
+        "medicos-dentistas",
+
+      name:
+        "Médicos & Dentistas",
 
       summary:
         "Projeto web desenvolvido com foco em interface, organização de conteúdo, responsividade e experiência do usuário.",
@@ -95,6 +142,16 @@ export const portfolioProjects:
         "Experiência do usuário",
       ],
 
+      screenshots: [
+        {
+          fileName:
+            "screenshot-01.webp",
+
+          alt:
+            "Captura de tela do projeto Médicos & Dentistas",
+        },
+      ],
+
       githubUrl:
         "https://github.com/Hossomii/medicos-dentistas-fullstack",
 
@@ -111,6 +168,7 @@ export function getPortfolioProject(
 ) {
   return portfolioProjects.find(
     (project) =>
-      project.id === projectId
+      project.id ===
+      projectId
   );
 }

@@ -11,11 +11,12 @@ export type FileSystemItemType =
 
   export type FileSystemIconId =
   | "computer"
+  | "projects"
   | "terminal"
   | "recycle-bin"
+  | "browser"
   | "project-tnt-basketball"
-  | "project-medicos-dentistas"
-  | "browser";
+  | "project-medicos-dentistas";
 
 type BaseFileSystemItem = {
   id: string;
