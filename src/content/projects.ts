@@ -13,6 +13,12 @@ export type PortfolioProject = {
 
   name: string;
 
+  category?: string;
+
+  year?: number;
+
+  status?: "completed" | "in-development";
+
   summary: string;
 
   role: string;
@@ -38,6 +44,70 @@ export type PortfolioProject = {
 };
 
 export const portfolioProjects: PortfolioProject[] = [
+  {
+    id: "project-hossomii-os",
+
+    slug: "hossomii-os",
+
+    name: "HOSSOMII OS",
+
+    category: "Interactive Portfolio",
+
+    year: 2026,
+
+    status: "in-development",
+
+    summary:
+      "Portfólio interativo construído como uma simulação de sistema operacional desktop inspirada na computação dos anos 2000, transformando projetos, documentos e informações profissionais em partes exploráveis de um computador fictício.",
+
+    role: "Idealização, arquitetura, desenvolvimento front-end, design de interação e implementação completa da experiência.",
+
+    challenge:
+      "Criar um portfólio que fosse mais do que uma sequência tradicional de páginas, mas que continuasse acessível, navegável e tecnicamente sustentável. O principal desafio foi fazer diferentes aplicações parecerem partes do mesmo sistema, compartilhando estado e comportamento sem duplicar a lógica entre interfaces.",
+
+    solution:
+      "A aplicação foi estruturada como um ambiente desktop composto por aplicações independentes conectadas a serviços e stores compartilhados. Explorer, Terminal, Lixeira, Project Viewer, Browser e outros módulos interagem com o mesmo filesystem virtual e com regras centralizadas, enquanto o gerenciamento de janelas controla foco, posição, redimensionamento, minimização e múltiplas instâncias.",
+
+    technologies: [
+      "React 19",
+      "TypeScript 6",
+      "Vite 8",
+      "Zustand",
+      "Vitest",
+      "GSAP",
+      "CSS",
+      "Git",
+      "GitHub",
+    ],
+
+    highlights: [
+      "Desktop e Window Manager customizados",
+      "Filesystem virtual compartilhado entre aplicações",
+      "Explorer, Terminal e Lixeira integrados ao mesmo estado",
+      "Sistema de arquivos com exclusão, restauração e proteção de itens críticos",
+      "Fluxo narrativo de falha crítica e ambiente de recuperação",
+      "HOSSOMII Web com páginas internas e integração com notícias externas",
+      "Temas, wallpapers e preferências persistentes",
+      "Project Viewer baseado em dados estruturados",
+      "Arquitetura preparada para adicionar e remover projetos sem alterar o sistema",
+    ],
+
+    technicalDecisions: [
+      "Uso de Zustand para separar o estado global do sistema das interfaces que o consomem.",
+      "Centralização do filesystem virtual para que Explorer, Terminal, Lixeira e outras aplicações compartilhem a mesma fonte de estado.",
+      "Criação de um Window Manager próprio responsável por foco, z-index, minimização, maximização, movimento, redimensionamento e múltiplas instâncias.",
+      "Centralização das associações entre tipos de arquivo e aplicações para evitar regras duplicadas entre Explorer e Terminal.",
+      "Separação entre dados profissionais dos projetos e estado mutável do filesystem virtual.",
+      "Geração automática da estrutura de arquivos de cada projeto a partir do catálogo de PortfolioProject.",
+      "Manutenção de regras críticas no nível de estado, evitando depender apenas de bloqueios visuais na interface.",
+      "Uso de componentes e aplicações independentes conectados por contratos compartilhados em vez de uma única interface monolítica.",
+    ],
+
+    screenshots: [],
+
+    githubUrl: "https://github.com/Hossomii/hossomii-os",
+  },
+
   {
     id: "project-tnt-basketball",
 
