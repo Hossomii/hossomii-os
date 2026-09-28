@@ -47,9 +47,7 @@ export function ProjectViewerApp({
       projectId
     );
 
-  if (
-    !project
-  ) {
+  if (!project) {
     return (
       <div className="project-viewer-app">
         <div className="project-viewer-error">
@@ -123,9 +121,166 @@ export function ProjectViewerApp({
           C:\Usuários\Anthony\Projetos\
           {project.name}
         </p>
+
+        {(project.githubUrl ||
+          project.demoUrl) && (
+          <div className="project-viewer-header-actions">
+            {project.githubUrl && (
+              <a
+                href={
+                  project.githubUrl
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub ↗
+              </a>
+            )}
+
+            {project.demoUrl && (
+              <a
+                href={
+                  project.demoUrl
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Abrir projeto ↗
+              </a>
+            )}
+          </div>
+        )}
       </header>
 
       <div className="project-viewer-content">
+        <section className="project-viewer-section">
+          <h2>
+            Sobre o projeto
+          </h2>
+
+          <p className="project-viewer-description">
+            {
+              project.summary
+            }
+          </p>
+        </section>
+
+        <section className="project-viewer-section">
+          <h2>
+            Minha participação
+          </h2>
+
+          <p className="project-viewer-description">
+            {
+              project.role
+            }
+          </p>
+        </section>
+
+        {project.problem && (
+          <section className="project-viewer-section">
+            <h2>
+              Problema
+            </h2>
+
+            <p className="project-viewer-description">
+              {
+                project.problem
+              }
+            </p>
+          </section>
+        )}
+
+        {project.solution && (
+          <section className="project-viewer-section">
+            <h2>
+              Solução
+            </h2>
+
+            <p className="project-viewer-description">
+              {
+                project.solution
+              }
+            </p>
+          </section>
+        )}
+
+        <section className="project-viewer-section">
+          <h2>
+            Tecnologias
+          </h2>
+
+          <div className="project-viewer-tags">
+            {project.technologies.map(
+              (
+                technology
+              ) => (
+                <span
+                  key={
+                    technology
+                  }
+                >
+                  {
+                    technology
+                  }
+                </span>
+              )
+            )}
+          </div>
+        </section>
+
+        <section className="project-viewer-section">
+          <h2>
+            Principais atividades
+          </h2>
+
+          <ul className="project-viewer-list">
+            {project.highlights.map(
+              (
+                highlight
+              ) => (
+                <li
+                  key={
+                    highlight
+                  }
+                >
+                  {
+                    highlight
+                  }
+                </li>
+              )
+            )}
+          </ul>
+        </section>
+
+        {project.technicalDecisions &&
+          project.technicalDecisions.length >
+            0 && (
+            <section className="project-viewer-section">
+              <h2>
+                Decisões técnicas
+              </h2>
+
+              <ul className="project-viewer-list">
+                {project.technicalDecisions.map(
+                  (
+                    decision
+                  ) => (
+                    <li
+                      key={
+                        decision
+                      }
+                    >
+                      {
+                        decision
+                      }
+                    </li>
+                  )
+                )}
+              </ul>
+            </section>
+          )}
+
         {screenshots.length >
           0 && (
           <section className="project-viewer-section">
@@ -186,67 +341,33 @@ export function ProjectViewerApp({
           </section>
         )}
 
-        <section className="project-viewer-section">
-          <h2>
-            Sobre o projeto
-          </h2>
+        {project.learnings &&
+          project.learnings.length >
+            0 && (
+            <section className="project-viewer-section">
+              <h2>
+                Aprendizados
+              </h2>
 
-          <p className="project-viewer-description">
-            {
-              project.summary
-            }
-          </p>
-        </section>
-
-        <section className="project-viewer-section">
-          <h2>
-            Minha participação
-          </h2>
-
-          <p className="project-viewer-description">
-            {
-              project.role
-            }
-          </p>
-        </section>
-
-        <section className="project-viewer-section">
-          <h2>
-            Tecnologias
-          </h2>
-
-          <pre className="project-viewer-technologies">
-            {project.technologies
-              .map(
-                (
-                  technology
-                ) =>
-                  `- ${technology}`
-              )
-              .join(
-                "\n"
-              )}
-          </pre>
-        </section>
-
-        <section className="project-viewer-section">
-          <h2>
-            Principais atividades
-          </h2>
-
-          <pre className="project-viewer-technologies">
-            {project.highlights
-              .map(
-                (
-                  highlight
-                ) =>
-                  `- ${highlight}`
-              )
-              .join(
-                "\n"
-              )}
-          </pre>
-        </section>
+              <ul className="project-viewer-list">
+                {project.learnings.map(
+                  (
+                    learning
+                  ) => (
+                    <li
+                      key={
+                        learning
+                      }
+                    >
+                      {
+                        learning
+                      }
+                    </li>
+                  )
+                )}
+              </ul>
+            </section>
+          )}
 
         <footer className="project-viewer-footer">
           <span>
