@@ -186,6 +186,23 @@ export function ProjectViewerApp({
         ? "CONCLUÍDO"
         : undefined;
 
+  const statusClassName =
+    project.status ===
+    "in-development"
+      ? "is-development"
+      : project.status ===
+          "completed"
+        ? "is-completed"
+        : undefined;
+
+  const recordName =
+    project.slug
+      .replaceAll(
+        "-",
+        "_"
+      )
+      .toUpperCase();
+
   function openScreenshot(
     fileId: string,
     fileName: string
@@ -255,8 +272,7 @@ export function ProjectViewerApp({
               )}
 
               {statusLabel && (
-                <span className="project-viewer-status">
-                  ●{" "}
+                <span>
                   {
                     statusLabel
                   }
@@ -266,76 +282,247 @@ export function ProjectViewerApp({
           </div>
         </div>
 
-        {(project.githubUrl ||
-          project.demoUrl) && (
-          <div className="project-viewer-header-actions">
-            {project.githubUrl && (
-              <a
-                href={
-                  project.githubUrl
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub ↗
-              </a>
-            )}
+        <div className="project-viewer-header-system">
+          <span>
+            PROJECT DATABASE
+          </span>
 
-            {project.demoUrl && (
-              <a
-                href={
-                  project.demoUrl
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Abrir projeto ↗
-              </a>
-            )}
-          </div>
-        )}
+          <strong>
+            {
+              recordName
+            }
+          </strong>
+        </div>
       </header>
 
-      {heroScreenshot &&
-        heroScreenshot.resourceUrl && (
-          <section className="project-viewer-hero">
-            <button
-              type="button"
-              onClick={() =>
-                openScreenshot(
-                  heroScreenshot.id,
-                  heroScreenshot.name
-                )
-              }
-            >
-              <img
-                src={
-                  heroScreenshot.resourceUrl
-                }
-                alt={
-                  heroMetadata?.alt ??
-                  heroScreenshot.name
-                }
-                draggable={
-                  false
-                }
-              />
+      <section className="project-viewer-dossier">
+        <div className="project-viewer-dossier-bar">
+          <span>
+            PROJECT RECORD
+          </span>
 
-              <span className="project-viewer-hero-overlay">
-                <strong>
-                  {
-                    heroMetadata?.caption ??
-                    project.name
+          <span>
+            {
+              recordName
+            }
+          </span>
+        </div>
+
+        <div className="project-viewer-dossier-grid">
+          <div className="project-viewer-media-panel">
+            {heroScreenshot &&
+            heroScreenshot.resourceUrl ? (
+              <button
+                type="button"
+                className="project-viewer-hero"
+                onClick={() =>
+                  openScreenshot(
+                    heroScreenshot.id,
+                    heroScreenshot.name
+                  )
+                }
+              >
+                <img
+                  src={
+                    heroScreenshot.resourceUrl
                   }
-                </strong>
+                  alt={
+                    heroMetadata?.alt ??
+                    heroScreenshot.name
+                  }
+                  draggable={
+                    false
+                  }
+                />
 
-                <small>
-                  Clique para ampliar
-                </small>
+                <span className="project-viewer-hero-overlay">
+                  <strong>
+                    {
+                      heroMetadata?.caption ??
+                      project.name
+                    }
+                  </strong>
+
+                  <small>
+                    Clique para ampliar
+                  </small>
+                </span>
+              </button>
+            ) : (
+              <div className="project-viewer-hero-empty">
+                <span>
+                  NO PREVIEW AVAILABLE
+                </span>
+              </div>
+            )}
+
+            <div className="project-viewer-media-status">
+              <span>
+                PREVIEW://
+                {
+                  heroScreenshot?.name ??
+                  "unavailable"
+                }
               </span>
-            </button>
-          </section>
-        )}
+
+              <span>
+                {
+                  screenshots.length
+                }{" "}
+                IMAGE
+                {
+                  screenshots.length ===
+                  1
+                    ? ""
+                    : "S"
+                }
+              </span>
+            </div>
+          </div>
+
+          <aside className="project-viewer-record">
+            <div className="project-viewer-record-heading">
+              <span>
+                PROJECT RECORD
+              </span>
+
+              {statusLabel && (
+                <div
+                  className={[
+                    "project-viewer-record-status",
+                    statusClassName,
+                  ]
+                    .filter(
+                      Boolean
+                    )
+                    .join(
+                      " "
+                    )}
+                >
+                  <span
+                    className="project-viewer-status-light"
+                    aria-hidden="true"
+                  />
+
+                  <strong>
+                    {
+                      statusLabel
+                    }
+                  </strong>
+                </div>
+              )}
+            </div>
+
+            <dl className="project-viewer-record-data">
+              {project.category && (
+                <div>
+                  <dt>
+                    Categoria
+                  </dt>
+
+                  <dd>
+                    {
+                      project.category
+                    }
+                  </dd>
+                </div>
+              )}
+
+              {project.year && (
+                <div>
+                  <dt>
+                    Ano
+                  </dt>
+
+                  <dd>
+                    {
+                      project.year
+                    }
+                  </dd>
+                </div>
+              )}
+
+              <div>
+                <dt>
+                  Função
+                </dt>
+
+                <dd>
+                  {
+                    project.role
+                  }
+                </dd>
+              </div>
+            </dl>
+
+            <div className="project-viewer-record-stack">
+              <span>
+                CORE STACK
+              </span>
+
+              <div>
+                {project.technologies
+                  .slice(
+                    0,
+                    5
+                  )
+                  .map(
+                    (
+                      technology
+                    ) => (
+                      <span
+                        key={
+                          technology
+                        }
+                      >
+                        {
+                          technology
+                        }
+                      </span>
+                    )
+                  )}
+              </div>
+            </div>
+
+            {(project.githubUrl ||
+              project.demoUrl) && (
+              <div className="project-viewer-record-actions">
+                {project.githubUrl && (
+                  <a
+                    href={
+                      project.githubUrl
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>
+                      &gt;
+                    </span>
+
+                    GitHub
+                  </a>
+                )}
+
+                {project.demoUrl && (
+                  <a
+                    href={
+                      project.demoUrl
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span>
+                      &gt;
+                    </span>
+
+                    Abrir projeto
+                  </a>
+                )}
+              </div>
+            )}
+          </aside>
+        </div>
+      </section>
 
       <nav
         className="project-viewer-tabs"
@@ -366,9 +553,11 @@ export function ProjectViewerApp({
                 )
               }
             >
-              {
-                tab.label
-              }
+              <span>
+                {
+                  tab.label
+                }
+              </span>
             </button>
           )
         )}
@@ -379,7 +568,7 @@ export function ProjectViewerApp({
           "overview" && (
           <div className="project-viewer-tab-panel">
             <section className="project-viewer-intro">
-              <span>
+              <span className="project-viewer-section-label">
                 PROJECT OVERVIEW
               </span>
 
@@ -399,9 +588,15 @@ export function ProjectViewerApp({
               <div className="project-viewer-overview-grid">
                 {project.challenge && (
                   <section className="project-viewer-card">
-                    <span className="project-viewer-card-index">
-                      01
-                    </span>
+                    <div className="project-viewer-card-header">
+                      <span className="project-viewer-card-index">
+                        01
+                      </span>
+
+                      <span>
+                        CHALLENGE
+                      </span>
+                    </div>
 
                     <h3>
                       Desafio
@@ -417,9 +612,15 @@ export function ProjectViewerApp({
 
                 {project.solution && (
                   <section className="project-viewer-card">
-                    <span className="project-viewer-card-index">
-                      02
-                    </span>
+                    <div className="project-viewer-card-header">
+                      <span className="project-viewer-card-index">
+                        02
+                      </span>
+
+                      <span>
+                        SOLUTION
+                      </span>
+                    </div>
 
                     <h3>
                       Solução
@@ -496,25 +697,44 @@ export function ProjectViewerApp({
                     Build Log
                   </h2>
 
-                  <ol className="project-viewer-build-log">
+                  <div className="project-viewer-build-log">
                     {project.technicalDecisions.map(
                       (
-                        decision
+                        decision,
+                        index
                       ) => (
-                        <li
+                        <article
                           key={
                             decision
                           }
+                          className="project-viewer-log-entry"
                         >
-                          <span>
-                            {
-                              decision
-                            }
-                          </span>
-                        </li>
+                          <div className="project-viewer-log-index">
+                            LOG{" "}
+                            {String(
+                              index +
+                                1
+                            ).padStart(
+                              3,
+                              "0"
+                            )}
+                          </div>
+
+                          <div className="project-viewer-log-content">
+                            <span>
+                              ENGINEERING RECORD
+                            </span>
+
+                            <p>
+                              {
+                                decision
+                              }
+                            </p>
+                          </div>
+                        </article>
                       )
                     )}
-                  </ol>
+                  </div>
                 </section>
               )}
 
@@ -558,6 +778,18 @@ export function ProjectViewerApp({
             {selectedScreenshot &&
             selectedScreenshot.resourceUrl ? (
               <>
+                <div className="project-viewer-gallery-label">
+                  <span>
+                    MEDIA VIEWER
+                  </span>
+
+                  <span>
+                    {
+                      selectedScreenshot.name
+                    }
+                  </span>
+                </div>
+
                 <button
                   type="button"
                   className="project-viewer-gallery-main"
@@ -592,7 +824,8 @@ export function ProjectViewerApp({
                 <div className="project-viewer-gallery-thumbnails">
                   {screenshots.map(
                     (
-                      screenshot
+                      screenshot,
+                      index
                     ) => {
                       const metadata =
                         project.screenshots.find(
@@ -625,6 +858,17 @@ export function ProjectViewerApp({
                             )
                           }
                         >
+                          <span className="project-viewer-thumbnail-index">
+                            IMG{" "}
+                            {String(
+                              index +
+                                1
+                            ).padStart(
+                              2,
+                              "0"
+                            )}
+                          </span>
+
                           <img
                             src={
                               screenshot.resourceUrl
@@ -638,7 +882,7 @@ export function ProjectViewerApp({
                             }
                           />
 
-                          <span>
+                          <span className="project-viewer-thumbnail-caption">
                             {
                               metadata?.caption ??
                               screenshot.name
@@ -699,6 +943,18 @@ export function ProjectViewerApp({
               </h2>
 
               <dl className="project-viewer-info">
+                <div>
+                  <dt>
+                    Registro
+                  </dt>
+
+                  <dd>
+                    {
+                      recordName
+                    }
+                  </dd>
+                </div>
+
                 {project.category && (
                   <div>
                     <dt>
