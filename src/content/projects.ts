@@ -4,6 +4,8 @@ export type PortfolioProjectScreenshot = {
   fileName: string;
 
   alt: string;
+
+  caption?: string;
 };
 
 export type PortfolioProject = {
@@ -103,7 +105,32 @@ export const portfolioProjects: PortfolioProject[] = [
       "Uso de componentes e aplicações independentes conectados por contratos compartilhados em vez de uma única interface monolítica.",
     ],
 
-    screenshots: [],
+    screenshots: [
+      {
+        fileName: "desktop.webp",
+
+        alt: "Desktop principal do HOSSOMII OS com aplicações, ícones e barra de tarefas.",
+
+        caption: "Ambiente desktop e diretórios iniciais do HOSSOMII OS.",
+      },
+
+      {
+        fileName: "hossomii-web.webp",
+
+        alt: "HOSSOMII Web exibindo a página Anthony Online.",
+
+        caption:
+          "Browser interno com experiências e páginas próprias do sistema.",
+      },
+
+      {
+        fileName: "recovery.webp",
+
+        alt: "Ambiente de recuperação do HOSSOMII OS após uma falha crítica.",
+
+        caption: "Fluxo narrativo de falha crítica e ambiente de recuperação.",
+      },
+    ],
 
     githubUrl: "https://github.com/Hossomii/hossomii-os",
   },
@@ -160,18 +187,24 @@ export const portfolioProjects: PortfolioProject[] = [
         fileName: "screenshot-01.webp",
 
         alt: "Captura de tela do TNT Basketball",
+
+        caption: "Gameplay principal do TNT Basketball.",
       },
 
       {
         fileName: "screenshot-02.webp",
 
         alt: "Gameplay do TNT Basketball",
+
+        caption: "Interface e feedback visual durante uma partida.",
       },
 
       {
         fileName: "screenshot-03.webp",
 
         alt: "Interface do TNT Basketball",
+
+        caption: "Elementos da experiência e interface do jogo.",
       },
     ],
 
