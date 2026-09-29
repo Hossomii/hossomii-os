@@ -5,47 +5,82 @@ import type { SystemPhase } from "../types/system";
 type SystemStore = {
   phase: SystemPhase;
 
-  setPhase: (phase: SystemPhase) => void;
+  setPhase: (
+    phase: SystemPhase
+  ) => void;
 
-  restartSystem: () => void;
+  powerOnSystem:
+    () => void;
 
-  shutdownSystem: () => void;
+  completePowerOn:
+    () => void;
 
-  completeShutdown: () => void;
+  restartSystem:
+    () => void;
 
-  resetSystem: () => void;
+  shutdownSystem:
+    () => void;
+
+  completeShutdown:
+    () => void;
+
+  resetSystem:
+    () => void;
 };
 
-export const useSystemStore = create<SystemStore>((set) => ({
-  phase: "login",
+export const useSystemStore =
+  create<SystemStore>(
+    (set) => ({
+      phase: "power",
 
-  setPhase: (phase) => {
-    set({
-      phase,
-    });
-  },
+      setPhase: (
+        phase
+      ) => {
+        set({
+          phase,
+        });
+      },
 
-  restartSystem: () => {
-    set({
-      phase: "restarting",
-    });
-  },
+      powerOnSystem: () => {
+        set({
+          phase:
+            "powering-on",
+        });
+      },
 
-  shutdownSystem: () => {
-    set({
-      phase: "shutting-down",
-    });
-  },
+      completePowerOn: () => {
+        set({
+          phase:
+            "login",
+        });
+      },
 
-  completeShutdown: () => {
-    set({
-      phase: "powered-off",
-    });
-  },
+      restartSystem: () => {
+        set({
+          phase:
+            "restarting",
+        });
+      },
 
-  resetSystem: () => {
-    set({
-      phase: "login",
-    });
-  },
-}));
+      shutdownSystem: () => {
+        set({
+          phase:
+            "shutting-down",
+        });
+      },
+
+      completeShutdown: () => {
+        set({
+          phase:
+            "powered-off",
+        });
+      },
+
+      resetSystem: () => {
+        set({
+          phase:
+            "login",
+        });
+      },
+    })
+  );
