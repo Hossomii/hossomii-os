@@ -8,6 +8,8 @@ import profileAvatar from "../../assets/profile-avatar.webp";
 import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 
+import { ExternalLink } from "../../components/ExternalLink";
+
 const currentFocus = [
   "Python",
   "Software Engineering",
@@ -121,21 +123,9 @@ export function QuickViewApp() {
           Documentos
         </button>
 
-        <a
-          href={externalLinks.github}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GitHub ↗
-        </a>
+        <ExternalLink href={externalLinks.github}>GitHub ↗</ExternalLink>
 
-        <a
-          href={externalLinks.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LinkedIn ↗
-        </a>
+        <ExternalLink href={externalLinks.linkedin}>LinkedIn ↗</ExternalLink>
       </nav>
 
       <div className="quick-view-layout">

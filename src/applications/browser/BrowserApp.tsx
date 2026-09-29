@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { openExternalUrl } from "../../system/navigation/externalNavigation";
+
 import { type BrowserInternalPage } from "./browser-links";
 
 import { BrowserHome } from "./components/BrowserHome";
@@ -10,10 +12,6 @@ import { BrowserNewsPage } from "./pages/BrowserNewsPage";
 
 export function BrowserApp() {
   const [currentPage, setCurrentPage] = useState<BrowserInternalPage>("home");
-
-  function openExternal(url: string) {
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
 
   function goHome() {
     setCurrentPage("home");
@@ -62,16 +60,16 @@ export function BrowserApp() {
       {currentPage === "home" && (
         <BrowserHome
           onOpenInternal={setCurrentPage}
-          onOpenExternal={openExternal}
+          onOpenExternal={openExternalUrl}
         />
       )}
 
       {currentPage === "profile" && (
-        <BrowserProfilePage onOpenExternal={openExternal} />
+        <BrowserProfilePage onOpenExternal={openExternalUrl} />
       )}
 
       {currentPage === "news" && (
-        <BrowserNewsPage onOpenExternal={openExternal} />
+        <BrowserNewsPage onOpenExternal={openExternalUrl} />
       )}
     </div>
   );

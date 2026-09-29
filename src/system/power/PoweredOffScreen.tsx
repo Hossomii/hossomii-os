@@ -1,19 +1,13 @@
-import {
-  useSystemStore,
-} from "../../stores/systemStore";
+import { useSystemStore } from "../../stores/systemStore";
 
-const GITHUB_URL =
-  "https://github.com/Hossomii";
+import { ExternalLink } from "../../components/ExternalLink";
 
-const LINKEDIN_URL =
-  "https://www.linkedin.com/in/anthony-hossomii-bugs/";
+const GITHUB_URL = "https://github.com/Hossomii";
+
+const LINKEDIN_URL = "https://www.linkedin.com/in/anthony-hossomii-bugs/";
 
 export function PoweredOffScreen() {
-  const powerOnSystem =
-    useSystemStore(
-      (state) =>
-        state.powerOnSystem
-    );
+  const powerOnSystem = useSystemStore((state) => state.powerOnSystem);
 
   return (
     <main className="powered-off-screen">
@@ -40,34 +34,21 @@ export function PoweredOffScreen() {
 
       <section className="powered-off-card">
         <header className="powered-off-card-header">
-          <span>
-            HOSSOMII-01
-          </span>
+          <span>HOSSOMII-01</span>
 
-          <span className="powered-off-offline">
-            ● OFFLINE
-          </span>
+          <span className="powered-off-offline">● OFFLINE</span>
         </header>
 
         <div className="powered-off-content">
-          <div
-            className="powered-off-sticker"
-            aria-hidden="true"
-          >
+          <div className="powered-off-sticker" aria-hidden="true">
             BYE!
           </div>
 
-          <span className="powered-off-eyebrow">
-            SESSION ENDED
-          </span>
+          <span className="powered-off-eyebrow">SESSION ENDED</span>
 
-          <h1>
-            HOSSOMII OS
-          </h1>
+          <h1>HOSSOMII OS</h1>
 
-          <p className="powered-off-message">
-            Sessão encerrada com sucesso!
-          </p>
+          <p className="powered-off-message">Sessão encerrada com sucesso!</p>
 
           <p className="powered-off-subtitle">
             Agora é seguro fechar esta janela.
@@ -75,106 +56,62 @@ export function PoweredOffScreen() {
             ...ou ficar mais um pouco :)
           </p>
 
-          <nav
-            className="powered-off-links"
-            aria-label="Links externos"
-          >
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          <nav className="powered-off-links" aria-label="Links externos">
+            <ExternalLink href={GITHUB_URL}>
               <span className="powered-off-link-icon powered-off-github-icon">
                 GH
               </span>
 
               <span>
-                <strong>
-                  GitHub
-                </strong>
+                <strong>GitHub</strong>
 
-                <small>
-                  código + projetos
-                </small>
+                <small>código + projetos</small>
               </span>
 
-              <span
-                className="powered-off-link-arrow"
-                aria-hidden="true"
-              >
+              <span className="powered-off-link-arrow" aria-hidden="true">
                 ↗
               </span>
-            </a>
+            </ExternalLink>
 
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ExternalLink href={LINKEDIN_URL}>
               <span className="powered-off-link-icon powered-off-linkedin-icon">
                 in
               </span>
 
               <span>
-                <strong>
-                  LinkedIn
-                </strong>
+                <strong>LinkedIn</strong>
 
-                <small>
-                  vamos conectar?
-                </small>
+                <small>vamos conectar?</small>
               </span>
 
-              <span
-                className="powered-off-link-arrow"
-                aria-hidden="true"
-              >
+              <span className="powered-off-link-arrow" aria-hidden="true">
                 ↗
               </span>
-            </a>
+            </ExternalLink>
           </nav>
 
           <button
             className="powered-off-power"
             type="button"
-            onClick={
-              powerOnSystem
-            }
+            onClick={powerOnSystem}
           >
-            <span aria-hidden="true">
-              ⏻
-            </span>
-
+            <span aria-hidden="true">⏻</span>
             Ligar novamente
           </button>
 
-          <div
-            className="powered-off-ticker"
-            aria-hidden="true"
-          >
-            <span>
-              ★ THANKS FOR VISITING ★
-            </span>
+          <div className="powered-off-ticker" aria-hidden="true">
+            <span>★ THANKS FOR VISITING ★</span>
 
-            <span>
-              HOSSOMII-01
-            </span>
+            <span>HOSSOMII-01</span>
 
-            <span>
-              SEE YOU SOON :)
-            </span>
+            <span>SEE YOU SOON :)</span>
           </div>
         </div>
 
         <footer className="powered-off-card-footer">
-          <span>
-            HOSSOMII SYSTEMS
-          </span>
+          <span>HOSSOMII SYSTEMS</span>
 
-          <span>
-            SESSION_STATUS:
-            CLOSED
-          </span>
+          <span>SESSION_STATUS: CLOSED</span>
         </footer>
       </section>
     </main>

@@ -1,283 +1,393 @@
 import { create } from "zustand";
 
-import { initialFileSystem } from "../system/filesystem/initialFileSystem";
+import {
+  useAchievementStore,
+} from "./achievementStore";
 
-import type { FileSystemItem } from "../types/filesystem";
+import {
+  initialFileSystem,
+} from "../system/filesystem/initialFileSystem";
+
+import type {
+  FileSystemItem,
+} from "../types/filesystem";
 
 type FileSystemStore = {
   items: FileSystemItem[];
 
-  getItem: (id: string) => FileSystemItem | undefined;
+  getItem: (
+    id: string
+  ) =>
+    | FileSystemItem
+    | undefined;
 
   getChildren: (
     parentId: string | null,
     includeHidden?: boolean
   ) => FileSystemItem[];
 
-  getTrashedItems: () => FileSystemItem[];
+  getTrashedItems:
+    () => FileSystemItem[];
 
-  getPath: (id: string) => FileSystemItem[];
+  getPath: (
+    id: string
+  ) => FileSystemItem[];
 
-  trashItem: (id: string) => boolean;
+  trashItem: (
+    id: string
+  ) => boolean;
 
-  trashCriticalItem: (id: string) => boolean;
+  trashCriticalItem: (
+    id: string
+  ) => boolean;
 
-  restoreItem: (id: string) => boolean;
+  restoreItem: (
+    id: string
+  ) => boolean;
 
-  resetFileSystem: () => void;
+  resetFileSystem:
+    () => void;
 };
 
-function createInitialItems(): FileSystemItem[] {
-  return initialFileSystem.map((item) => ({
-    ...item,
-  }));
+function createInitialItems():
+  FileSystemItem[] {
+  return initialFileSystem.map(
+    (item) => ({
+      ...item,
+    })
+  );
 }
 
 function moveItemToTrash(
   items: FileSystemItem[],
   id: string
 ): FileSystemItem[] {
-  return items.map((currentItem) => {
-    if (currentItem.id !== id) {
-      return currentItem;
+  return items.map(
+    (
+      currentItem
+    ) => {
+      if (
+        currentItem.id !== id
+      ) {
+        return currentItem;
+      }
+
+      return {
+        ...currentItem,
+
+        originalParentId:
+          currentItem.parentId,
+
+        parentId:
+          null,
+
+        trashed:
+          true,
+      };
     }
-
-    return {
-      ...currentItem,
-
-      originalParentId:
-        currentItem.parentId,
-
-      parentId: null,
-
-      trashed: true,
-    };
-  });
+  );
 }
 
 export const useFileSystemStore =
-  create<FileSystemStore>((set, get) => ({
-    items: createInitialItems(),
+  create<FileSystemStore>(
+    (
+      set,
+      get
+    ) => ({
+      items:
+        createInitialItems(),
 
-    getItem: (id) => {
-      return get().items.find(
-        (item) => item.id === id
-      );
-    },
-
-    getChildren: (
-      parentId,
-      includeHidden = false
-    ) => {
-      return get().items.filter((item) => {
-        if (item.trashed) {
-          return false;
-        }
-
-        if (item.parentId !== parentId) {
-          return false;
-        }
-
-        if (
-          !includeHidden &&
-          item.hidden
-        ) {
-          return false;
-        }
-
-        return true;
-      });
-    },
-
-    getTrashedItems: () => {
-      return get().items.filter(
-        (item) => item.trashed
-      );
-    },
-
-    getPath: (id) => {
-      const items = get().items;
-
-      const path: FileSystemItem[] = [];
-
-      const visitedIds =
-        new Set<string>();
-
-      let currentItem =
-        items.find(
+      getItem: (
+        id
+      ) => {
+        return get().items.find(
           (item) =>
             item.id === id
         );
+      },
 
-      while (currentItem) {
-        if (
-          visitedIds.has(
-            currentItem.id
-          )
-        ) {
-          break;
-        }
+      getChildren: (
+        parentId,
+        includeHidden = false
+      ) => {
+        return get().items.filter(
+          (item) => {
+            if (
+              item.trashed
+            ) {
+              return false;
+            }
 
-        visitedIds.add(
-          currentItem.id
+            if (
+              item.parentId !==
+              parentId
+            ) {
+              return false;
+            }
+
+            if (
+              !includeHidden &&
+              item.hidden
+            ) {
+              return false;
+            }
+
+            return true;
+          }
         );
+      },
 
-        path.unshift(
-          currentItem
-        );
+      getTrashedItems:
+        () => {
+          return get().items.filter(
+            (item) =>
+              item.trashed
+          );
+        },
 
-        if (
-          currentItem.parentId ===
-          null
-        ) {
-          break;
-        }
+      getPath: (
+        id
+      ) => {
+        const items =
+          get().items;
 
-        currentItem =
+        const path:
+          FileSystemItem[] =
+            [];
+
+        const visitedIds =
+          new Set<string>();
+
+        let currentItem =
           items.find(
             (item) =>
-              item.id ===
-              currentItem?.parentId
+              item.id === id
           );
-      }
 
-      return path;
-    },
+        while (
+          currentItem
+        ) {
+          if (
+            visitedIds.has(
+              currentItem.id
+            )
+          ) {
+            break;
+          }
 
-    trashItem: (id) => {
-      const item =
-        get().items.find(
-          (currentItem) =>
-            currentItem.id === id
-        );
+          visitedIds.add(
+            currentItem.id
+          );
 
-      if (!item) {
-        return false;
-      }
+          path.unshift(
+            currentItem
+          );
 
-      if (!item.deletable) {
-        return false;
-      }
+          if (
+            currentItem.parentId ===
+            null
+          ) {
+            break;
+          }
 
-      /*
-       * Critical items must never
-       * be deleted through the
-       * normal filesystem path.
-       *
-       * They are handled by the
-       * critical deletion flow.
-       */
-      if (item.critical) {
-        return false;
-      }
+          currentItem =
+            items.find(
+              (item) =>
+                item.id ===
+                currentItem?.parentId
+            );
+        }
 
-      if (item.trashed) {
-        return false;
-      }
+        return path;
+      },
 
-      set((state) => ({
-        items:
-          moveItemToTrash(
-            state.items,
-            id
-          ),
-      }));
+      trashItem: (
+        id
+      ) => {
+        const item =
+          get().items.find(
+            (
+              currentItem
+            ) =>
+              currentItem.id ===
+              id
+          );
 
-      return true;
-    },
+        if (!item) {
+          return false;
+        }
 
-    trashCriticalItem: (id) => {
-      const item =
-        get().items.find(
-          (currentItem) =>
-            currentItem.id === id
-        );
+        if (
+          !item.deletable
+        ) {
+          return false;
+        }
 
-      if (!item) {
-        return false;
-      }
+        /*
+         * Critical items must never
+         * be deleted through the
+         * normal filesystem path.
+         *
+         * They are handled by the
+         * critical deletion flow.
+         */
+        if (
+          item.critical
+        ) {
+          return false;
+        }
 
-      if (!item.deletable) {
-        return false;
-      }
+        if (
+          item.trashed
+        ) {
+          return false;
+        }
 
-      /*
-       * This operation is intentionally
-       * restricted to items explicitly
-       * marked as critical.
-       */
-      if (!item.critical) {
-        return false;
-      }
-
-      if (item.trashed) {
-        return false;
-      }
-
-      set((state) => ({
-        items:
-          moveItemToTrash(
-            state.items,
-            id
-          ),
-      }));
-
-      return true;
-    },
-
-    restoreItem: (id) => {
-      const item =
-        get().items.find(
-          (currentItem) =>
-            currentItem.id === id
-        );
-
-      if (!item) {
-        return false;
-      }
-
-      if (!item.trashed) {
-        return false;
-      }
-
-      if (!item.recoverable) {
-        return false;
-      }
-
-      set((state) => ({
-        items:
-          state.items.map(
-            (currentItem) => {
-              if (
-                currentItem.id !==
+        set(
+          (
+            state
+          ) => ({
+            items:
+              moveItemToTrash(
+                state.items,
                 id
-              ) {
-                return currentItem;
-              }
+              ),
+          })
+        );
 
-              return {
-                ...currentItem,
+        useAchievementStore
+          .getState()
+          .unlockAchievement(
+            "first-delete"
+          );
 
-                parentId:
-                  currentItem.originalParentId,
+        return true;
+      },
 
-                originalParentId:
-                  null,
+      trashCriticalItem: (
+        id
+      ) => {
+        const item =
+          get().items.find(
+            (
+              currentItem
+            ) =>
+              currentItem.id ===
+              id
+          );
 
-                trashed:
-                  false,
-              };
-            }
-          ),
-      }));
+        if (!item) {
+          return false;
+        }
 
-      return true;
-    },
+        if (
+          !item.deletable
+        ) {
+          return false;
+        }
 
-    resetFileSystem: () => {
-      set({
-        items:
-          createInitialItems(),
-      });
-    },
-  }));
+        /*
+         * This operation is intentionally
+         * restricted to items explicitly
+         * marked as critical.
+         */
+        if (
+          !item.critical
+        ) {
+          return false;
+        }
+
+        if (
+          item.trashed
+        ) {
+          return false;
+        }
+
+        set(
+          (
+            state
+          ) => ({
+            items:
+              moveItemToTrash(
+                state.items,
+                id
+              ),
+          })
+        );
+
+        return true;
+      },
+
+      restoreItem: (
+        id
+      ) => {
+        const item =
+          get().items.find(
+            (
+              currentItem
+            ) =>
+              currentItem.id ===
+              id
+          );
+
+        if (!item) {
+          return false;
+        }
+
+        if (
+          !item.trashed
+        ) {
+          return false;
+        }
+
+        if (
+          !item.recoverable
+        ) {
+          return false;
+        }
+
+        set(
+          (
+            state
+          ) => ({
+            items:
+              state.items.map(
+                (
+                  currentItem
+                ) => {
+                  if (
+                    currentItem.id !==
+                    id
+                  ) {
+                    return currentItem;
+                  }
+
+                  return {
+                    ...currentItem,
+
+                    parentId:
+                      currentItem.originalParentId,
+
+                    originalParentId:
+                      null,
+
+                    trashed:
+                      false,
+                  };
+                }
+              ),
+          })
+        );
+
+        return true;
+      },
+
+      resetFileSystem:
+        () => {
+          set({
+            items:
+              createInitialItems(),
+          });
+        },
+    })
+  );
