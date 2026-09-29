@@ -1,11 +1,28 @@
 /* =========================================================
    HOSSOMII OS
-   Project Viewer
+   Project Viewer / Project Database
    ========================================================= */
 
 .project-viewer-app {
-  container-type:
-    inline-size;
+  --project-bg: var(--system-content, #f4f4f4);
+
+  --project-surface: var(--system-content, #ffffff);
+
+  --project-surface-alt: var(--system-surface, #ece9d8);
+
+  --project-text: var(--system-text, #1c1c1c);
+
+  --project-muted: var(--system-muted, #666666);
+
+  --project-heading: var(--system-heading, #234b88);
+
+  --project-border: var(--system-border, #aca899);
+
+  --project-accent: var(--system-accent, #316ac5);
+
+  --project-button: var(--system-button, #ece9d8);
+
+  container-type: inline-size;
 
   display: flex;
   flex-direction: column;
@@ -19,66 +36,77 @@
   overflow-x: hidden;
   overflow-y: auto;
 
-  overscroll-behavior:
-    contain;
+  overscroll-behavior: contain;
 
-  background: #f4f4f4;
+  background: var(--project-bg);
 
-  color: #1c1c1c;
+  color: var(--project-text);
 
-  font-family:
-    Tahoma,
-    Verdana,
-    sans-serif;
+  font-family: Tahoma, Verdana, sans-serif;
 }
-
 
 /* =========================================================
    HEADER
    ========================================================= */
 
 .project-viewer-header {
+  display: flex;
+
   flex: 0 0 auto;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 18px;
 
   width: 100%;
 
-  padding:
-    clamp(
-      18px,
-      4cqw,
-      28px
-    )
-    clamp(
-      18px,
-      4cqw,
-      30px
-    )
-    clamp(
-      16px,
-      3.5cqw,
-      24px
-    );
+  padding: clamp(16px, 3.5cqw, 24px) clamp(18px, 4cqw, 28px);
 
-  border-bottom:
-    1px solid
-      #b8b8b8;
+  border-bottom: 1px solid var(--window-border, #0a55c4);
 
-  background:
-    linear-gradient(
-      135deg,
-      #1b3d78,
-      #2866b5
-    );
+  background: linear-gradient(
+    135deg,
+    var(--window-title-start, #3d95ff),
+    var(--window-title-middle, #0054c9),
+    var(--window-title-end, #0644a6)
+  );
 
   color: #ffffff;
+}
+
+.project-viewer-identity {
+  display: flex;
+
+  min-width: 0;
+
+  align-items: center;
+
+  gap: 12px;
+}
+
+.project-viewer-project-icon {
+  width: 56px;
+  height: 56px;
+
+  flex: 0 0 auto;
+
+  object-fit: contain;
+
+  filter: drop-shadow(1px 2px 1px rgba(0, 0, 0, 0.3));
+}
+
+.project-viewer-title-area {
+  min-width: 0;
 }
 
 .project-viewer-label {
   display: block;
 
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 700;
 
   letter-spacing: 1.4px;
@@ -87,35 +115,603 @@
 }
 
 .project-viewer-header h1 {
-  margin:
-    0
-    0
-    8px;
+  margin: 0 0 7px;
 
-  font-size:
-    clamp(
-      19px,
-      4cqw,
-      25px
-    );
+  font-size: clamp(20px, 4cqw, 27px);
 
+  line-height: 1.05;
+
+  overflow-wrap: anywhere;
+
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.project-viewer-meta {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+}
+
+.project-viewer-meta span {
+  padding: 2px 6px;
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  background: rgba(0, 0, 0, 0.09);
+
+  color: #ffffff;
+
+  font-size: 8px;
+}
+
+.project-viewer-header-system {
+  display: flex;
+
+  flex: 0 0 auto;
+
+  align-items: flex-end;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  max-width: 42%;
+
+  text-align: right;
+}
+
+.project-viewer-header-system span {
+  font-size: 8px;
   font-weight: 700;
 
-  overflow-wrap:
-    anywhere;
+  letter-spacing: 1.3px;
+
+  opacity: 0.65;
 }
 
-.project-viewer-header p {
+.project-viewer-header-system strong {
+  overflow: hidden;
+
   max-width: 100%;
 
-  margin: 0;
+  font-family: "Lucida Console", Consolas, monospace;
 
-  font-size: 11px;
-  line-height: 1.5;
+  font-size: 9px;
 
-  opacity: 0.82;
+  font-weight: 400;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+
+  opacity: 0.95;
 }
 
+/* =========================================================
+   DOSSIER
+   ========================================================= */
+
+.project-viewer-dossier {
+  flex: 0 0 auto;
+
+  padding: 10px;
+
+  border-bottom: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-dossier-bar {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  padding: 5px 8px;
+
+  border: 1px solid var(--project-border);
+
+  border-bottom: 0;
+
+  background: var(--project-button);
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.4px;
+}
+
+.project-viewer-dossier-bar span:last-child {
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.project-viewer-dossier-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.75fr)
+    minmax(190px, 0.75fr);
+
+  min-height: 250px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+}
+
+/* =========================================================
+   DOSSIER MEDIA
+   ========================================================= */
+
+.project-viewer-media-panel {
+  display: flex;
+
+  min-width: 0;
+
+  flex-direction: column;
+
+  padding: 8px;
+
+  border-right: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+}
+
+.project-viewer-hero {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+
+  min-height: 0;
+
+  flex: 1;
+
+  padding: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--project-border);
+
+  background: #080b10;
+
+  cursor: pointer;
+}
+
+.project-viewer-hero:hover {
+  border-color: var(--project-accent);
+}
+
+.project-viewer-hero:focus-visible {
+  outline: 2px solid var(--project-accent);
+
+  outline-offset: 2px;
+}
+
+.project-viewer-hero img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  min-height: 220px;
+
+  max-height: 340px;
+
+  object-fit: cover;
+
+  transition: transform 180ms ease;
+}
+
+.project-viewer-hero:hover img {
+  transform: scale(1.012);
+}
+
+.project-viewer-hero-overlay {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 9px 11px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.08),
+    rgba(0, 0, 0, 0.86)
+  );
+
+  color: #ffffff;
+
+  text-align: left;
+}
+
+.project-viewer-hero-overlay strong {
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+.project-viewer-hero-overlay small {
+  flex: 0 0 auto;
+
+  color: #ffffff;
+
+  font-size: 8px;
+
+  opacity: 0.76;
+}
+
+.project-viewer-hero-empty {
+  display: grid;
+
+  min-height: 220px;
+
+  flex: 1;
+
+  place-items: center;
+
+  border: 1px dashed var(--project-border);
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 9px;
+}
+
+.project-viewer-media-status {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+
+  margin-top: 5px;
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+}
+
+.project-viewer-media-status span:first-child {
+  overflow: hidden;
+
+  min-width: 0;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.project-viewer-media-status span:last-child {
+  flex: 0 0 auto;
+}
+
+/* =========================================================
+   PROJECT RECORD
+   ========================================================= */
+
+.project-viewer-record {
+  min-width: 0;
+
+  background: var(--project-surface);
+}
+
+.project-viewer-record-heading {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+
+  padding: 8px 9px;
+
+  border-bottom: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-record-heading > span {
+  color: var(--project-heading);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+.project-viewer-record-status {
+  display: flex;
+
+  align-items: center;
+
+  gap: 4px;
+
+  min-width: 0;
+
+  color: var(--project-text);
+
+  font-size: 7px;
+}
+
+.project-viewer-record-status strong {
+  overflow: hidden;
+
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
+}
+
+.project-viewer-status-light {
+  width: 7px;
+  height: 7px;
+
+  flex: 0 0 auto;
+
+  border: 1px solid var(--project-border);
+
+  border-radius: 50%;
+
+  background: var(--project-accent);
+
+  box-shadow: 0 0 5px rgba(49, 106, 197, 0.55);
+}
+
+.project-viewer-record-status.is-completed .project-viewer-status-light {
+  background: #459a48;
+}
+
+.project-viewer-record-status.is-development .project-viewer-status-light {
+  background: #d39a32;
+}
+
+.project-viewer-record-data {
+  margin: 0;
+
+  padding: 2px 9px;
+}
+
+.project-viewer-record-data div {
+  padding: 8px 0;
+
+  border-bottom: 1px solid var(--project-border);
+}
+
+.project-viewer-record-data div:last-child {
+  border-bottom: 0;
+}
+
+.project-viewer-record-data dt {
+  margin-bottom: 3px;
+
+  color: var(--project-muted);
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+
+  text-transform: uppercase;
+}
+
+.project-viewer-record-data dd {
+  margin: 0;
+
+  color: var(--project-text);
+
+  font-size: 9px;
+
+  line-height: 1.5;
+
+  overflow-wrap: anywhere;
+}
+
+.project-viewer-record-stack {
+  padding: 9px;
+
+  border-top: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-record-stack > span {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: var(--project-muted);
+
+  font-size: 7px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+.project-viewer-record-stack > div {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 4px;
+}
+
+.project-viewer-record-stack > div span {
+  padding: 3px 5px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-heading);
+
+  font-size: 7px;
+  font-weight: 700;
+}
+
+.project-viewer-record-actions {
+  display: grid;
+
+  gap: 5px;
+
+  padding: 9px;
+
+  border-top: 1px solid var(--project-border);
+}
+
+.project-viewer-record-actions a {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  padding: 6px 8px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-button);
+
+  color: var(--project-text);
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.project-viewer-record-actions a span {
+  color: var(--project-accent);
+
+  font-family: "Lucida Console", Consolas, monospace;
+}
+
+.project-viewer-record-actions a:hover {
+  border-color: var(--project-accent);
+
+  color: var(--project-heading);
+}
+
+.project-viewer-record-actions a:focus-visible {
+  outline: 2px solid var(--project-accent);
+
+  outline-offset: 2px;
+}
+
+/* =========================================================
+   NAVIGATION TABS
+   ========================================================= */
+
+.project-viewer-tabs {
+  display: flex;
+
+  flex: 0 0 auto;
+
+  overflow-x: auto;
+
+  border-bottom: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-tabs button {
+  position: relative;
+
+  min-width: max-content;
+
+  padding: 9px 15px;
+
+  border: 0;
+
+  border-right: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-muted);
+
+  font-family: Tahoma, Verdana, sans-serif;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.project-viewer-tabs button:hover {
+  background: var(--project-button);
+
+  color: var(--project-text);
+}
+
+.project-viewer-tabs button.is-active {
+  background: var(--project-surface);
+
+  color: var(--project-heading);
+}
+
+.project-viewer-tabs button.is-active::before {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  left: 0;
+
+  height: 2px;
+
+  background: var(--project-accent);
+
+  content: "";
+}
+
+.project-viewer-tabs button.is-active::after {
+  position: absolute;
+
+  right: 0;
+  bottom: -1px;
+  left: 0;
+
+  height: 1px;
+
+  background: var(--project-surface);
+
+  content: "";
+}
+
+.project-viewer-tabs button:focus-visible {
+  outline: 2px solid var(--project-accent);
+
+  outline-offset: -2px;
+}
 
 /* =========================================================
    CONTENT
@@ -126,269 +722,1001 @@
 
   min-width: 0;
 
-  padding:
-    clamp(
-      14px,
-      3.5cqw,
-      24px
-    );
+  padding: clamp(15px, 3.5cqw, 24px);
+
+  background: var(--project-bg);
+
+  color: var(--project-text);
 }
+
+.project-viewer-tab-panel {
+  min-width: 0;
+
+  animation: project-viewer-panel-in 140ms ease-out;
+}
+
+@keyframes project-viewer-panel-in {
+  from {
+    opacity: 0;
+
+    transform: translateY(3px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================
+   SHARED SECTION LABELS
+   ========================================================= */
+
+.project-viewer-section-label {
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 0.8px;
+}
+
+/* =========================================================
+   OVERVIEW
+   ========================================================= */
+
+.project-viewer-intro {
+  max-width: 820px;
+
+  margin-bottom: 18px;
+}
+
+.project-viewer-intro h2 {
+  margin: 5px 0 8px;
+
+  color: var(--project-heading);
+
+  font-size: 18px;
+}
+
+.project-viewer-intro p {
+  margin: 0;
+
+  color: var(--project-text);
+
+  font-size: 12px;
+  line-height: 1.75;
+
+  overflow-wrap: anywhere;
+}
+
+.project-viewer-overview-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+.project-viewer-card {
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-text);
+}
+
+.project-viewer-card-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 5px 8px;
+
+  border-bottom: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.6px;
+}
+
+.project-viewer-card-index {
+  color: var(--project-heading);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.project-viewer-card h3 {
+  margin: 14px 14px 8px;
+
+  color: var(--project-heading);
+
+  font-size: 14px;
+}
+
+.project-viewer-card p {
+  margin: 0 14px 15px;
+
+  color: var(--project-text);
+
+  font-size: 11px;
+  line-height: 1.7;
+
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   GENERAL SECTIONS
+   ========================================================= */
 
 .project-viewer-section {
   min-width: 0;
 
-  margin-bottom:
-    clamp(
-      20px,
-      4cqw,
-      28px
-    );
+  margin-bottom: clamp(21px, 4cqw, 30px);
 }
 
 .project-viewer-section h2 {
-  margin:
-    0
-    0
-    12px;
+  margin: 5px 0 12px;
 
   padding-bottom: 6px;
 
-  border-bottom:
-    1px solid
-      #c8c8c8;
+  border-bottom: 1px solid var(--project-border);
 
-  color: #234b88;
+  color: var(--project-heading);
 
   font-size: 14px;
 }
 
 .project-viewer-description {
-  max-width: 760px;
+  max-width: 820px;
 
   margin: 0;
 
-  color: #333;
+  color: var(--project-text);
 
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.75;
 
   white-space: pre-line;
 
-  overflow-wrap:
-    anywhere;
+  overflow-wrap: anywhere;
 }
 
-
 /* =========================================================
-   TECHNOLOGIES
+   CONTRIBUTION LISTS
    ========================================================= */
 
-.project-viewer-technologies {
-  width: 100%;
-  max-width: 100%;
+.project-viewer-list {
+  max-width: 820px;
 
   margin: 0;
 
-  padding: 14px;
+  padding-left: 21px;
 
-  overflow-x: auto;
+  color: var(--project-text);
 
-  border:
-    1px solid
-      #ccc;
-
-  background: #ffffff;
-
-  color: #222;
-
-  font-family:
-    "Lucida Console",
-    Consolas,
-    monospace;
-
-  font-size: 11px;
-  line-height: 1.6;
-
-  white-space: pre-wrap;
-
-  overflow-wrap:
-    anywhere;
+  font-size: 12px;
+  line-height: 1.75;
 }
 
+.project-viewer-list li {
+  margin-bottom: 5px;
+}
+
+.project-viewer-list li::marker {
+  color: var(--project-accent);
+}
+
+/* =========================================================
+   BUILD LOG
+   ========================================================= */
+
+.project-viewer-build-log {
+  display: grid;
+
+  max-width: 880px;
+
+  gap: 6px;
+}
+
+.project-viewer-log-entry {
+  display: grid;
+
+  grid-template-columns:
+    72px
+    minmax(0, 1fr);
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+}
+
+.project-viewer-log-index {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 10px 7px;
+
+  border-right: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-heading);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.project-viewer-log-content {
+  min-width: 0;
+
+  padding: 9px 11px;
+}
+
+.project-viewer-log-content > span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.6px;
+}
+
+.project-viewer-log-content p {
+  margin: 0;
+
+  color: var(--project-text);
+
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   TECHNOLOGY TAGS
+   ========================================================= */
+
+.project-viewer-tags {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.project-viewer-tags span {
+  padding: 5px 8px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-heading);
+
+  font-size: 10px;
+  font-weight: 700;
+}
 
 /* =========================================================
    GALLERY
    ========================================================= */
 
-.project-viewer-gallery {
-  display: grid;
+.project-viewer-gallery-label {
+  display: flex;
 
-  width: 100%;
+  align-items: center;
 
-  min-width: 0;
+  justify-content: space-between;
 
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(
-        min(
-          170px,
-          100%
-        ),
-        1fr
-      )
-    );
+  gap: 10px;
 
-  gap:
-    clamp(
-      8px,
-      2cqw,
-      12px
-    );
+  padding: 5px 8px;
+
+  border: 1px solid var(--project-border);
+
+  border-bottom: 0;
+
+  background: var(--project-surface-alt);
+
+  color: var(--project-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 8px;
 }
 
-.project-viewer-gallery button {
-  width: 100%;
-
-  min-width: 0;
-
-  padding: 5px;
-
+.project-viewer-gallery-label span:last-child {
   overflow: hidden;
 
-  border:
-    1px solid
-      #aaa;
+  white-space: nowrap;
 
-  background: #ffffff;
+  text-overflow: ellipsis;
+}
+
+.project-viewer-gallery-main {
+  display: block;
+
+  width: 100%;
+
+  margin-bottom: 10px;
+
+  padding: 6px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-text);
 
   cursor: pointer;
 }
 
-.project-viewer-gallery button:hover {
-  border-color:
-    #316ac5;
-
-  background:
-    #e9f2ff;
+.project-viewer-gallery-main:hover {
+  border-color: var(--project-accent);
 }
 
-.project-viewer-gallery img {
+.project-viewer-gallery-main:focus-visible {
+  outline: 2px solid var(--project-accent);
+
+  outline-offset: 2px;
+}
+
+.project-viewer-gallery-main img {
   display: block;
 
   width: 100%;
-  height: auto;
+
+  max-height: 420px;
+
+  object-fit: contain;
+
+  background: #080b10;
+}
+
+.project-viewer-gallery-main > span {
+  display: block;
+
+  padding: 8px 3px 2px;
+
+  color: var(--project-text);
+
+  font-size: 10px;
+
+  line-height: 1.5;
+
+  text-align: left;
+}
+
+.project-viewer-gallery-thumbnails {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.project-viewer-gallery-thumbnails button {
+  position: relative;
+
+  min-width: 0;
+
+  padding: 4px;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-text);
+
+  cursor: pointer;
+}
+
+.project-viewer-gallery-thumbnails button:hover {
+  border-color: var(--project-accent);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-gallery-thumbnails button.is-active {
+  border-color: var(--project-accent);
+
+  background: var(--project-surface-alt);
+}
+
+.project-viewer-gallery-thumbnails button:focus-visible {
+  outline: 2px solid var(--project-accent);
+
+  outline-offset: 2px;
+}
+
+.project-viewer-gallery-thumbnails img {
+  display: block;
+
+  width: 100%;
 
   aspect-ratio: 16 / 9;
 
   object-fit: cover;
 
-  background: #ddd;
+  background: #080b10;
 }
 
-.project-viewer-gallery span {
+.project-viewer-thumbnail-index {
+  position: absolute;
+
+  top: 7px;
+  left: 7px;
+
+  z-index: 1;
+
+  padding: 2px 4px;
+
+  background: rgba(0, 0, 0, 0.75);
+
+  color: #ffffff;
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+}
+
+.project-viewer-thumbnail-caption {
   display: block;
 
-  min-width: 0;
-
-  padding:
-    6px
-    2px
-    2px;
+  margin-top: 5px;
 
   overflow: hidden;
 
-  color: #333;
+  color: var(--project-muted);
 
-  font-size: 10px;
+  font-size: 8px;
+
+  line-height: 1.4;
 
   text-align: left;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
 
+/* =========================================================
+   PROJECT INFO
+   ========================================================= */
+
+.project-viewer-info {
+  margin: 0;
+
+  overflow: hidden;
+
+  border: 1px solid var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-text);
+}
+
+.project-viewer-info div {
+  display: grid;
+
+  grid-template-columns:
+    120px
+    minmax(0, 1fr);
+
+  border-bottom: 1px solid var(--project-border);
+}
+
+.project-viewer-info div:last-child {
+  border-bottom: 0;
+}
+
+.project-viewer-info dt,
+.project-viewer-info dd {
+  margin: 0;
+
+  padding: 8px 10px;
+}
+
+.project-viewer-info dt {
+  background: var(--project-surface-alt);
+
+  color: var(--project-muted);
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.project-viewer-info dd {
+  color: var(--project-text);
+
+  overflow-wrap: anywhere;
+
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   EMPTY / ERROR
+   ========================================================= */
+
+.project-viewer-empty {
+  padding: 30px;
+
+  border: 1px dashed var(--project-border);
+
+  background: var(--project-surface);
+
+  color: var(--project-muted);
+
+  font-size: 11px;
+
+  text-align: center;
+}
+
+.project-viewer-error {
+  padding: 18px;
+
+  background: var(--project-bg);
+
+  color: var(--project-text);
+
+  font-size: 12px;
+}
 
 /* =========================================================
    FOOTER
    ========================================================= */
 
 .project-viewer-footer {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 6px;
+
   padding-top: 14px;
 
-  border-top:
-    1px solid
-      #ccc;
+  border-top: 1px solid var(--project-border);
 
-  color: #777;
+  color: var(--project-muted);
 
-  font-size: 10px;
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+
+  line-height: 1.5;
+
+  letter-spacing: 0.3px;
 }
-
-.project-viewer-error {
-  padding: 18px;
-
-  font-size: 12px;
-}
-
 
 /* =========================================================
-   RESIZABLE WINDOW STATES
+   RESIZABLE WINDOW — MEDIUM
+   ========================================================= */
+
+@container (max-width: 620px) {
+  .project-viewer-dossier-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .project-viewer-media-panel {
+    border-right: 0;
+
+    border-bottom: 1px solid var(--project-border);
+  }
+
+  .project-viewer-record-data {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 0 12px;
+  }
+
+  .project-viewer-record-data div:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================
+   RESIZABLE WINDOW — SMALL
    ========================================================= */
 
 @container (max-width: 520px) {
   .project-viewer-header {
-    padding:
-      16px
-      17px;
+    align-items: flex-start;
+
+    padding: 15px 16px;
   }
 
-  .project-viewer-content {
-    padding:
-      14px;
+  .project-viewer-header-system {
+    display: none;
+  }
+
+  .project-viewer-project-icon {
+    width: 46px;
+    height: 46px;
   }
 
   .project-viewer-header h1 {
     font-size: 19px;
   }
 
-  .project-viewer-gallery {
-    grid-template-columns:
-      1fr;
+  .project-viewer-dossier {
+    padding: 7px;
   }
 
-  .project-viewer-technologies {
-    padding: 10px;
+  .project-viewer-hero img {
+    min-height: 180px;
 
-    font-size: 10px;
+    max-height: 250px;
   }
-}
 
-@container (max-width: 380px) {
-  .project-viewer-header {
-    padding:
-      13px
-      14px;
+  .project-viewer-hero-overlay {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 3px;
+  }
+
+  .project-viewer-record-data {
+    display: block;
+  }
+
+  .project-viewer-tabs button {
+    padding: 8px 11px;
+
+    font-size: 8px;
   }
 
   .project-viewer-content {
-    padding:
-      11px;
+    padding: 14px;
   }
 
-  .project-viewer-section {
-    margin-bottom: 18px;
+  .project-viewer-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-viewer-gallery-thumbnails {
+    grid-template-columns: 1fr;
+  }
+
+  .project-viewer-info div {
+    grid-template-columns: 1fr;
+  }
+
+  .project-viewer-info dt {
+    border-bottom: 1px solid var(--project-border);
+  }
+}
+
+/* =========================================================
+   RESIZABLE WINDOW — VERY SMALL
+   ========================================================= */
+
+@container (max-width: 380px) {
+  .project-viewer-header {
+    padding: 12px 13px;
+  }
+
+  .project-viewer-identity {
+    align-items: flex-start;
+  }
+
+  .project-viewer-project-icon {
+    width: 39px;
+    height: 39px;
   }
 
   .project-viewer-header h1 {
     font-size: 17px;
   }
 
-  .project-viewer-section h2 {
+  .project-viewer-label {
+    font-size: 8px;
+  }
+
+  .project-viewer-meta span {
+    font-size: 7px;
+  }
+
+  .project-viewer-dossier-bar {
+    font-size: 7px;
+  }
+
+  .project-viewer-record-heading {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .project-viewer-intro h2 {
+    font-size: 16px;
+  }
+
+  .project-viewer-description,
+  .project-viewer-intro p,
+  .project-viewer-list {
+    font-size: 11px;
+  }
+
+  .project-viewer-card h3 {
     font-size: 12px;
   }
 
-  .project-viewer-description {
-    font-size: 11px;
+  .project-viewer-card p,
+  .project-viewer-log-content p {
+    font-size: 10px;
+  }
+
+  .project-viewer-log-entry {
+    grid-template-columns: 1fr;
+  }
+
+  .project-viewer-log-index {
+    justify-content: flex-start;
+
+    border-right: 0;
+
+    border-bottom: 1px solid var(--project-border);
+  }
+
+  .project-viewer-tags span {
+    font-size: 9px;
+  }
+
+  .project-viewer-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+}
+
+/* =========================================================
+   FINAL POLISH — RETRO DESKTOP FEEDBACK
+   ========================================================= */
+
+.project-viewer-dossier-bar,
+.project-viewer-gallery-label {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.28),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.project-viewer-dossier-grid,
+.project-viewer-info,
+.project-viewer-card,
+.project-viewer-log-entry {
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* ---------------------------------------------------------
+   BUTTON PRESS FEEDBACK
+   --------------------------------------------------------- */
+
+.project-viewer-record-actions a,
+.project-viewer-tabs button,
+.project-viewer-gallery-thumbnails button,
+.project-viewer-gallery-main,
+.project-viewer-hero {
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    color 120ms ease,
+    transform 80ms ease;
+}
+
+.project-viewer-record-actions a:active,
+.project-viewer-gallery-thumbnails button:active {
+  transform: translate(1px, 1px);
+}
+
+.project-viewer-tabs button:active {
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+/* ---------------------------------------------------------
+   RECORD ACTIONS — XP-LIKE BUTTON DEPTH
+   --------------------------------------------------------- */
+
+.project-viewer-record-actions a {
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.28),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.12);
+}
+
+.project-viewer-record-actions a:active {
+  box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.18);
+}
+
+/* ---------------------------------------------------------
+   TABS
+   --------------------------------------------------------- */
+
+.project-viewer-tabs button {
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.project-viewer-tabs button.is-active {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+/* ---------------------------------------------------------
+   OVERVIEW CARDS
+   --------------------------------------------------------- */
+
+.project-viewer-card {
+  transition:
+    border-color 140ms ease,
+    transform 140ms ease;
+}
+
+.project-viewer-card:hover {
+  border-color: var(--project-accent);
+
+  transform: translateY(-1px);
+}
+
+/* ---------------------------------------------------------
+   BUILD LOG
+   --------------------------------------------------------- */
+
+.project-viewer-log-entry {
+  position: relative;
+
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.project-viewer-log-entry::before {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  width: 2px;
+
+  background: transparent;
+
+  content: "";
+
+  transition: background-color 140ms ease;
+}
+
+.project-viewer-log-entry:hover {
+  border-color: var(--project-accent);
+}
+
+.project-viewer-log-entry:hover::before {
+  background: var(--project-accent);
+}
+
+/* ---------------------------------------------------------
+   TECH TAGS
+   --------------------------------------------------------- */
+
+.project-viewer-tags span,
+.project-viewer-record-stack > div span {
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease;
+}
+
+.project-viewer-tags span:hover,
+.project-viewer-record-stack > div span:hover {
+  border-color: var(--project-accent);
+
+  background: var(--project-button);
+}
+
+/* ---------------------------------------------------------
+   MEDIA
+   --------------------------------------------------------- */
+
+.project-viewer-gallery-main,
+.project-viewer-gallery-thumbnails button {
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.project-viewer-gallery-thumbnails button.is-active {
+  box-shadow: inset 0 0 0 1px var(--project-accent);
+}
+
+/* ---------------------------------------------------------
+   STATUS LIGHT
+   --------------------------------------------------------- */
+
+.project-viewer-record-status.is-development .project-viewer-status-light {
+  animation: project-viewer-status-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes project-viewer-status-pulse {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ---------------------------------------------------------
+   HEADER ICON
+   --------------------------------------------------------- */
+
+.project-viewer-project-icon {
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+}
+
+.project-viewer-identity:hover .project-viewer-project-icon {
+  transform: translateY(-1px);
+
+  filter: drop-shadow(2px 3px 2px rgba(0, 0, 0, 0.32));
+}
+
+/* ---------------------------------------------------------
+   TEXT SELECTION
+   --------------------------------------------------------- */
+
+.project-viewer-app ::selection {
+  background: var(--selection, #316ac5);
+
+  color: var(--selection-text, #ffffff);
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .project-viewer-app *,
+  .project-viewer-app *::before,
+  .project-viewer-app *::after {
+    scroll-behavior: auto !important;
+
+    transition-duration: 0.01ms !important;
+
+    animation-duration: 0.01ms !important;
+
+    animation-iteration-count: 1 !important;
   }
 }

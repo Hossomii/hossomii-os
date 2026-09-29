@@ -1,5 +1,9 @@
 import type { FileSystemItem } from "../../types/filesystem";
 
+import { portfolioProjects } from "../../content/projects";
+
+import { createProjectFileSystemItems } from "./projectFileSystem";
+
 export const initialFileSystem: FileSystemItem[] = [
   {
     id: "drive-c",
@@ -140,7 +144,7 @@ export const initialFileSystem: FileSystemItem[] = [
     extension: "txt",
 
     content:
-      "Olá! Eu sou Anthony, desenvolvedor de software com formação em Análise e Desenvolvimento de Sistemas e estudante de Engenharia de Software.\n\nMeu foco profissional atual é desenvolvimento backend com C# e .NET, com interesse em construção de APIs, bancos de dados, arquitetura de software e sistemas confiáveis.\n\nTambém possuo experiência com desenvolvimento web, TypeScript, React, Node.js, PostgreSQL, Unity e C#.\n\nGosto especialmente de projetos que combinam engenharia de software, experiências interativas e identidade visual como o próprio HOSSOMII OS :)",
+      "Olá! Eu sou Anthony, desenvolvedor de software e estudante de Engenharia de Software.\n\nTenho interesse principalmente em engenharia de software, backend, sistemas e cibersegurança. Gosto de entender como aplicações funcionam por dentro, explorar fundamentos técnicos e transformar esse conhecimento em projetos práticos.\n\nAtualmente estudo principalmente Python, sistemas, redes e segurança, mantendo experiência prática com React, TypeScript, Node.js, PostgreSQL, C# e desenvolvimento de experiências interativas.\n\nNeste computador você pode explorar alguns dos meus projetos, documentos e experimentos. O próprio HOSSOMII OS também faz parte do portfólio: uma aplicação construída para transformar uma apresentação profissional tradicional em um sistema explorável.",
 
     hidden: false,
 
@@ -161,181 +165,7 @@ export const initialFileSystem: FileSystemItem[] = [
     extension: "txt",
 
     content:
-      "Anthony é desenvolvedor de software com interesse em desenvolvimento full stack, experiências digitais e construção de produtos interativos e cybersegurança.",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-project-app",
-    name: "project.exe",
-    type: "application",
-    parentId: "project-tnt-basketball",
-    iconId: "project-tnt-basketball",
-
-    appId: "project-viewer",
-    instanceId: "project-tnt-basketball",
-
-    data: {
-      projectId: "project-tnt-basketball",
-    },
-
-    hidden: false,
-
-    deletable: false,
-    critical: false,
-    recoverable: false,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-about",
-    name: "sobre-o-projeto.txt",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "txt",
-
-    content:
-      "TNT Basketball é um jogo desenvolvido em Unity utilizando C#.\n\nO projeto foi criado durante uma experiência prática envolvendo desenvolvimento de um jogo publicitário e trabalho em equipe.\n\nMinha participação envolveu lógica de gameplay, programação e integração de sistemas dentro da Unity, além do polimento visual do jogo.",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-technologies",
-    name: "tecnologias.txt",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "txt",
-
-    content:
-      "Tecnologias utilizadas:\n\n- C#\n- Unity\n- Git\n- GitHub\n\nÁreas trabalhadas:\n\n- Programação de gameplay\n- Lógica de sistemas\n- Desenvolvimento em equipe",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-links",
-    name: "links.txt",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "txt",
-
-    content:
-      "Links relacionados ao projeto:\n\nGitHub: https://github.com/Hossomii/TNT-Basketball\nDemo: https://grupo-1.itch.io/tnt-basketball",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "medicos-project-app",
-    name: "project.exe",
-    type: "application",
-    parentId: "project-medicos-dentistas",
-    iconId: "project-medicos-dentistas",
-
-    appId: "project-viewer",
-    instanceId: "project-medicos-dentistas",
-
-    data: {
-      projectId: "project-medicos-dentistas",
-    },
-
-    hidden: false,
-
-    deletable: false,
-    critical: false,
-    recoverable: false,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "medicos-about",
-    name: "sobre-o-projeto.txt",
-    type: "file",
-    parentId: "project-medicos-dentistas",
-
-    extension: "txt",
-
-    content:
-      "Médicos & Dentistas é um projeto web desenvolvido com foco em interface, organização de conteúdo e experiência do usuário.\n\nO projeto faz parte da minha experiência com desenvolvimento front-end e construção de interfaces web.",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "medicos-technologies",
-    name: "tecnologias.txt",
-    type: "file",
-    parentId: "project-medicos-dentistas",
-
-    extension: "txt",
-
-    content:
-      "Tecnologias utilizadas:\n\n- React\n- JavaScript / TypeScript\n- SASS\n- HTML\n- CSS\n\nÁreas trabalhadas:\n\n- Desenvolvimento de interface\n- Componentização\n- Responsividade\n- Organização visual",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "medicos-links",
-    name: "links.txt",
-    type: "file",
-    parentId: "project-medicos-dentistas",
-
-    extension: "txt",
-
-    content:
-      "Links relacionados ao projeto:\n\nGitHub: https://github.com/Hossomii/medicos-dentistas-fullstack\nDemo: https://medicos-e-dentistas-zeta.vercel.app/",
+      "Sou Anthony, desenvolvedor de software e estudante de Engenharia de Software. Tenho interesse em backend, sistemas, redes e cibersegurança, com curiosidade especial por entender como software funciona por dentro e como diferentes componentes se conectam.\n\nMeus projetos passam por aplicações web fullstack, sistemas interativos, desenvolvimento de jogos e experimentos que combinam engenharia de software com identidade visual e experiência do usuário.\n\nAtualmente estou aprofundando meus estudos em Linux, estruturas de dados e algoritmos, com Python como linguagem principal de estudo e interesse também em C e C#.",
 
     hidden: false,
 
@@ -369,117 +199,7 @@ export const initialFileSystem: FileSystemItem[] = [
 
   // Projects
 
-  {
-    id: "project-tnt-basketball",
-    name: "TNT Basketball",
-    type: "directory",
-    parentId: "projects",
-
-    hidden: false,
-
-    deletable: false,
-    critical: false,
-    recoverable: false,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-screenshot-01",
-    name: "screenshot-01.webp",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "webp",
-
-    resourceUrl: "/projects/tnt-basketball/screenshot-01.webp",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-screenshot-02",
-    name: "screenshot-02.webp",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "webp",
-
-    resourceUrl: "/projects/tnt-basketball/screenshot-02.webp",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "tnt-screenshot-03",
-    name: "screenshot-03.webp",
-    type: "file",
-    parentId: "project-tnt-basketball",
-
-    extension: "webp",
-
-    resourceUrl: "/projects/tnt-basketball/screenshot-03.webp",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "project-medicos-dentistas",
-    name: "Médicos & Dentistas",
-    type: "directory",
-    parentId: "projects",
-
-    hidden: false,
-
-    deletable: false,
-    critical: false,
-    recoverable: false,
-
-    trashed: false,
-    originalParentId: null,
-  },
-
-  {
-    id: "medicos-screenshot-01",
-    name: "screenshot-01.webp",
-    type: "file",
-    parentId: "project-medicos-dentistas",
-
-    extension: "webp",
-
-    resourceUrl: "/projects/medicos-dentistas/screenshot-01.webp",
-
-    hidden: false,
-
-    deletable: true,
-    critical: false,
-    recoverable: true,
-
-    trashed: false,
-    originalParentId: null,
-  },
+  ...portfolioProjects.flatMap(createProjectFileSystemItems),
 
   // System
 
@@ -513,6 +233,26 @@ export const initialFileSystem: FileSystemItem[] = [
     iconId: "computer",
 
     appId: "computer",
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
+    id: "browser-application",
+    name: "HOSSOMII Web",
+    type: "application",
+    parentId: "programs",
+
+    iconId: "browser",
+
+    appId: "browser",
 
     hidden: false,
 
@@ -571,6 +311,24 @@ export const initialFileSystem: FileSystemItem[] = [
     parentId: "desktop",
 
     targetId: "computer-application",
+
+    hidden: false,
+
+    deletable: false,
+    critical: false,
+    recoverable: false,
+
+    trashed: false,
+    originalParentId: null,
+  },
+
+  {
+    id: "desktop-browser",
+    name: "HOSSOMII Web",
+    type: "shortcut",
+    parentId: "desktop",
+
+    targetId: "browser-application",
 
     hidden: false,
 

@@ -7,6 +7,7 @@ import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
 import terminalIcon from "../../assets/icons/terminal.webp";
 import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
+import browserIcon from "../../assets/icons/browser.webp";
 
 import { getFileSystemIcon } from "../../system/filesystem/iconRegistry";
 
@@ -22,6 +23,9 @@ function getApplicationIcon(appId: WindowAppId) {
   switch (appId) {
     case "computer":
       return computerIcon;
+
+    case "browser":
+      return browserIcon;
 
     case "projects":
     case "project-viewer":

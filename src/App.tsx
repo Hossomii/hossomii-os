@@ -1,70 +1,45 @@
-import {
-  useSystemStore,
-} from "./stores/systemStore";
+import { useSystemStore } from "./stores/systemStore";
 
-import {
-  LoginScreen,
-} from "./system/auth/LoginScreen";
+import { LoginScreen } from "./system/auth/LoginScreen";
 
-import {
-  AuthenticatingScreen,
-} from "./system/auth/AuthenticatingScreen";
+import { AuthenticatingScreen } from "./system/auth/AuthenticatingScreen";
 
-import {
-  BootScreen,
-} from "./system/boot/BootScreen";
+import { BootScreen } from "./system/boot/BootScreen";
 
-import {
-  Desktop,
-} from "./desktop/Desktop";
+import { Desktop } from "./desktop/Desktop";
 
-import {
-  ShutdownScreen,
-} from "./system/power/ShutdownScreen";
+import { RestartScreen } from "./system/power/RestartScreen";
 
-import {
-  PoweredOffScreen,
-} from "./system/power/PoweredOffScreen";
+import { ShutdownScreen } from "./system/power/ShutdownScreen";
+
+import { PoweredOffScreen } from "./system/power/PoweredOffScreen";
 
 import "./styles/power.css";
 
 function App() {
-  const phase =
-    useSystemStore(
-      (state) =>
-        state.phase
-    );
+  const phase = useSystemStore((state) => state.phase);
 
   switch (phase) {
     case "login":
-      return (
-        <LoginScreen />
-      );
+      return <LoginScreen />;
 
     case "authenticating":
-      return (
-        <AuthenticatingScreen />
-      );
+      return <AuthenticatingScreen />;
+
+    case "restarting":
+      return <RestartScreen />;
 
     case "booting":
-      return (
-        <BootScreen />
-      );
+      return <BootScreen />;
 
     case "desktop":
-      return (
-        <Desktop />
-      );
+      return <Desktop />;
 
     case "shutting-down":
-      return (
-        <ShutdownScreen />
-      );
+      return <ShutdownScreen />;
 
     case "powered-off":
-      return (
-        <PoweredOffScreen />
-      );
+      return <PoweredOffScreen />;
 
     default:
       return null;

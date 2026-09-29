@@ -20,6 +20,7 @@ import documentsIcon from "../assets/icons/documents.webp";
 import terminalIcon from "../assets/icons/terminal.webp";
 import emptyTrashIcon from "../assets/icons/empty-trash.webp";
 import defaultTrashIcon from "../assets/icons/default-trash.webp";
+import browserIcon from "../assets/icons/browser.webp";
 
 import wallpaperDefault from "../assets/wallpapers/default.webp";
 import wallpaper01 from "../assets/wallpapers/wallpaper-01.webp";
@@ -40,6 +41,8 @@ import { ControlPanelApp } from "../applications/control-panel/ControlPanelApp";
 
 import { DesktopIcon } from "./components/DesktopIcon";
 
+import { BrowserApp } from "../applications/browser/BrowserApp";
+
 import { StartMenu } from "./components/StartMenu";
 
 import { Taskbar } from "./components/Taskbar";
@@ -53,6 +56,10 @@ import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
 import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
 
 import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerApp";
+
+import profileAvatar from "../assets/profile-avatar.webp";
+
+import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
 
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
@@ -73,7 +80,7 @@ const WALLPAPERS = {
 } as const;
 
 export function Desktop() {
-  const resetSystem = useSystemStore((state) => state.resetSystem);
+  const restartSystem = useSystemStore((state) => state.restartSystem);
 
   const shutdownSystem = useSystemStore((state) => state.shutdownSystem);
 
@@ -123,6 +130,12 @@ export function Desktop() {
 
   const desktopItems = [
     {
+      id: "quick-view",
+      label: "Quick View",
+      icon: profileAvatar,
+    },
+
+    {
       id: "computer",
       label: "Meu Computador",
       icon: computerIcon,
@@ -136,6 +149,11 @@ export function Desktop() {
       id: "documents",
       label: "Meus Documentos",
       icon: documentsIcon,
+    },
+    {
+      id: "browser",
+      label: "HOSSOMII Web",
+      icon: browserIcon,
     },
     {
       id: "terminal",
@@ -162,6 +180,18 @@ export function Desktop() {
 
   function handleOpenItem(id: WindowAppId) {
     setStartMenuOpen(false);
+
+    if (id === "quick-view") {
+      openWindow({
+        appId: "quick-view",
+
+        title: "Quick View - Anthony",
+
+        icon: profileAvatar,
+      });
+
+      return;
+    }
 
     if (id === "computer") {
       openWindow({
@@ -223,6 +253,18 @@ export function Desktop() {
       return;
     }
 
+    if (id === "browser") {
+      openWindow({
+        appId: "browser",
+
+        title: "HOSSOMII Web",
+
+        icon: browserIcon,
+      });
+
+      return;
+    }
+
     if (id === "terminal") {
       openWindow({
         appId: "terminal",
@@ -265,7 +307,7 @@ export function Desktop() {
 
     resetWindows();
 
-    resetSystem();
+    restartSystem();
   }
 
   function handleShutdown() {
@@ -303,10 +345,26 @@ export function Desktop() {
       </div>
 
       {windows.map((windowItem) => {
+        if (windowItem.appId === "quick-view") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <QuickViewApp />
+            </WindowFrame>
+          );
+        }
+
         if (windowItem.appId === "computer") {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
               <ComputerApp />
+            </WindowFrame>
+          );
+        }
+
+        if (windowItem.appId === "browser") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <BrowserApp />
             </WindowFrame>
           );
         }
@@ -425,6 +483,7 @@ export function Desktop() {
         startMenuOpen={startMenuOpen}
         windows={windows}
         activeWindowId={activeWindow?.id ?? null}
+        onBrowserOpen={() => handleOpenItem("browser")}
         onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
         onWindowClick={handleTaskbarWindowClick}
       />

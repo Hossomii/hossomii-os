@@ -1,10 +1,4 @@
 /* =========================================================
-   HOSSOMII OS
-   Window Manager
-   ========================================================= */
-
-
-/* =========================================================
    WINDOW
    ========================================================= */
 
@@ -16,54 +10,26 @@
 
   box-sizing: border-box;
 
-  min-width: min(
-    340px,
-    calc(100% - 16px)
-  );
+  min-width: min(340px, calc(100% - 16px));
 
-  min-height: min(
-    220px,
-    calc(
-      100% -
-      var(--taskbar-height) -
-      16px
-    )
-  );
+  min-height: min(220px, calc(100% - var(--taskbar-height) - 16px));
 
   max-width: 100%;
 
-  max-height: calc(
-    100% -
-    var(--taskbar-height)
-  );
+  max-height: calc(100% - var(--taskbar-height));
 
   overflow: hidden;
 
-  border:
-    3px solid #0a55c4;
+  border: 3px solid #0a55c4;
 
-  border-radius:
-    8px
-    8px
-    2px
-    2px;
+  border-radius: 8px 8px 2px 2px;
 
   background: #ece9d8;
 
-  box-shadow:
-    4px
-    5px
-    18px
-    rgba(
-      0,
-      0,
-      0,
-      0.35
-    );
+  box-shadow: 4px 5px 18px rgba(0, 0, 0, 0.35);
 
   user-select: none;
 }
-
 
 /* =========================================================
    WINDOW TITLEBAR
@@ -83,23 +49,18 @@
 
   min-width: 0;
 
-  padding:
-    0
-    3px
-    0
-    6px;
+  padding: 0 3px 0 6px;
 
   overflow: hidden;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #3d95ff 0%,
-      #0875e1 8%,
-      #0054c9 48%,
-      #0644a6 88%,
-      #2c69c7 100%
-    );
+  background: linear-gradient(
+    to bottom,
+    #3d95ff 0%,
+    #0875e1 8%,
+    #0054c9 48%,
+    #0644a6 88%,
+    #2c69c7 100%
+  );
 
   color: white;
 
@@ -119,16 +80,7 @@
   font-size: 11px;
   font-weight: 700;
 
-  text-shadow:
-    1px
-    1px
-    1px
-    rgba(
-      0,
-      0,
-      0,
-      0.55
-    );
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.55);
 }
 
 .window-title img {
@@ -148,7 +100,6 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 
 /* =========================================================
    WINDOW CONTROLS
@@ -172,40 +123,17 @@
   padding: 0;
   flex: 0 0 23px;
 
-  border:
-    1px solid
-      rgba(
-        255,
-        255,
-        255,
-        0.9
-      );
+  border: 1px solid rgba(255, 255, 255, 0.9);
 
   border-radius: 3px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #68a7f2,
-      #1d63c5
-    );
+  background: linear-gradient(145deg, #68a7f2, #1d63c5);
 
-  box-shadow:
-    inset
-      1px
-      1px
-      rgba(
-        255,
-        255,
-        255,
-        0.35
-      );
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.35);
 
   color: white;
 
-  font-family:
-    Arial,
-    sans-serif;
+  font-family: Arial, sans-serif;
 
   font-size: 12px;
   font-weight: 700;
@@ -214,34 +142,16 @@
 }
 
 .window-controls button:hover {
-  filter:
-    brightness(1.12);
+  filter: brightness(1.12);
 }
 
 .window-controls button:active {
-  box-shadow:
-    inset
-      1px
-      2px
-      3px
-      rgba(
-        0,
-        0,
-        0,
-        0.3
-      );
+  box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.3);
 }
 
-.window-controls
-  .window-close-button {
-  background:
-    linear-gradient(
-      145deg,
-      #f68c70,
-      #c83d28
-    );
+.window-controls .window-close-button {
+  background: linear-gradient(145deg, #f68c70, #c83d28);
 }
-
 
 /* =========================================================
    WINDOW BODY
@@ -265,7 +175,6 @@
 
   background: white;
 }
-
 
 /* =========================================================
    RESIZE HANDLES
@@ -355,11 +264,9 @@
   cursor: nesw-resize;
 }
 
-.os-window-maximized
-  .window-resize-handle {
+.os-window-maximized .window-resize-handle {
   display: none;
 }
-
 
 /* =========================================================
    TASKBAR WINDOW AREA
@@ -373,9 +280,7 @@
 
   gap: 3px;
 
-  padding:
-    3px
-    5px;
+  padding: 3px 5px;
 
   overflow: hidden;
 }
@@ -384,10 +289,7 @@
   display: flex;
   align-items: center;
 
-  flex:
-    0
-    1
-    180px;
+  flex: 0 1 180px;
 
   gap: 5px;
 
@@ -397,36 +299,19 @@
   min-width: 72px;
   max-width: 180px;
 
-  padding:
-    0
-    8px;
+  padding: 0 8px;
 
   overflow: hidden;
 
-  border:
-    1px solid
-      rgba(
-        75,
-        135,
-        220,
-        0.8
-      );
+  border: 1px solid rgba(75, 135, 220, 0.8);
 
   border-radius: 3px;
 
-  background:
-    linear-gradient(
-      to bottom,
-      #3c81df,
-      #2864c9
-    );
+  background: linear-gradient(to bottom, #3c81df, #2864c9);
 
   color: white;
 
-  font-family:
-    Tahoma,
-    Verdana,
-    sans-serif;
+  font-family: Tahoma, Verdana, sans-serif;
 
   font-size: 10px;
 
@@ -434,55 +319,21 @@
 
   cursor: pointer;
 
-  box-shadow:
-    inset
-      1px
-      1px
-      rgba(
-        255,
-        255,
-        255,
-        0.18
-      );
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.18);
 }
 
 .taskbar-window-button:hover {
-  background:
-    linear-gradient(
-      to bottom,
-      #4b92eb,
-      #3473d6
-    );
+  background: linear-gradient(to bottom, #4b92eb, #3473d6);
 }
 
 .taskbar-window-active {
-  background:
-    linear-gradient(
-      to bottom,
-      #1f53ad,
-      #194994
-    );
+  background: linear-gradient(to bottom, #1f53ad, #194994);
 
-  box-shadow:
-    inset
-      1px
-      2px
-      3px
-      rgba(
-        0,
-        0,
-        0,
-        0.3
-      );
+  box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.3);
 }
 
 .taskbar-window-minimized {
-  background:
-    linear-gradient(
-      to bottom,
-      #2253a8,
-      #346ac0
-    );
+  background: linear-gradient(to bottom, #2253a8, #346ac0);
 
   opacity: 0.88;
 }
@@ -505,6 +356,82 @@
   text-overflow: ellipsis;
 }
 
+/* =========================================================
+   TASKBAR QUICK LAUNCH
+   ========================================================= */
+
+.taskbar-quick-launch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 auto;
+
+  height: 100%;
+
+  padding: 0 4px;
+}
+
+.taskbar-quick-launch-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 2px;
+
+  border: 1px solid transparent;
+
+  border-radius: 3px;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.taskbar-quick-launch-button:hover {
+  border-color: rgba(150, 195, 255, 0.85);
+
+  background: rgba(255, 255, 255, 0.16);
+
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.28);
+}
+
+.taskbar-quick-launch-button:active {
+  background: rgba(10, 60, 150, 0.45);
+
+  box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.taskbar-quick-launch-button:focus-visible {
+  outline: 1px dotted rgba(255, 255, 255, 0.95);
+
+  outline-offset: -3px;
+}
+
+.taskbar-quick-launch-button img {
+  width: 24px;
+  height: 24px;
+
+  object-fit: contain;
+
+  pointer-events: none;
+}
+
+.taskbar-quick-launch-separator {
+  flex: 0 0 auto;
+
+  width: 2px;
+  height: 27px;
+
+  margin-right: 3px;
+
+  border-left: 1px solid rgba(0, 44, 135, 0.65);
+
+  border-right: 1px solid rgba(120, 175, 245, 0.55);
+}
 
 /* =========================================================
    SMALL VIEWPORT
@@ -517,8 +444,24 @@
     min-width: 58px;
     max-width: 110px;
 
-    padding:
-      0
-      5px;
+    padding: 0 5px;
+  }
+
+  .taskbar-quick-launch {
+    padding: 0 2px;
+  }
+
+  .taskbar-quick-launch-button {
+    width: 28px;
+    height: 30px;
+  }
+
+  .taskbar-quick-launch-button img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .taskbar-quick-launch-separator {
+    margin-right: 1px;
   }
 }

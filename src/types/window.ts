@@ -8,7 +8,9 @@ export type WindowAppId =
   | "pdf-viewer"
   | "image-viewer"
   | "project-viewer"
-  | "control-panel";
+  | "control-panel"
+  | "browser"
+  | "quick-view";
 
 export type WindowBounds = {
   x: number;

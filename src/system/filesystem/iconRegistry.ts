@@ -3,6 +3,8 @@ import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
 import terminalIcon from "../../assets/icons/terminal.webp";
 import medicosDentistasIcon from "../../assets/icons/projects/medicos-dentistas.webp";
 import tntBasketballIcon from "../../assets/icons/projects/tnt-basketball.webp";
+import browserIcon from "../../assets/icons/browser.webp";
+import projectsIcon from "../../assets/icons/projects.webp";
 
 import type {
   FileSystemIconId,
@@ -17,8 +19,14 @@ const ICONS: Partial<
   computer:
     computerIcon,
 
+  projects:
+    projectsIcon,
+
   terminal:
     terminalIcon,
+
+  browser:
+    browserIcon,
 
   "recycle-bin":
     emptyTrashIcon,

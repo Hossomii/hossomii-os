@@ -10,9 +10,17 @@
 
 @import "./project-viewer.css";
 
+@import "./quick-view.css";
+
 @import "./control-panel.css";
 
 @import "./terminal.css";
+
+@import "./browser.css";
+
+@import "./browser-profile.css";
+
+@import "./browser-news.css";
 
 @import "./critical-flow.css";
 
