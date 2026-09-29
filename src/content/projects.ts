@@ -222,26 +222,81 @@ export const portfolioProjects: PortfolioProject[] = [
 
     name: "Médicos & Dentistas",
 
+    category: "Fullstack Web Application",
+
+    status: "in-development",
+
     summary:
-      "Projeto web desenvolvido com foco em interface, organização de conteúdo, responsividade e experiência do usuário.",
+      "Aplicação fullstack para uma iniciativa fictícia de atendimento médico e odontológico gratuito, com interface responsiva e fluxo real de cadastro de voluntários integrado a uma API REST e banco PostgreSQL.",
 
-    role: "Desenvolvimento front-end e construção da interface da aplicação.",
+    role: "O projeto começou como uma implementação front-end em React e posteriormente foi expandido por mim para uma aplicação fullstack, incluindo API REST, validação de dados, persistência com PostgreSQL e integração completa entre frontend e backend.",
 
-    technologies: ["React", "TypeScript", "JavaScript", "SASS", "HTML", "CSS"],
+    challenge:
+      "Transformar uma interface originalmente desenvolvida apenas como front-end em uma aplicação fullstack funcional. O principal desafio foi conectar o formulário de voluntários a uma API real e estruturar a persistência dos dados com PostgreSQL e Prisma, mantendo separadas as responsabilidades entre interface, validação, lógica da API e acesso ao banco.",
+
+    solution:
+      "A aplicação foi dividida em frontend React e backend Node.js. O frontend utiliza Axios para enviar os dados do cadastro e controla estados de carregamento, sucesso e erro. No backend, as requisições passam por rotas, controllers e services, com validação por Zod antes da persistência via Prisma em PostgreSQL. O tratamento de exceções também foi centralizado em um middleware global do Express.",
+
+    technologies: [
+      "React 19",
+      "JavaScript",
+      "Node.js",
+      "Express",
+      "PostgreSQL",
+      "Prisma",
+      "Zod",
+      "Axios",
+      "React Router",
+      "SCSS Modules",
+      "Vite",
+    ],
 
     highlights: [
-      "Desenvolvimento de interface",
-      "Componentização",
-      "Responsividade",
-      "Organização visual",
-      "Experiência do usuário",
+      "Evolução de um projeto front-end para uma aplicação fullstack",
+      "Criação de API REST para cadastro e listagem de voluntários",
+      "Persistência de dados com PostgreSQL e Prisma ORM",
+      "Modelagem e migrations de banco versionadas no projeto",
+      "Validação de dados da API com Zod",
+      "Separação do backend em routes, controllers e services",
+      "Tratamento global de erros no Express",
+      "Integração do formulário React com a API utilizando Axios",
+      "Estados de loading, sucesso e erro durante o cadastro",
+      "Interface responsiva com componentes reutilizáveis e SCSS Modules",
+    ],
+
+    technicalDecisions: [
+      "Separação do backend em routes, controllers e services para manter responsabilidades distintas entre entrada HTTP, coordenação da requisição e acesso aos dados.",
+
+      "Validação dos dados recebidos pela API com Zod antes de executar operações de persistência.",
+
+      "Uso do Prisma como camada de acesso ao PostgreSQL, mantendo schema e migrations versionados junto ao código da aplicação.",
+
+      "Definição do e-mail do voluntário como campo único no banco de dados para impedir registros duplicados com o mesmo endereço.",
+
+      "Centralização do tratamento de exceções em um middleware global do Express, evitando repetir tratamento de erros em diferentes endpoints.",
+
+      "Separação da configuração do Axios em um serviço próprio no frontend para centralizar a comunicação com a API.",
+
+      "Tratamento explícito de loading, sucesso e erro no formulário de voluntários para oferecer feedback durante operações assíncronas.",
+
+      "Uso de componentes reutilizáveis e SCSS Modules para organizar a interface e manter os estilos isolados por componente.",
+    ],
+
+    learnings: [
+      "A expansão do projeto para fullstack tornou PostgreSQL e Prisma os principais pontos de aprendizado, principalmente por exigir modelagem dos dados, configuração da conexão, migrations e persistência real das informações recebidas pela API.",
+
+      "Evoluir uma interface já existente para uma aplicação fullstack mostrou a importância de separar responsabilidades entre frontend, rotas, controllers, services, validação e banco de dados.",
+
+      "Se o projeto fosse desenvolvido novamente, a aplicação teria um escopo maior e mais próximo de um produto atual de mercado, com mais funcionalidades e fluxos além da página institucional e do cadastro de voluntários.",
     ],
 
     screenshots: [
       {
         fileName: "screenshot-01.webp",
 
-        alt: "Captura de tela do projeto Médicos & Dentistas",
+        alt: "Página inicial do projeto Médicos & Dentistas.",
+
+        caption: "Interface institucional responsiva do Médicos & Dentistas.",
       },
     ],
 
