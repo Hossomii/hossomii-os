@@ -1,58 +1,181 @@
-import { useSystemStore } from "../../stores/systemStore";
+import {
+  useSystemStore,
+} from "../../stores/systemStore";
 
-const GITHUB_URL = "https://github.com/Hossomii";
+const GITHUB_URL =
+  "https://github.com/Hossomii";
 
-const LINKEDIN_URL = "https://www.linkedin.com/in/anthony-hossomii-bugs/";
+const LINKEDIN_URL =
+  "https://www.linkedin.com/in/anthony-hossomii-bugs/";
 
 export function PoweredOffScreen() {
-  const restartSystem = useSystemStore((state) => state.restartSystem);
+  const powerOnSystem =
+    useSystemStore(
+      (state) =>
+        state.powerOnSystem
+    );
 
   return (
     <main className="powered-off-screen">
-      <section className="powered-off-content">
-        <div className="powered-off-mark">H</div>
+      <div
+        className="powered-off-decoration powered-off-star-one"
+        aria-hidden="true"
+      >
+        ★
+      </div>
 
-        <h1>HOSSOMII OS</h1>
+      <div
+        className="powered-off-decoration powered-off-star-two"
+        aria-hidden="true"
+      >
+        ✦
+      </div>
 
-        <p className="powered-off-message">
-          Agora é seguro fechar esta janela.
-        </p>
+      <div
+        className="powered-off-decoration powered-off-heart"
+        aria-hidden="true"
+      >
+        ♡
+      </div>
 
-        <p className="powered-off-subtitle">
-          Ou você pode continuar explorando outros lugares.
-        </p>
+      <section className="powered-off-card">
+        <header className="powered-off-card-header">
+          <span>
+            HOSSOMII-01
+          </span>
 
-        <nav className="powered-off-links" aria-label="Links externos">
-          <a href={GITHUB_URL} target="_blank" rel="noreferrer">
-            <span className="powered-off-link-icon">GH</span>
+          <span className="powered-off-offline">
+            ● OFFLINE
+          </span>
+        </header>
+
+        <div className="powered-off-content">
+          <div
+            className="powered-off-sticker"
+            aria-hidden="true"
+          >
+            BYE!
+          </div>
+
+          <span className="powered-off-eyebrow">
+            SESSION ENDED
+          </span>
+
+          <h1>
+            HOSSOMII OS
+          </h1>
+
+          <p className="powered-off-message">
+            Sessão encerrada com sucesso!
+          </p>
+
+          <p className="powered-off-subtitle">
+            Agora é seguro fechar esta janela.
+            <br />
+            ...ou ficar mais um pouco :)
+          </p>
+
+          <nav
+            className="powered-off-links"
+            aria-label="Links externos"
+          >
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="powered-off-link-icon powered-off-github-icon">
+                GH
+              </span>
+
+              <span>
+                <strong>
+                  GitHub
+                </strong>
+
+                <small>
+                  código + projetos
+                </small>
+              </span>
+
+              <span
+                className="powered-off-link-arrow"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
+            </a>
+
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="powered-off-link-icon powered-off-linkedin-icon">
+                in
+              </span>
+
+              <span>
+                <strong>
+                  LinkedIn
+                </strong>
+
+                <small>
+                  vamos conectar?
+                </small>
+              </span>
+
+              <span
+                className="powered-off-link-arrow"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
+            </a>
+          </nav>
+
+          <button
+            className="powered-off-power"
+            type="button"
+            onClick={
+              powerOnSystem
+            }
+          >
+            <span aria-hidden="true">
+              ⏻
+            </span>
+
+            Ligar novamente
+          </button>
+
+          <div
+            className="powered-off-ticker"
+            aria-hidden="true"
+          >
+            <span>
+              ★ THANKS FOR VISITING ★
+            </span>
 
             <span>
-              <strong>GitHub</strong>
-
-              <small>Ver código e projetos</small>
+              HOSSOMII-01
             </span>
-          </a>
-
-          <a href={LINKEDIN_URL} target="_blank" rel="noreferrer">
-            <span className="powered-off-link-icon">in</span>
 
             <span>
-              <strong>LinkedIn</strong>
-
-              <small>Conectar profissionalmente</small>
+              SEE YOU SOON :)
             </span>
-          </a>
-        </nav>
+          </div>
+        </div>
 
-        <button
-          className="powered-off-restart"
-          type="button"
-          onClick={restartSystem}
-        >
-          Reiniciar HOSSOMII OS
-        </button>
+        <footer className="powered-off-card-footer">
+          <span>
+            HOSSOMII SYSTEMS
+          </span>
 
-        <span className="powered-off-hint">HOSSOMII-01 • SESSION ENDED</span>
+          <span>
+            SESSION_STATUS:
+            CLOSED
+          </span>
+        </footer>
       </section>
     </main>
   );
