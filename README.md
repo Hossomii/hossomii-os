@@ -18,7 +18,7 @@ Instead of scrolling through traditional portfolio sections, visitors remotely a
 HOSSOMII-01
 ```
 
-The experience follows a complete system flow:
+The current experience follows this flow:
 
 ```text
 Remote Login
@@ -34,7 +34,9 @@ Applications
 Virtual File System
 ```
 
-From the desktop, visitors can explore projects, documents and applications as if they were navigating an operating system.
+The system also includes restart, shutdown and recovery flows.
+
+From the desktop, visitors can explore professional information as if they were navigating an actual computer.
 
 ---
 
@@ -49,9 +51,11 @@ From the desktop, visitors can explore projects, documents and applications as i
 - Start Menu
 - taskbar
 - live clock
-- shutdown and restart flows
+- shutdown flow
+- restart transition
 - multiple wallpapers
-- multiple visual themes
+- Default, Dark and High Contrast themes
+- persistent visual preferences
 
 ### Window Manager
 
@@ -66,9 +70,29 @@ Windows support:
 - focus management
 - z-index management
 - viewport constraints
-- multiple instances of the same application
+- multiple instances of supported applications
 
 For example, multiple text files can be opened simultaneously in separate Notepad windows.
+
+---
+
+## Quick View
+
+Quick View provides a faster route through the portfolio for visitors who do not want to explore the entire operating system.
+
+It includes:
+
+- professional introduction
+- current areas of focus
+- featured projects
+- résumé access
+- documents
+- GitHub
+- LinkedIn
+
+Project information is read from the same structured portfolio data used by the rest of the system.
+
+Visitors can open a full `project.exe` directly from Quick View when they want to explore a project in more depth.
 
 ---
 
@@ -91,6 +115,7 @@ C:\
 │       │   └── currículo.pdf
 │       │
 │       └── Projetos\
+│           ├── HOSSOMII OS\
 │           ├── TNT Basketball\
 │           └── Médicos & Dentistas\
 │
@@ -98,6 +123,7 @@ C:\
 │
 └── Programas\
     ├── Meu Computador
+    ├── HOSSOMII Web
     ├── Terminal
     └── Lixeira
 ```
@@ -110,6 +136,43 @@ Filesystem items may represent:
 - shortcuts
 
 The filesystem is shared between applications instead of being independently simulated by each interface.
+
+---
+
+## Structured Portfolio Data
+
+Project content is centralized in a portfolio catalog.
+
+```text
+projects.ts
+    ↓
+projectFileSystem.ts
+    ↓
+Virtual File System
+    ↓
+Project Viewer / Quick View / Explorer
+```
+
+This allows project information to be stored once and presented in multiple parts of the system.
+
+Each project may contain:
+
+- summary
+- role
+- category
+- year
+- status
+- technologies
+- highlights
+- challenge
+- solution
+- technical decisions
+- learnings
+- screenshots
+- GitHub URL
+- live demo URL
+
+The virtual project directories are generated automatically from this data.
 
 ---
 
@@ -151,7 +214,9 @@ File appears in Recycle Bin
 
 ## Applications
 
-Current applications include:
+### Quick View
+
+Compact professional overview designed for fast portfolio exploration.
 
 ### My Computer
 
@@ -161,7 +226,7 @@ Allows visitors to navigate through the virtual disk and open directories, files
 
 ### Documents
 
-Provides access to portfolio documents such as:
+Provides access to:
 
 - introduction
 - developer information
@@ -171,7 +236,7 @@ Provides access to portfolio documents such as:
 
 Projects are represented as directories inside the filesystem.
 
-Each project can contain:
+Each generated project directory can contain:
 
 - project information
 - technologies
@@ -181,11 +246,63 @@ Each project can contain:
 
 ### Project Viewer
 
-`project.exe` opens a dedicated project presentation application.
+`project.exe` opens a dedicated case-study application.
 
-The viewer currently supports project descriptions, technologies and image galleries.
+The current Project Viewer includes:
 
-The next portfolio milestone will expand it into a more complete engineering case-study format.
+- Project Dossier
+- project metadata
+- hero screenshot
+- role and core stack
+- GitHub and demo actions
+- Overview tab
+- Build Log
+- Gallery
+- Tech information
+
+The Build Log presents technical decisions and project learnings as development records inside the fictional operating system.
+
+The viewer uses the same generic structure for every project rather than project-specific layouts.
+
+### HOSSOMII Web
+
+Internal browser application with its own early-web identity.
+
+Current experiences include:
+
+- browser home
+- Anthony Online
+- HOSSOMII News
+- external resource links
+
+#### Anthony Online
+
+A colorful personal profile inspired by creative websites and online communities from the early 2000s.
+
+It includes:
+
+- professional introduction
+- selected projects
+- technology badges
+- external links
+- profile widgets
+- guestbook-style content
+- retro web microinteractions
+
+#### HOSSOMII News
+
+Retro news portal backed by an external public news feed.
+
+The news layer includes:
+
+- normalized article data
+- loading and error states
+- memory cache
+- request timeout
+- request cancellation
+- safe external navigation
+- lazy-loaded images
+- image fallbacks
 
 ### Notepad
 
@@ -220,11 +337,22 @@ Allows visitors to customize the system appearance.
 
 Available themes:
 
-- Default
-- Dark
+- HOSSOMII Default
+- HOSSOMII Dark
 - High Contrast
 
-Wallpaper preferences are also persisted locally.
+Available wallpapers currently include:
+
+- HOSSOMII Hills
+- HOSSOMII Default
+- Red Team Grid
+- Retro Blue Abstract
+- HOSSOMII Arcade
+- Minimal Green
+
+`HOSSOMII Default` is the default wallpaper.
+
+Visual preferences are persisted using local storage.
 
 ---
 
@@ -310,11 +438,55 @@ This allows the graphical Explorer and Terminal to use the same application-open
 
 HOSSOMII OS contains an interactive recovery flow connected to the virtual filesystem.
 
-Certain system interactions can trigger a failure sequence followed by a dedicated recovery environment.
+Certain system interactions can trigger a critical failure followed by a dedicated recovery environment.
+
+The recovery console interacts with the same underlying filesystem used by the desktop applications.
 
 The exact trigger and complete sequence are intentionally not documented here.
 
 Exploration is part of the experience.
+
+---
+
+## Achievements
+
+HOSSOMII OS contains a small achievement system used to reward exploration.
+
+Achievement notifications are queued and displayed inside the desktop.
+
+Some unlock conditions are intentionally undocumented.
+
+The achievement system will be expanded in a future version.
+
+---
+
+## Power Flow
+
+The system supports shutdown and restart states.
+
+Shutdown currently follows:
+
+```text
+Desktop
+   ↓
+Saving settings
+   ↓
+Shutting down
+   ↓
+Powered Off
+```
+
+Restart follows:
+
+```text
+Desktop
+   ↓
+Restarting
+   ↓
+Remote Login
+```
+
+The powered-off experience and system startup flow will receive additional visual and interaction work in the next development phase.
 
 ---
 
@@ -326,6 +498,7 @@ Simplified architecture:
 src/
 │
 ├── applications/
+│   ├── browser/
 │   ├── computer/
 │   ├── control-panel/
 │   ├── documents/
@@ -335,8 +508,12 @@ src/
 │   ├── pdf/
 │   ├── project-viewer/
 │   ├── projects/
+│   ├── quick-view/
 │   ├── recycle-bin/
 │   └── terminal/
+│
+├── content/
+│   └── structured portfolio data
 │
 ├── desktop/
 │   └── desktop shell and window UI
@@ -399,7 +576,7 @@ docs/SYSTEM_OVERVIEW.md
 
 ## Tests
 
-The project currently includes automated tests for important filesystem behavior.
+Automated tests currently cover important filesystem behavior.
 
 Examples include:
 
@@ -419,51 +596,59 @@ Run:
 npm test
 ```
 
----
-
-## Running Locally
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Hossomii/hossomii-os.git
-```
-
-Enter the project directory:
-
-```bash
-cd hossomii-os
-```
-
-Install dependencies:
-
-```bash
-npm install
-```
-
-Start the development server:
-
-```bash
-npm run dev
-```
-
-Production build:
+Production validation also includes:
 
 ```bash
 npm run build
-```
-
-Lint:
-
-```bash
 npm run lint
 ```
 
-Tests:
+---
 
-```bash
-npm test
-```
+## Current Portfolio Projects
+
+### HOSSOMII OS
+
+Interactive portfolio and fictional desktop operating-system experience.
+
+Technical areas include:
+
+- React architecture
+- TypeScript
+- Zustand
+- custom Window Manager
+- virtual filesystem
+- application integration
+- interactive UI
+- testing
+
+### TNT Basketball
+
+Arcade basketball game developed with Unity and C#.
+
+Technical areas include:
+
+- gameplay systems
+- score and combo logic
+- power-ups
+- gameplay state
+- responsive UI
+- WebGL
+
+### Médicos & Dentistas
+
+Fullstack healthcare-themed web application that originally started as a frontend project and was later expanded into a complete frontend/backend architecture.
+
+Technical areas include:
+
+- React
+- Node.js
+- Express
+- REST API
+- PostgreSQL
+- Prisma
+- Zod
+- Axios
 
 ---
 
@@ -472,6 +657,10 @@ npm test
 ### Exploration instead of scrolling
 
 Portfolio information should be discovered through interaction rather than presented only as traditional webpage sections.
+
+### Fast access without removing exploration
+
+Visitors who need information quickly can use Quick View, while the complete operating system remains available for deeper exploration.
 
 ### Functionality before decoration
 
@@ -487,6 +676,10 @@ If there is a Terminal, it should interact with the same filesystem.
 
 Applications should not maintain isolated copies of the same information.
 
+### Single source of truth
+
+Portfolio project data should be stored once and transformed for the interfaces that need it.
+
 ### Safe internal rules
 
 Important filesystem rules are enforced at the state layer rather than only through UI restrictions.
@@ -501,17 +694,34 @@ Easter eggs and narrative events can alter the experience, but they should not p
 
 ---
 
-## Current Development Status
+## Inspiration
+
+HOSSOMII OS takes inspiration from:
+
+- early-2000s desktop interfaces
+- Windows XP-era software
+- early personal websites
+- remote access interfaces
+- diegetic game interfaces
+- investigative software experiences
+- The Operator
+- Watch Dogs
+
+These references are used as design direction rather than being reproduced literally.
+
+---
+
+## Development Status
 
 ```text
 v0.3 — Filesystem / Explorer / Desktop Apps
 COMPLETE
 
 v0.4 — Portfolio Content
-IN DEVELOPMENT
+COMPLETE
 
 v0.5 — Visual Polish / Motion
-PLANNED
+NEXT
 
 v0.6 — Audio
 PLANNED
@@ -529,60 +739,42 @@ v1.0 — Final Major Application + Integration
 PLANNED
 ```
 
-The current development focus is improving the portfolio content and transforming project presentations into stronger technical case studies.
+---
+
+## Next Phase — v0.5
+
+The next development phase focuses on visual polish and stronger system feedback.
+
+Planned work currently includes:
+
+- dedicated TXT file icon
+- dedicated PDF file icon
+- improved powered-off screen
+- initial Power screen before remote login
+- first-use achievements
+- achievement persistence
+- centralized external-link handling
+- additional system microinteractions
+- motion polish
+
+Planned first-use achievements include:
+
+- opening a text file
+- opening a PDF
+- deleting an item
+- opening an external link
+
+Audio remains reserved for v0.6.
 
 ---
 
-## Current Portfolio Projects
+## Final Major Application
 
-### TNT Basketball
+A larger interactive application is planned for the final stage of the project.
 
-Unity / C# project focused on gameplay programming, system logic and collaborative development.
+It will only be developed when the rest of HOSSOMII OS is close to completion.
 
-### Médicos & Dentistas
-
-Web project focused on frontend development, componentization, responsive interfaces and user experience.
-
-More projects will be selected based on what they contribute to the overall portfolio rather than simply increasing project count.
-
----
-
-## Inspiration
-
-HOSSOMII OS takes inspiration from:
-
-- early-2000s desktop interfaces
-- Windows XP-era software
-- remote access interfaces
-- diegetic game interfaces
-- investigative software experiences
-- The Operator
-- Watch Dogs
-
-These references are used as design direction rather than being reproduced literally.
-
----
-
-## Roadmap
-
-The next major development phase focuses on the actual portfolio content.
-
-Planned work includes:
-
-- structured project data
-- improved Project Viewer
-- engineering case studies
-- GitHub and live-demo actions
-- professional content review
-- additional selected projects
-- Quick View for recruiters
-- visual polish
-- audio
-- accessibility
-- performance optimization
-- additional narrative interactions
-
-A larger application is planned for the final stage of the project and will only be developed after the rest of HOSSOMII OS is close to completion.
+The game will remain architecturally independent from the operating-system implementation while being accessible from inside the fictional desktop.
 
 ---
 
@@ -602,7 +794,7 @@ The repository also uses private development documentation for internal project 
 
 **Anthony Hossomii Bugs**
 
-Software developer focused on software engineering, backend development and interactive products.
+Software developer and Software Engineering student interested in backend development, systems, networks and cybersecurity.
 
 GitHub:
 
