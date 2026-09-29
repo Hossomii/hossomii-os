@@ -1,8 +1,13 @@
 import {
+  useLayoutEffect,
   useRef,
   type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from "react";
+
+import {
+  gsap,
+} from "gsap";
 
 import {
   useWindowStore,
@@ -58,6 +63,26 @@ export function WindowFrame({
   windowItem,
   children,
 }: WindowFrameProps) {
+  const windowElementRef =
+    useRef<HTMLElement>(
+      null
+    );
+
+  const previousMinimized =
+    useRef(
+      windowItem.minimized
+    );
+
+  const hasOpened =
+    useRef(
+      false
+    );
+
+  const isClosing =
+    useRef(
+      false
+    );
+
   const focusWindow =
     useWindowStore(
       (state) =>
@@ -122,13 +147,263 @@ export function WindowFrame({
       },
     });
 
+  useLayoutEffect(() => {
+    const element =
+      windowElementRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const wasMinimized =
+      previousMinimized.current;
+
+    previousMinimized.current =
+      windowItem.minimized;
+
+    const prefersReducedMotion =
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+    gsap.killTweensOf(
+      element
+    );
+
+    if (
+      windowItem.minimized
+    ) {
+      if (
+        prefersReducedMotion
+      ) {
+        gsap.set(
+          element,
+          {
+            display:
+              "none",
+
+            clearProps:
+              "transform,opacity,pointerEvents",
+          }
+        );
+
+        return;
+      }
+
+      gsap.set(
+        element,
+        {
+          pointerEvents:
+            "none",
+        }
+      );
+
+      const animation =
+        gsap.to(
+          element,
+          {
+            opacity: 0,
+
+            y: 14,
+
+            scale: 0.97,
+
+            duration: 0.14,
+
+            ease:
+              "power2.in",
+
+            onComplete: () => {
+              gsap.set(
+                element,
+                {
+                  display:
+                    "none",
+
+                  clearProps:
+                    "transform,opacity,pointerEvents",
+                }
+              );
+            },
+          }
+        );
+
+      return () => {
+        animation.kill();
+      };
+    }
+
+    const isRestoring =
+      wasMinimized;
+
+    const isOpening =
+      !hasOpened.current;
+
+    hasOpened.current =
+      true;
+
+    gsap.set(
+      element,
+      {
+        display:
+          "flex",
+
+        pointerEvents:
+          "auto",
+      }
+    );
+
+    if (
+      !isOpening &&
+      !isRestoring
+    ) {
+      gsap.set(
+        element,
+        {
+          clearProps:
+            "display,pointerEvents,transform,opacity",
+        }
+      );
+
+      return;
+    }
+
+    if (
+      prefersReducedMotion
+    ) {
+      gsap.set(
+        element,
+        {
+          clearProps:
+            "display,pointerEvents,transform,opacity",
+        }
+      );
+
+      return;
+    }
+
+    const animation =
+      gsap.fromTo(
+        element,
+        {
+          opacity: 0,
+
+          y:
+            isRestoring
+              ? 14
+              : 8,
+
+          scale:
+            isRestoring
+              ? 0.97
+              : 0.985,
+        },
+        {
+          opacity: 1,
+
+          y: 0,
+
+          scale: 1,
+
+          duration:
+            isRestoring
+              ? 0.15
+              : 0.16,
+
+          ease:
+            "power2.out",
+
+          onComplete: () => {
+            gsap.set(
+              element,
+              {
+                clearProps:
+                  "display,pointerEvents,transform,opacity",
+              }
+            );
+          },
+        }
+      );
+
+    return () => {
+      animation.kill();
+    };
+  }, [
+    windowItem.minimized,
+  ]);
+
+  function handleClose() {
+    if (
+      isClosing.current
+    ) {
+      return;
+    }
+
+    const element =
+      windowElementRef.current;
+
+    const prefersReducedMotion =
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+    if (
+      !element ||
+      prefersReducedMotion
+    ) {
+      closeWindow(
+        windowItem.id
+      );
+
+      return;
+    }
+
+    isClosing.current =
+      true;
+
+    gsap.killTweensOf(
+      element
+    );
+
+    gsap.set(
+      element,
+      {
+        pointerEvents:
+          "none",
+      }
+    );
+
+    gsap.to(
+      element,
+      {
+        opacity: 0,
+
+        y: 4,
+
+        scale: 0.985,
+
+        duration: 0.12,
+
+        ease:
+          "power2.in",
+
+        onComplete: () => {
+          closeWindow(
+            windowItem.id
+          );
+        },
+      }
+    );
+  }
+
   function handleTitlePointerDown(
     event:
       ReactPointerEvent<HTMLElement>
   ) {
     if (
       event.button !== 0 ||
-      windowItem.maximized
+      windowItem.maximized ||
+      isClosing.current
     ) {
       return;
     }
@@ -205,7 +480,8 @@ export function WindowFrame({
   ) {
     if (
       event.button !== 0 ||
-      windowItem.maximized
+      windowItem.maximized ||
+      isClosing.current
     ) {
       return;
     }
@@ -356,19 +632,19 @@ export function WindowFrame({
     }
   }
 
-  if (
-    windowItem.minimized
-  ) {
-    return null;
-  }
-
   return (
     <section
+      ref={
+        windowElementRef
+      }
       className={`os-window ${
         windowItem.maximized
           ? "os-window-maximized"
           : ""
       }`}
+      aria-hidden={
+        windowItem.minimized
+      }
       style={{
         left:
           windowItem.x,
@@ -385,11 +661,15 @@ export function WindowFrame({
         zIndex:
           windowItem.zIndex,
       }}
-      onPointerDown={() =>
-        focusWindow(
-          windowItem.id
-        )
-      }
+      onPointerDown={() => {
+        if (
+          !isClosing.current
+        ) {
+          focusWindow(
+            windowItem.id
+          );
+        }
+      }}
     >
       <header
         className="window-titlebar"
@@ -405,11 +685,15 @@ export function WindowFrame({
         onPointerCancel={
           handleTitlePointerUp
         }
-        onDoubleClick={() =>
-          toggleMaximizeWindow(
-            windowItem.id
-          )
-        }
+        onDoubleClick={() => {
+          if (
+            !isClosing.current
+          ) {
+            toggleMaximizeWindow(
+              windowItem.id
+            );
+          }
+        }}
       >
         <div className="window-title">
           <img
@@ -417,7 +701,9 @@ export function WindowFrame({
               windowItem.icon
             }
             alt=""
-            draggable={false}
+            draggable={
+              false
+            }
           />
 
           <span>
@@ -443,6 +729,12 @@ export function WindowFrame({
             ) => {
               event.stopPropagation();
 
+              if (
+                isClosing.current
+              ) {
+                return;
+              }
+
               minimizeWindow(
                 windowItem.id
               );
@@ -463,14 +755,22 @@ export function WindowFrame({
             ) => {
               event.stopPropagation();
 
+              if (
+                isClosing.current
+              ) {
+                return;
+              }
+
               toggleMaximizeWindow(
                 windowItem.id
               );
             }}
           >
-            {windowItem.maximized
-              ? "❐"
-              : "□"}
+            {
+              windowItem.maximized
+                ? "❐"
+                : "□"
+            }
           </button>
 
           <button
@@ -482,9 +782,7 @@ export function WindowFrame({
             ) => {
               event.stopPropagation();
 
-              closeWindow(
-                windowItem.id
-              );
+              handleClose();
             }}
           >
             ×
@@ -493,7 +791,9 @@ export function WindowFrame({
       </header>
 
       <div className="window-body">
-        {children}
+        {
+          children
+        }
       </div>
 
       {!windowItem.maximized &&
