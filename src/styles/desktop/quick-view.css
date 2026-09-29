@@ -1,4 +1,6 @@
 .quick-view-app {
+  container-type: inline-size;
+
   --quick-bg: var(--system-content, #ffffff);
 
   --quick-surface: var(--system-surface, #ece9d8);

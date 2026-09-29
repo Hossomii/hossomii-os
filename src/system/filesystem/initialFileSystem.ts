@@ -165,7 +165,7 @@ export const initialFileSystem: FileSystemItem[] = [
     extension: "txt",
 
     content:
-      "Sou Anthony, desenvolvedor de software e estudante de Engenharia de Software. Tenho interesse em backend, sistemas, redes e cibersegurança, com curiosidade especial por entender como software funciona por dentro e como diferentes componentes se conectam.\n\nMeus projetos passam por aplicações web fullstack, sistemas interativos, desenvolvimento de jogos e experimentos que combinam engenharia de software com identidade visual e experiência do usuário. Atualmente estou aprofundando meus estudos em Linux, Data Structure e Algoritmos[C/C# e Python são as linguagens de programação que me chamam mais atenção]",
+      "Sou Anthony, desenvolvedor de software e estudante de Engenharia de Software. Tenho interesse em backend, sistemas, redes e cibersegurança, com curiosidade especial por entender como software funciona por dentro e como diferentes componentes se conectam.\n\nMeus projetos passam por aplicações web fullstack, sistemas interativos, desenvolvimento de jogos e experimentos que combinam engenharia de software com identidade visual e experiência do usuário.\n\nAtualmente estou aprofundando meus estudos em Linux, estruturas de dados e algoritmos, com Python como linguagem principal de estudo e interesse também em C e C#.",
 
     hidden: false,
 
