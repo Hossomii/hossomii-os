@@ -142,6 +142,12 @@ export const portfolioProjects: PortfolioProject[] = [
 
     name: "TNT Basketball",
 
+    category: "Game Development",
+
+    year: 2026,
+
+    status: "completed",
+
     summary:
       "Jogo arcade de basquete desenvolvido em Unity e C# como projeto final de uma experiência prática de desenvolvimento de games em equipe.",
 

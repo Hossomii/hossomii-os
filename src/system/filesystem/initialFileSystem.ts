@@ -1,12 +1,8 @@
 import type { FileSystemItem } from "../../types/filesystem";
 
-import {
-  portfolioProjects,
-} from "../../content/projects";
+import { portfolioProjects } from "../../content/projects";
 
-import {
-  createProjectFileSystemItems,
-} from "./projectFileSystem";
+import { createProjectFileSystemItems } from "./projectFileSystem";
 
 export const initialFileSystem: FileSystemItem[] = [
   {
@@ -148,7 +144,7 @@ export const initialFileSystem: FileSystemItem[] = [
     extension: "txt",
 
     content:
-      "Olá! Eu sou Anthony, desenvolvedor de software com formação em Análise e Desenvolvimento de Sistemas e estudante de Engenharia de Software.\n\nMeu foco profissional atual é desenvolvimento backend com C# e .NET, com interesse em construção de APIs, bancos de dados, arquitetura de software e sistemas confiáveis.\n\nTambém possuo experiência com desenvolvimento web, TypeScript, React, Node.js, PostgreSQL, Unity e C#.\n\nGosto especialmente de projetos que combinam engenharia de software, experiências interativas e identidade visual como o próprio HOSSOMII OS :)",
+      "Olá! Eu sou Anthony, desenvolvedor de software e estudante de Engenharia de Software.\n\nTenho interesse principalmente em engenharia de software, backend, sistemas e cibersegurança. Gosto de entender como aplicações funcionam por dentro, explorar fundamentos técnicos e transformar esse conhecimento em projetos práticos.\n\nAtualmente estudo principalmente Python, sistemas, redes e segurança, mantendo experiência prática com React, TypeScript, Node.js, PostgreSQL, C# e desenvolvimento de experiências interativas.\n\nNeste computador você pode explorar alguns dos meus projetos, documentos e experimentos. O próprio HOSSOMII OS também faz parte do portfólio: uma aplicação construída para transformar uma apresentação profissional tradicional em um sistema explorável.",
 
     hidden: false,
 
@@ -169,7 +165,7 @@ export const initialFileSystem: FileSystemItem[] = [
     extension: "txt",
 
     content:
-      "Anthony é desenvolvedor de software com interesse em desenvolvimento full stack, experiências digitais e construção de produtos interativos e cybersegurança.",
+      "Sou Anthony, desenvolvedor de software e estudante de Engenharia de Software. Tenho interesse em backend, sistemas, redes e cibersegurança, com curiosidade especial por entender como software funciona por dentro e como diferentes componentes se conectam.\n\nMeus projetos passam por aplicações web fullstack, sistemas interativos, desenvolvimento de jogos e experimentos que combinam engenharia de software com identidade visual e experiência do usuário. Atualmente estou aprofundando meus estudos em Linux, Data Structure e Algoritmos[C/C# e Python são as linguagens de programação que me chamam mais atenção]",
 
     hidden: false,
 
@@ -203,9 +199,7 @@ export const initialFileSystem: FileSystemItem[] = [
 
   // Projects
 
-  ...portfolioProjects.flatMap(
-    createProjectFileSystemItems
-  ),
+  ...portfolioProjects.flatMap(createProjectFileSystemItems),
 
   // System
 
