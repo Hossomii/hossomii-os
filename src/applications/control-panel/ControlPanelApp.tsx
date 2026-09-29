@@ -27,8 +27,7 @@ const THEMES: ThemeOption[] = [
   {
     id: "default",
     name: "HOSSOMII Default",
-    description:
-      "A aparência clássica azul do HOSSOMII OS.",
+    description: "A aparência clássica azul do HOSSOMII OS.",
   },
   {
     id: "dark",
@@ -47,100 +46,72 @@ const THEMES: ThemeOption[] = [
 const WALLPAPERS: WallpaperOption[] = [
   {
     id: "default",
-    name: "HOSSOMII Original",
+    name: "HOSSOMII Hills",
     image: wallpaperDefault,
   },
   {
     id: "wallpaper-01",
-    name: "Wallpaper 01",
+    name: "HOSSOMII Default",
     image: wallpaper01,
   },
   {
     id: "wallpaper-02",
-    name: "Wallpaper 02",
+    name: "Red Team Grid",
     image: wallpaper02,
   },
   {
     id: "wallpaper-03",
-    name: "Wallpaper 03",
+    name: "Retro Blue Abstract",
     image: wallpaper03,
   },
   {
     id: "wallpaper-04",
-    name: "Wallpaper 04",
+    name: "HOSSOMII Arcade",
     image: wallpaper04,
   },
   {
     id: "wallpaper-05",
-    name: "Wallpaper 05",
+    name: "Minimal Green",
     image: wallpaper05,
   },
 ];
 
 export function ControlPanelApp() {
-  const theme =
-    useSystemPreferencesStore(
-      (state) => state.theme
-    );
+  const theme = useSystemPreferencesStore((state) => state.theme);
 
-  const wallpaper =
-    useSystemPreferencesStore(
-      (state) => state.wallpaper
-    );
+  const wallpaper = useSystemPreferencesStore((state) => state.wallpaper);
 
-  const setTheme =
-    useSystemPreferencesStore(
-      (state) => state.setTheme
-    );
+  const setTheme = useSystemPreferencesStore((state) => state.setTheme);
 
-  const setWallpaper =
-    useSystemPreferencesStore(
-      (state) => state.setWallpaper
-    );
+  const setWallpaper = useSystemPreferencesStore((state) => state.setWallpaper);
 
-  const resetPreferences =
-    useSystemPreferencesStore(
-      (state) =>
-        state.resetPreferences
-    );
+  const resetPreferences = useSystemPreferencesStore(
+    (state) => state.resetPreferences,
+  );
 
   return (
     <div className="control-panel-app">
       <header className="control-panel-header">
         <div>
-          <span className="control-panel-eyebrow">
-            PAINEL DE CONTROLE
-          </span>
+          <span className="control-panel-eyebrow">PAINEL DE CONTROLE</span>
 
-          <h1>
-            Aparência e temas
-          </h1>
+          <h1>Aparência e temas</h1>
 
-          <p>
-            Personalize a aparência do
-            HOSSOMII OS.
-          </p>
+          <p>Personalize a aparência do HOSSOMII OS.</p>
         </div>
       </header>
 
       <div className="control-panel-content">
         <section className="control-panel-section">
           <header>
-            <h2>
-              Tema do sistema
-            </h2>
+            <h2>Tema do sistema</h2>
 
-            <p>
-              Altere janelas, menus,
-              Explorer e barra de
-              tarefas.
-            </p>
+            <p>Altere janelas, menus, Explorer e barra de tarefas.</p>
           </header>
 
           <div className="theme-options">
             {THEMES.map((option) => {
-              const selected =
-                theme === option.id;
+              const selected = theme === option.id;
 
               return (
                 <button
@@ -149,18 +120,12 @@ export function ControlPanelApp() {
                   className={[
                     "theme-option",
                     `theme-option-${option.id}`,
-                    selected
-                      ? "theme-option-selected"
-                      : "",
+                    selected ? "theme-option-selected" : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}
                   aria-pressed={selected}
-                  onClick={() =>
-                    setTheme(
-                      option.id
-                    )
-                  }
+                  onClick={() => setTheme(option.id)}
                 >
                   <div className="theme-preview">
                     <div className="theme-preview-window">
@@ -170,15 +135,9 @@ export function ControlPanelApp() {
                     </div>
                   </div>
 
-                  <strong>
-                    {option.name}
-                  </strong>
+                  <strong>{option.name}</strong>
 
-                  <small>
-                    {
-                      option.description
-                    }
-                  </small>
+                  <small>{option.description}</small>
                 </button>
               );
             })}
@@ -187,20 +146,14 @@ export function ControlPanelApp() {
 
         <section className="control-panel-section">
           <header>
-            <h2>
-              Plano de fundo
-            </h2>
+            <h2>Plano de fundo</h2>
 
-            <p>
-              Escolha uma imagem para
-              a área de trabalho.
-            </p>
+            <p>Escolha uma imagem para a área de trabalho.</p>
           </header>
 
           <div className="wallpaper-options">
             {WALLPAPERS.map((option) => {
-              const selected =
-                wallpaper === option.id;
+              const selected = wallpaper === option.id;
 
               return (
                 <button
@@ -208,27 +161,16 @@ export function ControlPanelApp() {
                   type="button"
                   className={[
                     "wallpaper-option",
-                    selected
-                      ? "wallpaper-option-selected"
-                      : "",
+                    selected ? "wallpaper-option-selected" : "",
                   ]
                     .filter(Boolean)
                     .join(" ")}
                   aria-pressed={selected}
-                  onClick={() =>
-                    setWallpaper(
-                      option.id
-                    )
-                  }
+                  onClick={() => setWallpaper(option.id)}
                 >
-                  <img
-                    src={option.image}
-                    alt=""
-                  />
+                  <img src={option.image} alt="" />
 
-                  <span>
-                    {option.name}
-                  </span>
+                  <span>{option.name}</span>
                 </button>
               );
             })}
@@ -236,19 +178,11 @@ export function ControlPanelApp() {
         </section>
 
         <section className="control-panel-reset">
-          <button
-            type="button"
-            onClick={
-              resetPreferences
-            }
-          >
+          <button type="button" onClick={resetPreferences}>
             Restaurar padrão
           </button>
 
-          <span>
-            Restaura o tema e
-            wallpaper originais.
-          </span>
+          <span>Restaura o tema e wallpaper padrão do sistema.</span>
         </section>
       </div>
     </div>

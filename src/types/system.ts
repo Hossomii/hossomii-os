@@ -3,5 +3,6 @@ export type SystemPhase =
   | "authenticating"
   | "booting"
   | "desktop"
+  | "restarting"
   | "shutting-down"
   | "powered-off";

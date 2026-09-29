@@ -80,7 +80,7 @@ const WALLPAPERS = {
 } as const;
 
 export function Desktop() {
-  const resetSystem = useSystemStore((state) => state.resetSystem);
+  const restartSystem = useSystemStore((state) => state.restartSystem);
 
   const shutdownSystem = useSystemStore((state) => state.shutdownSystem);
 
@@ -307,7 +307,7 @@ export function Desktop() {
 
     resetWindows();
 
-    resetSystem();
+    restartSystem();
   }
 
   function handleShutdown() {

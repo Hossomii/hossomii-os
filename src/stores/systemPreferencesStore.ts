@@ -1,9 +1,6 @@
 import { create } from "zustand";
 
-export type SystemTheme =
-  | "default"
-  | "dark"
-  | "high-contrast";
+export type SystemTheme = "default" | "dark" | "high-contrast";
 
 export type WallpaperId =
   | "default"
@@ -18,147 +15,88 @@ type SystemPreferencesStore = {
 
   wallpaper: WallpaperId;
 
-  setTheme: (
-    theme: SystemTheme
-  ) => void;
+  setTheme: (theme: SystemTheme) => void;
 
-  setWallpaper: (
-    wallpaper: WallpaperId
-  ) => void;
+  setWallpaper: (wallpaper: WallpaperId) => void;
 
-  resetPreferences:
-    () => void;
+  resetPreferences: () => void;
 };
 
-const THEME_STORAGE_KEY =
-  "hossomii-os-theme";
+const THEME_STORAGE_KEY = "hossomii-os-theme";
 
-const WALLPAPER_STORAGE_KEY =
-  "hossomii-os-wallpaper";
+const WALLPAPER_STORAGE_KEY = "hossomii-os-wallpaper";
 
-const VALID_THEMES:
-  SystemTheme[] = [
-    "default",
-    "dark",
-    "high-contrast",
-  ];
+const VALID_THEMES: SystemTheme[] = ["default", "dark", "high-contrast"];
 
-const VALID_WALLPAPERS:
-  WallpaperId[] = [
-    "default",
-    "wallpaper-01",
-    "wallpaper-02",
-    "wallpaper-03",
-    "wallpaper-04",
-    "wallpaper-05",
-  ];
+const VALID_WALLPAPERS: WallpaperId[] = [
+  "default",
+  "wallpaper-01",
+  "wallpaper-02",
+  "wallpaper-03",
+  "wallpaper-04",
+  "wallpaper-05",
+];
 
-function getStoredTheme():
-  SystemTheme {
-  if (
-    typeof window ===
-    "undefined"
-  ) {
+function getStoredTheme(): SystemTheme {
+  if (typeof window === "undefined") {
     return "default";
   }
 
-  const storedTheme =
-    window.localStorage.getItem(
-      THEME_STORAGE_KEY
-    );
+  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
 
-  if (
-    VALID_THEMES.includes(
-      storedTheme as SystemTheme
-    )
-  ) {
-    return (
-      storedTheme as SystemTheme
-    );
+  if (VALID_THEMES.includes(storedTheme as SystemTheme)) {
+    return storedTheme as SystemTheme;
   }
 
   return "default";
 }
 
-function getStoredWallpaper():
-  WallpaperId {
-  if (
-    typeof window ===
-    "undefined"
-  ) {
-    return "default";
+function getStoredWallpaper(): WallpaperId {
+  if (typeof window === "undefined") {
+    return "wallpaper-01";
   }
 
-  const storedWallpaper =
-    window.localStorage.getItem(
-      WALLPAPER_STORAGE_KEY
-    );
+  const storedWallpaper = window.localStorage.getItem(WALLPAPER_STORAGE_KEY);
 
-  if (
-    VALID_WALLPAPERS.includes(
-      storedWallpaper as WallpaperId
-    )
-  ) {
-    return (
-      storedWallpaper as WallpaperId
-    );
+  if (VALID_WALLPAPERS.includes(storedWallpaper as WallpaperId)) {
+    return storedWallpaper as WallpaperId;
   }
 
-  return "default";
+  return "wallpaper-01";
 }
 
-export const useSystemPreferencesStore =
-  create<SystemPreferencesStore>(
-    (set) => ({
-      theme:
-        getStoredTheme(),
+export const useSystemPreferencesStore = create<SystemPreferencesStore>(
+  (set) => ({
+    theme: getStoredTheme(),
 
-      wallpaper:
-        getStoredWallpaper(),
+    wallpaper: getStoredWallpaper(),
 
-      setTheme: (
-        theme
-      ) => {
-        window.localStorage.setItem(
-          THEME_STORAGE_KEY,
-          theme
-        );
+    setTheme: (theme) => {
+      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
 
-        set({
-          theme,
-        });
-      },
+      set({
+        theme,
+      });
+    },
 
-      setWallpaper: (
-        wallpaper
-      ) => {
-        window.localStorage.setItem(
-          WALLPAPER_STORAGE_KEY,
-          wallpaper
-        );
+    setWallpaper: (wallpaper) => {
+      window.localStorage.setItem(WALLPAPER_STORAGE_KEY, wallpaper);
 
-        set({
-          wallpaper,
-        });
-      },
+      set({
+        wallpaper,
+      });
+    },
 
-      resetPreferences:
-        () => {
-          window.localStorage.removeItem(
-            THEME_STORAGE_KEY
-          );
+    resetPreferences: () => {
+      window.localStorage.removeItem(THEME_STORAGE_KEY);
 
-          window.localStorage.removeItem(
-            WALLPAPER_STORAGE_KEY
-          );
+      window.localStorage.removeItem(WALLPAPER_STORAGE_KEY);
 
-          set({
-            theme:
-              "default",
+      set({
+        theme: "default",
 
-            wallpaper:
-              "default",
-          });
-        },
-    })
-  );
+        wallpaper: "wallpaper-01",
+      });
+    },
+  }),
+);
