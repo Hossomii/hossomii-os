@@ -1,0 +1,421 @@
+.quick-view-app {
+  --quick-bg: var(--system-content, #ffffff);
+
+  --quick-surface: var(--system-surface, #ece9d8);
+
+  --quick-text: var(--system-text, #222222);
+
+  --quick-muted: var(--system-muted, #666666);
+
+  --quick-heading: var(--system-heading, #2453a1);
+
+  --quick-border: var(--system-border, #aca899);
+
+  --quick-accent: var(--system-accent, #316ac5);
+
+  width: 100%;
+  height: 100%;
+
+  overflow: auto;
+
+  background: var(--quick-bg);
+
+  color: var(--quick-text);
+
+  font-family: Tahoma, Verdana, sans-serif;
+}
+
+.quick-view-hero {
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid var(--quick-border);
+
+  background: linear-gradient(
+    135deg,
+    var(--window-title-start, #3d95ff),
+    var(--window-title-middle, #0054c9),
+    var(--window-title-end, #0644a6)
+  );
+
+  color: #ffffff;
+}
+
+.quick-view-hero img {
+  width: 82px;
+  height: 82px;
+
+  flex: 0 0 auto;
+
+  border: 2px solid #ffffff;
+
+  border-radius: 4px;
+
+  object-fit: cover;
+
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.32);
+}
+
+.quick-view-eyebrow {
+  font-size: 8px;
+  font-weight: 700;
+
+  letter-spacing: 1.3px;
+
+  opacity: 0.75;
+}
+
+.quick-view-hero h1 {
+  margin: 4px 0 3px;
+
+  font-size: 26px;
+}
+
+.quick-view-role {
+  margin: 0 0 10px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.quick-view-summary {
+  max-width: 650px;
+
+  margin: 0;
+
+  font-size: 11px;
+  line-height: 1.6;
+
+  opacity: 0.92;
+}
+
+.quick-view-actions {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 5px;
+
+  padding: 8px 10px;
+
+  border-bottom: 1px solid var(--quick-border);
+
+  background: var(--quick-surface);
+}
+
+.quick-view-actions button,
+.quick-view-actions a {
+  padding: 5px 9px;
+
+  border: 1px solid var(--quick-border);
+
+  background: var(--system-button, #ece9d8);
+
+  color: var(--quick-text);
+
+  font: inherit;
+
+  font-size: 9px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.28);
+}
+
+.quick-view-actions button:hover,
+.quick-view-actions a:hover {
+  border-color: var(--quick-accent);
+
+  color: var(--quick-heading);
+}
+
+.quick-view-layout {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+
+  padding: 18px;
+}
+
+.quick-view-section {
+  min-width: 0;
+}
+
+.quick-view-section-wide {
+  grid-column: 1 / -1;
+}
+
+.quick-view-section-header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 9px;
+
+  padding-bottom: 5px;
+
+  border-bottom: 1px solid var(--quick-border);
+}
+
+.quick-view-section-header > span {
+  color: var(--quick-accent);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.quick-view-section-header h2 {
+  margin: 0;
+
+  color: var(--quick-heading);
+
+  font-size: 13px;
+}
+
+.quick-view-focus {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+.quick-view-focus span {
+  padding: 6px 8px;
+
+  border: 1px solid var(--quick-border);
+
+  background: var(--quick-surface);
+
+  color: var(--quick-heading);
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.quick-view-projects {
+  display: grid;
+
+  gap: 7px;
+}
+
+.quick-view-project {
+  padding: 10px;
+
+  border: 1px solid var(--quick-border);
+
+  background: var(--quick-bg);
+}
+
+.quick-view-project-top {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+.quick-view-project-top span {
+  color: var(--quick-muted);
+
+  font-size: 7px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.quick-view-project h3 {
+  margin: 2px 0 0;
+
+  color: var(--quick-heading);
+
+  font-size: 12px;
+}
+
+.quick-view-project small {
+  color: var(--quick-muted);
+
+  font-size: 7px;
+
+  white-space: nowrap;
+}
+
+.quick-view-project p {
+  margin: 8px 0;
+
+  color: var(--quick-text);
+
+  font-size: 9px;
+  line-height: 1.55;
+}
+
+.quick-view-project-tech {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 4px;
+
+  margin-bottom: 8px;
+}
+
+.quick-view-project-tech span {
+  padding: 2px 5px;
+
+  border: 1px solid var(--quick-border);
+
+  background: var(--quick-surface);
+
+  color: var(--quick-muted);
+
+  font-size: 7px;
+}
+
+.quick-view-project > button {
+  padding: 4px 7px;
+
+  border: 1px solid var(--quick-border);
+
+  background: var(--system-button, #ece9d8);
+
+  color: var(--quick-text);
+
+  font: inherit;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.quick-view-project > button:hover {
+  border-color: var(--quick-accent);
+
+  color: var(--quick-heading);
+}
+
+.quick-view-system-map {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  border: 1px solid var(--quick-border);
+}
+
+.quick-view-system-map div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  padding: 10px;
+
+  border-right: 1px solid var(--quick-border);
+
+  background: var(--quick-surface);
+}
+
+.quick-view-system-map div:last-child {
+  border-right: 0;
+}
+
+.quick-view-system-map strong {
+  color: var(--quick-heading);
+
+  font-size: 9px;
+}
+
+.quick-view-system-map span {
+  color: var(--quick-muted);
+
+  font-size: 8px;
+  line-height: 1.45;
+}
+
+.quick-view-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin: 0 18px;
+
+  padding: 10px 0 14px;
+
+  border-top: 1px solid var(--quick-border);
+
+  color: var(--quick-muted);
+
+  font-family: "Lucida Console", Consolas, monospace;
+
+  font-size: 7px;
+}
+
+@container (max-width: 580px) {
+  .quick-view-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-view-section-wide {
+    grid-column: auto;
+  }
+
+  .quick-view-system-map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-view-system-map div {
+    border-bottom: 1px solid var(--quick-border);
+  }
+}
+
+@container (max-width: 420px) {
+  .quick-view-hero {
+    align-items: flex-start;
+
+    padding: 16px;
+
+    flex-direction: column;
+  }
+
+  .quick-view-hero img {
+    width: 62px;
+    height: 62px;
+  }
+
+  .quick-view-layout {
+    padding: 12px;
+  }
+
+  .quick-view-system-map {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-view-system-map div {
+    border-right: 0;
+  }
+
+  .quick-view-footer {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+}

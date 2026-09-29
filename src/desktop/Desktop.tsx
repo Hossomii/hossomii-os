@@ -57,6 +57,10 @@ import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
 
 import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerApp";
 
+import profileAvatar from "../assets/profile-avatar.webp";
+
+import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
+
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
 import "../styles/desktop/index.css";
@@ -126,6 +130,12 @@ export function Desktop() {
 
   const desktopItems = [
     {
+      id: "quick-view",
+      label: "Quick View",
+      icon: profileAvatar,
+    },
+
+    {
       id: "computer",
       label: "Meu Computador",
       icon: computerIcon,
@@ -170,6 +180,18 @@ export function Desktop() {
 
   function handleOpenItem(id: WindowAppId) {
     setStartMenuOpen(false);
+
+    if (id === "quick-view") {
+      openWindow({
+        appId: "quick-view",
+
+        title: "Quick View - Anthony",
+
+        icon: profileAvatar,
+      });
+
+      return;
+    }
 
     if (id === "computer") {
       openWindow({
@@ -323,6 +345,14 @@ export function Desktop() {
       </div>
 
       {windows.map((windowItem) => {
+        if (windowItem.appId === "quick-view") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <QuickViewApp />
+            </WindowFrame>
+          );
+        }
+
         if (windowItem.appId === "computer") {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
@@ -451,17 +481,10 @@ export function Desktop() {
 
       <Taskbar
         startMenuOpen={startMenuOpen}
-        
         windows={windows}
-
         activeWindowId={activeWindow?.id ?? null}
-
-        onBrowserOpen={() => 
-          handleOpenItem("browser")}
-
-        onStartToggle={() => 
-          setStartMenuOpen((currentState) => !currentState)}
-
+        onBrowserOpen={() => handleOpenItem("browser")}
+        onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
         onWindowClick={handleTaskbarWindowClick}
       />
     </main>

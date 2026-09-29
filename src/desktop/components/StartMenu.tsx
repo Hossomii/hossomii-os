@@ -38,6 +38,20 @@ export function StartMenu({
 
       <div className="start-menu-content">
         <div className="start-menu-primary">
+          <button type="button" onClick={() => onOpenItem("quick-view")}>
+            <img
+              className="start-menu-program-image"
+              src={profileAvatar}
+              alt=""
+            />
+
+            <span>
+              <strong>Quick View</strong>
+
+              <small>Resumo profissional</small>
+            </span>
+          </button>
+
           <button type="button" onClick={() => onOpenItem("terminal")}>
             <img
               className="start-menu-program-image"

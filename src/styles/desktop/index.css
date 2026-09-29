@@ -10,6 +10,8 @@
 
 @import "./project-viewer.css";
 
+@import "./quick-view.css";
+
 @import "./control-panel.css";
 
 @import "./terminal.css";

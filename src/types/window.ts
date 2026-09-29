@@ -9,7 +9,8 @@ export type WindowAppId =
   | "image-viewer"
   | "project-viewer"
   | "control-panel"
-  | "browser";
+  | "browser"
+  | "quick-view";
 
 export type WindowBounds = {
   x: number;
