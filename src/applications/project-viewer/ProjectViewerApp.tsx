@@ -1,45 +1,26 @@
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 
-import {
-  getPortfolioProject,
-} from "../../content/projects";
+import { ExternalLink } from "../../components/ExternalLink";
 
-import {
-  useFileSystemStore,
-} from "../../stores/filesystemStore";
+import { getPortfolioProject } from "../../content/projects";
 
-import {
-  useWindowStore,
-} from "../../stores/windowStore";
+import { useFileSystemStore } from "../../stores/filesystemStore";
 
-import {
-  getFileSystemIcon,
-} from "../../system/filesystem/iconRegistry";
+import { useWindowStore } from "../../stores/windowStore";
+
+import { getFileSystemIcon } from "../../system/filesystem/iconRegistry";
 
 import documentsIcon from "../../assets/icons/documents.webp";
 
-import type {
-  FileSystemFile,
-} from "../../types/filesystem";
+import type { FileSystemFile } from "../../types/filesystem";
 
 type ProjectViewerAppProps = {
   projectId: string;
 };
 
-type ProjectViewerTab =
-  | "overview"
-  | "build-log"
-  | "gallery"
-  | "tech";
+type ProjectViewerTab = "overview" | "build-log" | "gallery" | "tech";
 
-const imageExtensions = [
-  "webp",
-  "png",
-  "jpg",
-  "jpeg",
-];
+const imageExtensions = ["webp", "png", "jpg", "jpeg"];
 
 const projectTabs: {
   id: ProjectViewerTab;
@@ -63,41 +44,18 @@ const projectTabs: {
   },
 ];
 
-export function ProjectViewerApp({
-  projectId,
-}: ProjectViewerAppProps) {
-  const [
-    activeTab,
-    setActiveTab,
-  ] =
-    useState<ProjectViewerTab>(
-      "overview"
-    );
+export function ProjectViewerApp({ projectId }: ProjectViewerAppProps) {
+  const [activeTab, setActiveTab] = useState<ProjectViewerTab>("overview");
 
-  const [
-    selectedScreenshotId,
-    setSelectedScreenshotId,
-  ] =
-    useState<string | null>(
-      null
-    );
+  const [selectedScreenshotId, setSelectedScreenshotId] = useState<
+    string | null
+  >(null);
 
-  const items =
-    useFileSystemStore(
-      (state) =>
-        state.items
-    );
+  const items = useFileSystemStore((state) => state.items);
 
-  const openWindow =
-    useWindowStore(
-      (state) =>
-        state.openWindow
-    );
+  const openWindow = useWindowStore((state) => state.openWindow);
 
-  const project =
-    getPortfolioProject(
-      projectId
-    );
+  const project = getPortfolioProject(projectId);
 
   if (!project) {
     return (
@@ -109,116 +67,65 @@ export function ProjectViewerApp({
     );
   }
 
-  const projectPath =
-    `C:\\Usuários\\Anthony\\Projetos\\${project.name}`;
+  const projectPath = `C:\\Usuários\\Anthony\\Projetos\\${project.name}`;
 
-  const projectIcon =
-    getFileSystemIcon(
-      project.iconId ??
-        "projects"
-    );
+  const projectIcon = getFileSystemIcon(project.iconId ?? "projects");
 
-  const screenshots =
-    items
-      .filter(
-        (
-          item
-        ): item is FileSystemFile =>
-          item.parentId ===
-            projectId &&
-          item.type ===
-            "file" &&
-          !item.trashed &&
-          !item.hidden &&
-          imageExtensions.includes(
-            item.extension.toLowerCase()
-          ) &&
-          Boolean(
-            item.resourceUrl
-          )
+  const screenshots = items
+    .filter(
+      (item): item is FileSystemFile =>
+        item.parentId === projectId &&
+        item.type === "file" &&
+        !item.trashed &&
+        !item.hidden &&
+        imageExtensions.includes(item.extension.toLowerCase()) &&
+        Boolean(item.resourceUrl),
+    )
+    .slice(0, 3);
+
+  const heroScreenshot = screenshots[0];
+
+  const heroMetadata = heroScreenshot
+    ? project.screenshots.find(
+        (screenshot) => screenshot.fileName === heroScreenshot.name,
       )
-      .slice(
-        0,
-        3
-      );
-
-  const heroScreenshot =
-    screenshots[0];
-
-  const heroMetadata =
-    heroScreenshot
-      ? project.screenshots.find(
-          (
-            screenshot
-          ) =>
-            screenshot.fileName ===
-            heroScreenshot.name
-        )
-      : undefined;
+    : undefined;
 
   const selectedScreenshot =
-    screenshots.find(
-      (
-        screenshot
-      ) =>
-        screenshot.id ===
-        selectedScreenshotId
-    ) ??
+    screenshots.find((screenshot) => screenshot.id === selectedScreenshotId) ??
     screenshots[0];
 
-  const selectedScreenshotMetadata =
-    selectedScreenshot
-      ? project.screenshots.find(
-          (
-            screenshot
-          ) =>
-            screenshot.fileName ===
-            selectedScreenshot.name
-        )
-      : undefined;
+  const selectedScreenshotMetadata = selectedScreenshot
+    ? project.screenshots.find(
+        (screenshot) => screenshot.fileName === selectedScreenshot.name,
+      )
+    : undefined;
 
   const statusLabel =
-    project.status ===
-    "in-development"
+    project.status === "in-development"
       ? "EM DESENVOLVIMENTO"
-      : project.status ===
-          "completed"
+      : project.status === "completed"
         ? "CONCLUÍDO"
         : undefined;
 
   const statusClassName =
-    project.status ===
-    "in-development"
+    project.status === "in-development"
       ? "is-development"
-      : project.status ===
-          "completed"
+      : project.status === "completed"
         ? "is-completed"
         : undefined;
 
-  const recordName =
-    project.slug
-      .replaceAll(
-        "-",
-        "_"
-      )
-      .toUpperCase();
+  const recordName = project.slug.replaceAll("-", "_").toUpperCase();
 
-  function openScreenshot(
-    fileId: string,
-    fileName: string
-  ) {
+  function openScreenshot(fileId: string, fileName: string) {
     openWindow({
-      appId:
-        "image-viewer",
+      appId: "image-viewer",
 
-      instanceId:
-        fileId,
+      instanceId: fileId,
 
-      title:
-        `${fileName} - Visualizador de Imagens`,
+      title: `${fileName} - Visualizador de Imagens`,
 
-      icon:
-        documentsIcon,
+      icon: documentsIcon,
 
       data: {
         fileId,
@@ -233,182 +140,98 @@ export function ProjectViewerApp({
           {projectIcon && (
             <img
               className="project-viewer-project-icon"
-              src={
-                projectIcon
-              }
+              src={projectIcon}
               alt=""
-              draggable={
-                false
-              }
+              draggable={false}
             />
           )}
 
           <div className="project-viewer-title-area">
-            <span className="project-viewer-label">
-              HOSSOMII PORTFOLIO
-            </span>
+            <span className="project-viewer-label">HOSSOMII PORTFOLIO</span>
 
-            <h1>
-              {
-                project.name
-              }
-            </h1>
+            <h1>{project.name}</h1>
 
             <div className="project-viewer-meta">
-              {project.category && (
-                <span>
-                  {
-                    project.category
-                  }
-                </span>
-              )}
+              {project.category && <span>{project.category}</span>}
 
-              {project.year && (
-                <span>
-                  {
-                    project.year
-                  }
-                </span>
-              )}
+              {project.year && <span>{project.year}</span>}
 
-              {statusLabel && (
-                <span>
-                  {
-                    statusLabel
-                  }
-                </span>
-              )}
+              {statusLabel && <span>{statusLabel}</span>}
             </div>
           </div>
         </div>
 
         <div className="project-viewer-header-system">
-          <span>
-            PROJECT DATABASE
-          </span>
+          <span>PROJECT DATABASE</span>
 
-          <strong>
-            {
-              recordName
-            }
-          </strong>
+          <strong>{recordName}</strong>
         </div>
       </header>
 
       <section className="project-viewer-dossier">
         <div className="project-viewer-dossier-bar">
-          <span>
-            PROJECT RECORD
-          </span>
+          <span>PROJECT RECORD</span>
 
-          <span>
-            {
-              recordName
-            }
-          </span>
+          <span>{recordName}</span>
         </div>
 
         <div className="project-viewer-dossier-grid">
           <div className="project-viewer-media-panel">
-            {heroScreenshot &&
-            heroScreenshot.resourceUrl ? (
+            {heroScreenshot && heroScreenshot.resourceUrl ? (
               <button
                 type="button"
                 className="project-viewer-hero"
                 onClick={() =>
-                  openScreenshot(
-                    heroScreenshot.id,
-                    heroScreenshot.name
-                  )
+                  openScreenshot(heroScreenshot.id, heroScreenshot.name)
                 }
               >
                 <img
-                  src={
-                    heroScreenshot.resourceUrl
-                  }
-                  alt={
-                    heroMetadata?.alt ??
-                    heroScreenshot.name
-                  }
-                  draggable={
-                    false
-                  }
+                  src={heroScreenshot.resourceUrl}
+                  alt={heroMetadata?.alt ?? heroScreenshot.name}
+                  draggable={false}
                 />
 
                 <span className="project-viewer-hero-overlay">
-                  <strong>
-                    {
-                      heroMetadata?.caption ??
-                      project.name
-                    }
-                  </strong>
+                  <strong>{heroMetadata?.caption ?? project.name}</strong>
 
-                  <small>
-                    Clique para ampliar
-                  </small>
+                  <small>Clique para ampliar</small>
                 </span>
               </button>
             ) : (
               <div className="project-viewer-hero-empty">
-                <span>
-                  NO PREVIEW AVAILABLE
-                </span>
+                <span>NO PREVIEW AVAILABLE</span>
               </div>
             )}
 
             <div className="project-viewer-media-status">
               <span>
                 PREVIEW://
-                {
-                  heroScreenshot?.name ??
-                  "unavailable"
-                }
+                {heroScreenshot?.name ?? "unavailable"}
               </span>
 
               <span>
-                {
-                  screenshots.length
-                }{" "}
-                IMAGE
-                {
-                  screenshots.length ===
-                  1
-                    ? ""
-                    : "S"
-                }
+                {screenshots.length} IMAGE
+                {screenshots.length === 1 ? "" : "S"}
               </span>
             </div>
           </div>
 
           <aside className="project-viewer-record">
             <div className="project-viewer-record-heading">
-              <span>
-                PROJECT RECORD
-              </span>
+              <span>PROJECT RECORD</span>
 
               {statusLabel && (
                 <div
-                  className={[
-                    "project-viewer-record-status",
-                    statusClassName,
-                  ]
-                    .filter(
-                      Boolean
-                    )
-                    .join(
-                      " "
-                    )}
+                  className={["project-viewer-record-status", statusClassName]
+                    .filter(Boolean)
+                    .join(" ")}
                 >
                   <span
                     className="project-viewer-status-light"
                     aria-hidden="true"
                   />
 
-                  <strong>
-                    {
-                      statusLabel
-                    }
-                  </strong>
+                  <strong>{statusLabel}</strong>
                 </div>
               )}
             </div>
@@ -416,107 +239,51 @@ export function ProjectViewerApp({
             <dl className="project-viewer-record-data">
               {project.category && (
                 <div>
-                  <dt>
-                    Categoria
-                  </dt>
+                  <dt>Categoria</dt>
 
-                  <dd>
-                    {
-                      project.category
-                    }
-                  </dd>
+                  <dd>{project.category}</dd>
                 </div>
               )}
 
               {project.year && (
                 <div>
-                  <dt>
-                    Ano
-                  </dt>
+                  <dt>Ano</dt>
 
-                  <dd>
-                    {
-                      project.year
-                    }
-                  </dd>
+                  <dd>{project.year}</dd>
                 </div>
               )}
 
               <div>
-                <dt>
-                  Função
-                </dt>
+                <dt>Função</dt>
 
-                <dd>
-                  {
-                    project.role
-                  }
-                </dd>
+                <dd>{project.role}</dd>
               </div>
             </dl>
 
             <div className="project-viewer-record-stack">
-              <span>
-                CORE STACK
-              </span>
+              <span>CORE STACK</span>
 
               <div>
-                {project.technologies
-                  .slice(
-                    0,
-                    5
-                  )
-                  .map(
-                    (
-                      technology
-                    ) => (
-                      <span
-                        key={
-                          technology
-                        }
-                      >
-                        {
-                          technology
-                        }
-                      </span>
-                    )
-                  )}
+                {project.technologies.slice(0, 5).map((technology) => (
+                  <span key={technology}>{technology}</span>
+                ))}
               </div>
             </div>
 
-            {(project.githubUrl ||
-              project.demoUrl) && (
+            {(project.githubUrl || project.demoUrl) && (
               <div className="project-viewer-record-actions">
                 {project.githubUrl && (
-                  <a
-                    href={
-                      project.githubUrl
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>
-                      &gt;
-                    </span>
-
+                  <ExternalLink href={project.githubUrl}>
+                    <span>&gt;</span>
                     GitHub
-                  </a>
+                  </ExternalLink>
                 )}
 
                 {project.demoUrl && (
-                  <a
-                    href={
-                      project.demoUrl
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <span>
-                      &gt;
-                    </span>
-
+                  <ExternalLink href={project.demoUrl}>
+                    <span>&gt;</span>
                     Abrir projeto
-                  </a>
+                  </ExternalLink>
                 )}
               </div>
             )}
@@ -524,113 +291,60 @@ export function ProjectViewerApp({
         </div>
       </section>
 
-      <nav
-        className="project-viewer-tabs"
-        aria-label="Seções do projeto"
-      >
-        {projectTabs.map(
-          (
-            tab
-          ) => (
-            <button
-              key={
-                tab.id
-              }
-              type="button"
-              className={
-                activeTab ===
-                tab.id
-                  ? "is-active"
-                  : undefined
-              }
-              aria-pressed={
-                activeTab ===
-                tab.id
-              }
-              onClick={() =>
-                setActiveTab(
-                  tab.id
-                )
-              }
-            >
-              <span>
-                {
-                  tab.label
-                }
-              </span>
-            </button>
-          )
-        )}
+      <nav className="project-viewer-tabs" aria-label="Seções do projeto">
+        {projectTabs.map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            className={activeTab === tab.id ? "is-active" : undefined}
+            aria-pressed={activeTab === tab.id}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            <span>{tab.label}</span>
+          </button>
+        ))}
       </nav>
 
       <div className="project-viewer-content">
-        {activeTab ===
-          "overview" && (
+        {activeTab === "overview" && (
           <div className="project-viewer-tab-panel">
             <section className="project-viewer-intro">
               <span className="project-viewer-section-label">
                 PROJECT OVERVIEW
               </span>
 
-              <h2>
-                Sobre o projeto
-              </h2>
+              <h2>Sobre o projeto</h2>
 
-              <p>
-                {
-                  project.summary
-                }
-              </p>
+              <p>{project.summary}</p>
             </section>
 
-            {(project.challenge ||
-              project.solution) && (
+            {(project.challenge || project.solution) && (
               <div className="project-viewer-overview-grid">
                 {project.challenge && (
                   <section className="project-viewer-card">
                     <div className="project-viewer-card-header">
-                      <span className="project-viewer-card-index">
-                        01
-                      </span>
+                      <span className="project-viewer-card-index">01</span>
 
-                      <span>
-                        CHALLENGE
-                      </span>
+                      <span>CHALLENGE</span>
                     </div>
 
-                    <h3>
-                      Desafio
-                    </h3>
+                    <h3>Desafio</h3>
 
-                    <p>
-                      {
-                        project.challenge
-                      }
-                    </p>
+                    <p>{project.challenge}</p>
                   </section>
                 )}
 
                 {project.solution && (
                   <section className="project-viewer-card">
                     <div className="project-viewer-card-header">
-                      <span className="project-viewer-card-index">
-                        02
-                      </span>
+                      <span className="project-viewer-card-index">02</span>
 
-                      <span>
-                        SOLUTION
-                      </span>
+                      <span>SOLUTION</span>
                     </div>
 
-                    <h3>
-                      Solução
-                    </h3>
+                    <h3>Solução</h3>
 
-                    <p>
-                      {
-                        project.solution
-                      }
-                    </p>
+                    <p>{project.solution}</p>
                   </section>
                 )}
               </div>
@@ -638,23 +352,14 @@ export function ProjectViewerApp({
           </div>
         )}
 
-        {activeTab ===
-          "build-log" && (
+        {activeTab === "build-log" && (
           <div className="project-viewer-tab-panel">
             <section className="project-viewer-section">
-              <span className="project-viewer-section-label">
-                ROLE
-              </span>
+              <span className="project-viewer-section-label">ROLE</span>
 
-              <h2>
-                Minha participação
-              </h2>
+              <h2>Minha participação</h2>
 
-              <p className="project-viewer-description">
-                {
-                  project.role
-                }
-              </p>
+              <p className="project-viewer-description">{project.role}</p>
             </section>
 
             <section className="project-viewer-section">
@@ -662,132 +367,71 @@ export function ProjectViewerApp({
                 CONTRIBUTIONS
               </span>
 
-              <h2>
-                Principais atividades
-              </h2>
+              <h2>Principais atividades</h2>
 
               <ul className="project-viewer-list">
-                {project.highlights.map(
-                  (
-                    highlight
-                  ) => (
-                    <li
-                      key={
-                        highlight
-                      }
-                    >
-                      {
-                        highlight
-                      }
-                    </li>
-                  )
-                )}
+                {project.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
               </ul>
             </section>
 
             {project.technicalDecisions &&
-              project.technicalDecisions.length >
-                0 && (
+              project.technicalDecisions.length > 0 && (
                 <section className="project-viewer-section">
                   <span className="project-viewer-section-label">
                     ENGINEERING NOTES
                   </span>
 
-                  <h2>
-                    Build Log
-                  </h2>
+                  <h2>Build Log</h2>
 
                   <div className="project-viewer-build-log">
-                    {project.technicalDecisions.map(
-                      (
-                        decision,
-                        index
-                      ) => (
-                        <article
-                          key={
-                            decision
-                          }
-                          className="project-viewer-log-entry"
-                        >
-                          <div className="project-viewer-log-index">
-                            LOG{" "}
-                            {String(
-                              index +
-                                1
-                            ).padStart(
-                              3,
-                              "0"
-                            )}
-                          </div>
+                    {project.technicalDecisions.map((decision, index) => (
+                      <article
+                        key={decision}
+                        className="project-viewer-log-entry"
+                      >
+                        <div className="project-viewer-log-index">
+                          LOG {String(index + 1).padStart(3, "0")}
+                        </div>
 
-                          <div className="project-viewer-log-content">
-                            <span>
-                              ENGINEERING RECORD
-                            </span>
+                        <div className="project-viewer-log-content">
+                          <span>ENGINEERING RECORD</span>
 
-                            <p>
-                              {
-                                decision
-                              }
-                            </p>
-                          </div>
-                        </article>
-                      )
-                    )}
+                          <p>{decision}</p>
+                        </div>
+                      </article>
+                    ))}
                   </div>
                 </section>
               )}
 
-            {project.learnings &&
-              project.learnings.length >
-                0 && (
-                <section className="project-viewer-section">
-                  <span className="project-viewer-section-label">
-                    POST-MORTEM
-                  </span>
+            {project.learnings && project.learnings.length > 0 && (
+              <section className="project-viewer-section">
+                <span className="project-viewer-section-label">
+                  POST-MORTEM
+                </span>
 
-                  <h2>
-                    Aprendizados
-                  </h2>
+                <h2>Aprendizados</h2>
 
-                  <ul className="project-viewer-list">
-                    {project.learnings.map(
-                      (
-                        learning
-                      ) => (
-                        <li
-                          key={
-                            learning
-                          }
-                        >
-                          {
-                            learning
-                          }
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </section>
-              )}
+                <ul className="project-viewer-list">
+                  {project.learnings.map((learning) => (
+                    <li key={learning}>{learning}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
           </div>
         )}
 
-        {activeTab ===
-          "gallery" && (
+        {activeTab === "gallery" && (
           <div className="project-viewer-tab-panel">
-            {selectedScreenshot &&
-            selectedScreenshot.resourceUrl ? (
+            {selectedScreenshot && selectedScreenshot.resourceUrl ? (
               <>
                 <div className="project-viewer-gallery-label">
-                  <span>
-                    MEDIA VIEWER
-                  </span>
+                  <span>MEDIA VIEWER</span>
 
-                  <span>
-                    {
-                      selectedScreenshot.name
-                    }
-                  </span>
+                  <span>{selectedScreenshot.name}</span>
                 </div>
 
                 <button
@@ -796,102 +440,58 @@ export function ProjectViewerApp({
                   onClick={() =>
                     openScreenshot(
                       selectedScreenshot.id,
-                      selectedScreenshot.name
+                      selectedScreenshot.name,
                     )
                   }
                 >
                   <img
-                    src={
-                      selectedScreenshot.resourceUrl
-                    }
+                    src={selectedScreenshot.resourceUrl}
                     alt={
-                      selectedScreenshotMetadata?.alt ??
-                      selectedScreenshot.name
+                      selectedScreenshotMetadata?.alt ?? selectedScreenshot.name
                     }
-                    draggable={
-                      false
-                    }
+                    draggable={false}
                   />
 
                   <span>
-                    {
-                      selectedScreenshotMetadata?.caption ??
-                      selectedScreenshot.name
-                    }
+                    {selectedScreenshotMetadata?.caption ??
+                      selectedScreenshot.name}
                   </span>
                 </button>
 
                 <div className="project-viewer-gallery-thumbnails">
-                  {screenshots.map(
-                    (
-                      screenshot,
-                      index
-                    ) => {
-                      const metadata =
-                        project.screenshots.find(
-                          (
-                            item
-                          ) =>
-                            item.fileName ===
-                            screenshot.name
-                        );
+                  {screenshots.map((screenshot, index) => {
+                    const metadata = project.screenshots.find(
+                      (item) => item.fileName === screenshot.name,
+                    );
 
-                      return (
-                        <button
-                          key={
-                            screenshot.id
-                          }
-                          type="button"
-                          className={
-                            selectedScreenshot.id ===
-                            screenshot.id
-                              ? "is-active"
-                              : undefined
-                          }
-                          aria-pressed={
-                            selectedScreenshot.id ===
-                            screenshot.id
-                          }
-                          onClick={() =>
-                            setSelectedScreenshotId(
-                              screenshot.id
-                            )
-                          }
-                        >
-                          <span className="project-viewer-thumbnail-index">
-                            IMG{" "}
-                            {String(
-                              index +
-                                1
-                            ).padStart(
-                              2,
-                              "0"
-                            )}
-                          </span>
+                    return (
+                      <button
+                        key={screenshot.id}
+                        type="button"
+                        className={
+                          selectedScreenshot.id === screenshot.id
+                            ? "is-active"
+                            : undefined
+                        }
+                        aria-pressed={selectedScreenshot.id === screenshot.id}
+                        onClick={() => setSelectedScreenshotId(screenshot.id)}
+                      >
+                        <span className="project-viewer-thumbnail-index">
+                          IMG {String(index + 1).padStart(2, "0")}
+                        </span>
 
-                          <img
-                            src={
-                              screenshot.resourceUrl
-                            }
-                            alt={
-                              metadata?.alt ??
-                              screenshot.name
-                            }
-                            draggable={
-                              false
-                            }
-                          />
+                        <img
+                          src={screenshot.resourceUrl}
+                          alt={metadata?.alt ?? screenshot.name}
+                          draggable={false}
+                        />
 
-                          <span className="project-viewer-thumbnail-caption">
-                            {
-                              metadata?.caption ??
-                              screenshot.name
-                            }
-                          </span>
-                        </button>
-                      );
-                    }
-                  )}
+                        <span className="project-viewer-thumbnail-caption">
+                          {metadata?.caption ?? screenshot.name}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </>
             ) : (
@@ -902,111 +502,60 @@ export function ProjectViewerApp({
           </div>
         )}
 
-        {activeTab ===
-          "tech" && (
+        {activeTab === "tech" && (
           <div className="project-viewer-tab-panel">
             <section className="project-viewer-section">
-              <span className="project-viewer-section-label">
-                STACK
-              </span>
+              <span className="project-viewer-section-label">STACK</span>
 
-              <h2>
-                Tecnologias
-              </h2>
+              <h2>Tecnologias</h2>
 
               <div className="project-viewer-tags">
-                {project.technologies.map(
-                  (
-                    technology
-                  ) => (
-                    <span
-                      key={
-                        technology
-                      }
-                    >
-                      {
-                        technology
-                      }
-                    </span>
-                  )
-                )}
+                {project.technologies.map((technology) => (
+                  <span key={technology}>{technology}</span>
+                ))}
               </div>
             </section>
 
             <section className="project-viewer-section">
-              <span className="project-viewer-section-label">
-                PROJECT INFO
-              </span>
+              <span className="project-viewer-section-label">PROJECT INFO</span>
 
-              <h2>
-                Informações
-              </h2>
+              <h2>Informações</h2>
 
               <dl className="project-viewer-info">
                 <div>
-                  <dt>
-                    Registro
-                  </dt>
+                  <dt>Registro</dt>
 
-                  <dd>
-                    {
-                      recordName
-                    }
-                  </dd>
+                  <dd>{recordName}</dd>
                 </div>
 
                 {project.category && (
                   <div>
-                    <dt>
-                      Categoria
-                    </dt>
+                    <dt>Categoria</dt>
 
-                    <dd>
-                      {
-                        project.category
-                      }
-                    </dd>
+                    <dd>{project.category}</dd>
                   </div>
                 )}
 
                 {project.year && (
                   <div>
-                    <dt>
-                      Ano
-                    </dt>
+                    <dt>Ano</dt>
 
-                    <dd>
-                      {
-                        project.year
-                      }
-                    </dd>
+                    <dd>{project.year}</dd>
                   </div>
                 )}
 
                 {statusLabel && (
                   <div>
-                    <dt>
-                      Status
-                    </dt>
+                    <dt>Status</dt>
 
-                    <dd>
-                      {
-                        statusLabel
-                      }
-                    </dd>
+                    <dd>{statusLabel}</dd>
                   </div>
                 )}
 
                 <div>
-                  <dt>
-                    Localização
-                  </dt>
+                  <dt>Localização</dt>
 
-                  <dd>
-                    {
-                      projectPath
-                    }
-                  </dd>
+                  <dd>{projectPath}</dd>
                 </div>
               </dl>
             </section>
@@ -1014,15 +563,9 @@ export function ProjectViewerApp({
         )}
 
         <footer className="project-viewer-footer">
-          <span>
-            HOSSOMII PROJECT DATABASE
-          </span>
+          <span>HOSSOMII PROJECT DATABASE</span>
 
-          <span>
-            {
-              projectPath
-            }
-          </span>
+          <span>{projectPath}</span>
         </footer>
       </div>
     </div>

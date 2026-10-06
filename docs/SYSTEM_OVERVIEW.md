@@ -3,14 +3,14 @@
 HOSSOMII OS é um portfólio interativo apresentado como um sistema
 operacional fictício executado diretamente no navegador.
 
-Em vez de navegar apenas por uma página tradicional com seções como
-"Sobre", "Projetos" e "Contato", o visitante recebe acesso a uma
-estação de trabalho virtual e pode descobrir as informações explorando
-o próprio sistema.
+Em vez de organizar informações apenas em páginas tradicionais,
+o visitante acessa uma estação de trabalho virtual e explora projetos,
+documentos e informações profissionais através das próprias interfaces
+do sistema.
 
-A experiência utiliza principalmente referências visuais dos computadores
-do início dos anos 2000, especialmente da era Windows XP, combinadas com
-interfaces diegéticas, sites pessoais antigos e elementos narrativos.
+A experiência combina referências de computadores do início dos anos
+2000 com aplicações web modernas, estado compartilhado e elementos
+narrativos.
 
 ---
 
@@ -25,141 +25,197 @@ HOSSOMII-01
 O fluxo principal atual é:
 
 ```text
-Acesso remoto
-      ↓
-Autenticação
-      ↓
-Inicialização
-      ↓
+Powered Off
+     ↓
+Power On
+     ↓
+HOSSOMII Startup
+     ↓
+Remote Access
+     ↓
+Authentication
+     ↓
+Boot
+     ↓
 Desktop
-      ↓
-Aplicações
-      ↓
-Sistema de arquivos virtual
+     ↓
+Applications
+     ↓
+Virtual File System
 ```
 
 Também existem fluxos próprios para:
 
-- reinicialização;
-- desligamento;
+- restart;
+- shutdown;
+- recuperação;
 - falha crítica;
-- recuperação.
-
-O objetivo é fazer com que as diferentes partes de um portfólio pareçam
-elementos pertencentes ao mesmo computador.
+- conquistas de exploração.
 
 ---
 
-## Arquitetura geral
+## Stack
+
+O projeto é construído com:
+
+```text
+React 19
+TypeScript 6
+Vite 8
+Zustand
+GSAP
+Vitest
+ESLint
+```
 
 HOSSOMII OS não é um sistema operacional real.
 
-Ele é uma aplicação web construída com:
+Ele é uma aplicação React que simula conceitos encontrados em ambientes
+desktop.
 
-- React;
-- TypeScript;
-- Vite;
-- Zustand;
-- Vitest;
-- GSAP.
+---
 
-A aplicação simula conceitos encontrados em ambientes desktop, incluindo:
+## Arquitetura
 
-- Desktop;
-- Window Manager;
-- aplicações;
-- sistema de arquivos virtual;
-- associações de arquivos;
-- terminal;
-- lixeira;
-- preferências do sistema;
-- estados de inicialização e desligamento;
-- recuperação;
-- conquistas.
+A aplicação é dividida principalmente entre:
 
-O estado compartilhado é organizado principalmente através de stores
-Zustand.
+```text
+src/
+
+├── applications/
+│   └── aplicações executadas dentro do Desktop
+│
+├── content/
+│   └── dados estruturados do portfólio
+│
+├── desktop/
+│   └── Desktop, taskbar, Start Menu e Window Manager
+│
+├── stores/
+│   └── estado compartilhado com Zustand
+│
+├── system/
+│   ├── auth/
+│   ├── boot/
+│   ├── critical-file/
+│   ├── filesystem/
+│   ├── navigation/
+│   └── power/
+│
+├── styles/
+└── types/
+```
+
+Os stores principais controlam conceitos independentes:
+
+```text
+filesystemStore
+→ sistema de arquivos
+
+windowStore
+→ janelas
+
+systemStore
+→ estados da máquina
+
+systemPreferencesStore
+→ tema e wallpaper
+
+achievementStore
+→ conquistas
+
+criticalFileStore
+→ fluxo de falha crítica
+```
+
+Essa separação evita concentrar toda a lógica do sistema nos componentes
+visuais.
 
 ---
 
 ## Window Manager
 
-As aplicações são apresentadas através de um gerenciador de janelas
-desenvolvido especificamente para o HOSSOMII OS.
+As aplicações são exibidas através de um Window Manager próprio.
+
+Cada janela possui estado relacionado a:
+
+```text
+posição
+dimensões
+z-index
+minimização
+maximização
+restore bounds
+dados da aplicação
+```
 
 As janelas suportam:
 
 - abertura;
 - foco;
-- z-index;
 - movimento;
 - redimensionamento;
 - minimização;
 - maximização;
 - restauração;
 - fechamento;
-- múltiplas instâncias quando necessário.
+- múltiplas instâncias.
 
-As dimensões são limitadas ao espaço disponível do Desktop para evitar
-que janelas fiquem permanentemente inacessíveis fora da viewport.
+As dimensões são limitadas à área disponível do Desktop.
 
----
+Isso impede que uma janela fique permanentemente inacessível fora da
+viewport.
 
-## Desktop
+### Motion
 
-O Desktop funciona como a principal área de exploração do sistema.
+GSAP controla as principais transições.
 
-Atualmente possui atalhos para:
+Atualmente existem animações para:
 
-- Quick View;
-- Meu Computador;
-- Meus Projetos;
-- Meus Documentos;
-- HOSSOMII Web;
-- Terminal;
-- Lixeira.
+- abertura;
+- minimização;
+- restauração;
+- fechamento;
+- Start Menu;
+- notificações de conquistas.
 
-Também possui:
+As animações são propositalmente curtas para não descaracterizar a
+experiência de desktop.
 
-- Menu Iniciar;
-- barra de tarefas;
-- relógio;
-- quick launch do navegador;
-- wallpapers;
-- temas.
+Quando uma aplicação é minimizada, seu componente continua montado.
 
----
+```text
+Application
+     ↓
+minimized = true
+     ↓
+GSAP transition
+     ↓
+display: none
+```
 
-## Quick View
+Ao restaurar:
 
-Quick View foi criado para permitir que alguém compreenda o perfil
-profissional rapidamente sem precisar explorar todo o sistema.
+```text
+minimized = false
+     ↓
+window becomes visible
+     ↓
+restore transition
+```
 
-Ele apresenta:
+Isso permite preservar o estado interno da aplicação durante ciclos de
+minimização e restauração.
 
-- resumo profissional;
-- áreas de interesse;
-- projetos em destaque;
-- tecnologias principais dos projetos;
-- currículo;
-- documentos;
-- GitHub;
-- LinkedIn.
-
-O Quick View não mantém uma cópia independente dos projetos.
-
-Ele utiliza diretamente o catálogo estruturado do portfólio.
-
-Ao selecionar um projeto, o visitante pode abrir o mesmo Project Viewer
-utilizado pelo restante do sistema.
+`prefers-reduced-motion` é respeitado pela nova camada de motion.
 
 ---
 
 ## Sistema de arquivos virtual
 
-O HOSSOMII OS possui um sistema de arquivos próprio mantido em memória.
+O HOSSOMII OS possui um filesystem próprio mantido em memória.
 
-A estrutura principal inclui:
+Estrutura simplificada:
 
 ```text
 C:\
@@ -181,48 +237,189 @@ Os itens podem representar:
 - aplicações;
 - atalhos.
 
-Cada item também pode possuir propriedades relacionadas a:
+Cada item pode possuir propriedades relacionadas a:
 
-- visibilidade;
+- parent;
+- extensão;
+- recurso;
+- ícone;
 - exclusão;
 - proteção;
 - criticidade;
-- restauração;
-- estado da Lixeira.
+- Lixeira;
+- localização original.
 
 ---
 
 ## Estado compartilhado
 
-Explorer, Terminal, Lixeira e outras aplicações utilizam o mesmo estado
-do sistema de arquivos.
+Explorer, Terminal e Lixeira trabalham sobre o mesmo filesystem.
 
-Por exemplo:
+Exemplo:
 
 ```text
 Explorer
    ↓
-Excluir arquivo
+Delete
    ↓
 filesystemStore
    ↓
-Arquivo deixa o diretório original
+arquivo marcado como trashed
    ↓
-Arquivo aparece na Lixeira
+Explorer atualizado
+   ↓
+Recycle Bin atualizado
+   ↓
+Terminal atualizado
 ```
-
-O Terminal observa exatamente a mesma alteração.
 
 Não existe uma cópia independente do filesystem para cada aplicação.
 
+Essa é uma das principais decisões arquiteturais do projeto.
+
 ---
 
-## Catálogo de projetos
+## Associações de arquivos
 
-Os dados profissionais dos projetos ficam separados do estado mutável do
+A lógica de abertura é compartilhada entre diferentes interfaces.
+
+```text
+TXT
+→ Notepad
+
+PDF
+→ PDF Viewer
+
+WEBP / PNG / JPG / JPEG
+→ Image Viewer
+
+project.exe
+→ Project Viewer
+
+directory
+→ Explorer
+
+shortcut
+→ target item
+```
+
+Explorer e Terminal reutilizam essas regras.
+
+---
+
+## Terminal
+
+O Terminal opera sobre o mesmo filesystem utilizado pela interface
+gráfica.
+
+Comandos atuais incluem:
+
+```text
+ajuda / help
+
+dir / ls
+
+cd
+pwd
+
+type / cat
+
+open
+
+del
+
+cls / clear
+
+whoami
+hostname
+ver
+```
+
+Também suporta:
+
+- histórico;
+- autocomplete com Tab;
+- caminhos relativos;
+- caminhos absolutos;
+- `/` e `\`;
+- nomes com espaços;
+- resolução case-insensitive;
+- resolução tolerante a acentos.
+
+O comando `open` utiliza as mesmas associações de arquivos do Explorer.
+
+---
+
+## Lixeira
+
+Arquivos comuns não são removidos imediatamente.
+
+```text
+arquivo
+   ↓
+trashItem()
+   ↓
+trashed = true
+   ↓
+originalParentId preservado
+   ↓
+Recycle Bin
+```
+
+Ao restaurar, o arquivo retorna ao diretório original.
+
+Itens protegidos e componentes críticos possuem regras diferentes.
+
+---
+
+## Segurança interna do filesystem
+
+Algumas regras importantes são aplicadas diretamente no store.
+
+Isso significa que a proteção não depende apenas do botão ou da interface
+que iniciou uma ação.
+
+Um componente crítico, por exemplo, não pode ser removido através da
+operação normal de exclusão.
+
+Essa regra continua válida mesmo que outra interface tente utilizar a
+mesma operação.
+
+---
+
+## Critical Failure e Recovery
+
+Existe um fluxo narrativo relacionado a um componente crítico do
 filesystem.
 
-A arquitetura principal é:
+A sequência pode envolver:
+
+```text
+Desktop
+   ↓
+critical interaction
+   ↓
+system failure
+   ↓
+Recovery Environment
+   ↓
+diagnostic
+   ↓
+filesystem repair
+   ↓
+restart
+```
+
+O ambiente de recuperação utiliza o mesmo filesystem virtual.
+
+O gatilho específico não é documentado publicamente porque a descoberta
+faz parte da experiência.
+
+---
+
+## Dados do portfólio
+
+Os projetos profissionais são armazenados separadamente do filesystem.
 
 ```text
 projects.ts
@@ -232,18 +429,16 @@ projectFileSystem.ts
 Virtual File System
 ```
 
-O catálogo contém informações como:
+`projects.ts` funciona como fonte principal de dados.
 
-- id;
-- slug;
+Pode conter:
+
 - nome;
 - categoria;
-- ano;
 - status;
 - resumo;
-- função desempenhada;
+- função;
 - tecnologias;
-- destaques;
 - desafio;
 - solução;
 - decisões técnicas;
@@ -252,13 +447,14 @@ O catálogo contém informações como:
 - GitHub;
 - demo.
 
-`projectFileSystem.ts` funciona como um adaptador entre os dados de
-portfólio e o sistema de arquivos.
+`projectFileSystem.ts` adapta esses dados para a representação dentro do
+sistema operacional.
 
-A partir de um projeto ele gera automaticamente elementos como:
+Exemplo:
 
 ```text
 Projeto\
+
 ├── project.exe
 ├── sobre-o-projeto.txt
 ├── tecnologias.txt
@@ -266,486 +462,287 @@ Projeto\
 └── screenshots
 ```
 
-Isso permite adicionar ou remover projetos sem alterar manualmente a
-estrutura principal do filesystem.
+Isso evita duplicar manualmente os mesmos dados em Quick View, Explorer
+e Project Viewer.
 
 ---
 
-## Projetos atuais
+## Aplicações principais
 
-### HOSSOMII OS
+### Quick View
 
-O próprio sistema é apresentado como um case do portfólio.
+Resumo profissional para visitantes que querem encontrar rapidamente:
 
-O projeto demonstra, entre outros pontos:
+- perfil;
+- projetos;
+- currículo;
+- documentos;
+- GitHub;
+- LinkedIn.
 
-- arquitetura React;
-- TypeScript;
-- gerenciamento de estado;
-- Window Manager;
-- filesystem virtual;
-- integração entre aplicações;
-- regras de sistema;
-- experiência interativa;
-- testes.
+### Meu Computador
 
-### TNT Basketball
+Interface principal de navegação pelo filesystem.
 
-Projeto de jogo arcade desenvolvido com Unity e C#.
+### Project Viewer
 
-O case destaca:
-
-- sistemas de gameplay;
-- pontuação;
-- combos;
-- power-ups;
-- controle de estado;
-- WebGL;
-- integração em equipe.
-
-### Médicos & Dentistas
-
-Aplicação web que começou como projeto front-end e posteriormente foi
-expandida para fullstack.
-
-O projeto utiliza:
-
-- React;
-- JavaScript;
-- Node.js;
-- Express;
-- PostgreSQL;
-- Prisma;
-- Zod;
-- Axios.
-
-O backend possui separação entre rotas, controllers e services, além de
-validação e persistência de dados.
-
----
-
-## Project Viewer
-
-Cada projeto possui uma aplicação `project.exe`.
-
-Ela abre o Project Viewer utilizando o id do projeto como contexto.
-
-O viewer atual possui:
+`project.exe` abre um case study estruturado em:
 
 ```text
-PROJECT DOSSIER
-      │
-      ├── identidade do projeto
-      ├── imagem principal
-      ├── categoria
-      ├── ano
-      ├── status
-      ├── função
-      └── stack principal
-
-OVERVIEW
-      ├── sobre
-      ├── desafio
-      └── solução
-
-BUILD LOG
-      ├── participação
-      ├── atividades
-      ├── decisões técnicas
-      └── aprendizados
-
-GALLERY
-      └── imagens
-
-TECH
-      └── informações técnicas
+Overview
+Build Log
+Gallery
+Tech
 ```
 
-O estado de navegação interno do Project Viewer é local ao componente.
+### HOSSOMII Web
 
-O filesystem, janelas e demais estados compartilhados continuam nos
-stores globais.
-
----
-
-## Meu Computador
-
-Meu Computador funciona como o principal Explorer do sistema.
-
-O visitante pode:
-
-- navegar pelo disco;
-- entrar em diretórios;
-- selecionar itens;
-- abrir aplicações;
-- abrir arquivos;
-- excluir arquivos permitidos;
-- acessar projetos e documentos.
-
----
-
-## Meus Documentos
-
-O diretório de documentos contém atualmente:
-
-```text
-leia-me.txt
-sobre-mim.txt
-currículo.pdf
-```
-
-Os textos apresentam o perfil profissional atual.
-
-O currículo é aberto através do visualizador de PDF integrado ao sistema.
-
----
-
-## Associações de arquivos
-
-A abertura de arquivos utiliza regras compartilhadas.
-
-Atualmente:
-
-```text
-TXT
-→ Bloco de Notas
-
-PDF
-→ Visualizador de PDF
-
-WEBP / PNG / JPG / JPEG
-→ Visualizador de Imagens
-
-project.exe
-→ Project Viewer
-
-diretório
-→ Explorer
-
-atalho
-→ item de destino
-```
-
-Explorer e Terminal reutilizam essas mesmas regras.
-
----
-
-## Terminal
-
-O Terminal é conectado ao mesmo filesystem utilizado pela interface
-gráfica.
-
-Atualmente suporta:
-
-```text
-ajuda
-help
-
-dir
-ls
-
-cd
-pwd
-
-type
-cat
-
-open
-
-del
-
-cls
-clear
-
-whoami
-hostname
-ver
-```
-
-Também possui:
-
-- histórico de comandos;
-- autocomplete com Tab;
-- caminhos relativos;
-- caminhos absolutos;
-- `/` e `\`;
-- nomes com espaços;
-- resolução sem diferenciação de maiúsculas/minúsculas;
-- resolução tolerante a acentos.
-
-O comando `open` utiliza a mesma lógica de associação de arquivos do
-Explorer.
-
----
-
-## Lixeira
-
-Quando um arquivo comum é excluído:
-
-- ele deixa sua localização original;
-- o `originalParentId` é preservado;
-- o item recebe estado de Lixeira;
-- o ícone da Lixeira muda;
-- o arquivo pode ser restaurado.
-
-A restauração utiliza a localização original armazenada no item.
-
-Diretórios e componentes protegidos possuem regras próprias.
-
----
-
-## Componentes críticos
-
-O filesystem diferencia arquivos comuns, itens protegidos e componentes
-críticos.
-
-A exclusão normal não consegue remover um arquivo crítico.
-
-Essa regra existe no próprio store, e não apenas no botão visual que
-inicia a ação.
-
-Dessa forma, outras interfaces não conseguem ignorar acidentalmente a
-proteção.
-
----
-
-## Critical Failure e Recovery
-
-Existe um fluxo especial relacionado a um componente crítico do sistema.
-
-Esse fluxo inclui:
-
-- múltiplas confirmações;
-- falha do ambiente gráfico;
-- transição narrativa;
-- ambiente de recuperação;
-- diagnóstico;
-- restauração;
-- reinicialização do shell.
-
-O Recovery Environment utiliza o mesmo filesystem virtual.
-
-Os detalhes necessários para descobrir o easter egg não são documentados
-publicamente.
-
----
-
-## HOSSOMII Web
-
-HOSSOMII Web é o navegador interno da máquina.
-
-Ele possui páginas próprias e também permite abrir determinados recursos
-externos.
-
-Atualmente inclui:
+Navegador interno com:
 
 - página inicial;
 - Anthony Online;
 - HOSSOMII News;
-- links externos.
+- navegação externa.
 
----
+### Anthony Online
 
-## Anthony Online
+Página pessoal inspirada na web dos anos 2000.
 
-Anthony Online é uma interpretação criativa de páginas pessoais e
-comunidades da internet dos anos 2000.
+Reutiliza informações já existentes no catálogo de projetos.
 
-A interface inclui:
+### HOSSOMII News
 
-- perfil;
-- projetos;
-- tecnologias;
-- links;
-- widgets;
-- stickers;
-- guestbook;
-- contador visual;
-- microinterações.
-
-A página reutiliza os projetos existentes no catálogo do portfólio.
-
----
-
-## HOSSOMII News
-
-HOSSOMII News apresenta notícias externas em uma interface inspirada em
-portais antigos.
+Interface de notícias externas.
 
 A camada de dados inclui:
 
 - normalização;
-- cache temporário em memória;
+- cache temporário;
 - timeout;
-- cancelamento de requisições;
-- fallback de imagens;
+- cancelamento;
 - lazy loading;
+- fallback de imagens;
 - navegação externa segura.
 
-Nenhuma chave privada é armazenada no frontend.
+### Notepad
+
+Visualizador para arquivos `.txt`.
+
+### PDF Viewer
+
+Visualizador integrado para documentos PDF.
+
+### Image Viewer
+
+Visualizador para imagens suportadas pelo filesystem.
+
+### Recycle Bin
+
+Gerencia arquivos excluídos e restauração.
+
+### Control Panel
+
+Gerencia temas e wallpapers.
 
 ---
 
-## Painel de Controle
+## Navegação externa
 
-O Painel de Controle gerencia preferências visuais.
+Links externos utilizam uma camada centralizada.
 
-Temas atuais:
-
-- HOSSOMII Default;
-- HOSSOMII Dark;
-- Alto Contraste.
-
-Wallpapers atuais:
-
-- HOSSOMII Hills;
-- HOSSOMII Default;
-- Red Team Grid;
-- Retro Blue Abstract;
-- HOSSOMII Arcade;
-- Minimal Green.
-
-O wallpaper padrão atual é:
+A navegação aceita apenas:
 
 ```text
-HOSSOMII Default
+http:
+https:
 ```
 
-As preferências são persistidas no `localStorage`.
+A URL é resolvida antes da abertura.
+
+Links externos podem ser registrados pelo sistema de conquistas e são
+abertos em nova aba utilizando:
+
+```text
+noopener
+noreferrer
+```
+
+Recursos locais da própria aplicação não contam como navegação externa.
 
 ---
 
 ## Conquistas
 
-Existe um sistema de conquistas baseado em Zustand.
+O sistema de conquistas utiliza Zustand com persistência.
 
-O store mantém:
-
-- conquistas desbloqueadas;
-- fila de notificações;
-- prevenção de desbloqueio duplicado durante a sessão.
-
-Atualmente existe uma conquista relacionada ao fluxo de recuperação.
-
-O sistema será expandido posteriormente.
-
----
-
-## Reinicialização
-
-O sistema possui um estado próprio de reinicialização.
-
-O fluxo é:
+Conquistas atuais:
 
 ```text
-Desktop
-   ↓
-Restart
-   ↓
-Tela intermediária
-   ↓
-Login
+Leitura obrigatória
+→ abrir um TXT
+
+Papelada digital
+→ abrir um PDF
+
+Sem apego
+→ mover o primeiro arquivo para a Lixeira
+
+Saindo da rede
+→ abrir um link externo
+
+Eu avisei.
+→ recuperar o sistema após o incidente crítico
 ```
 
-A tela intermediária evita uma troca instantânea de estado e reforça a
-sensação de que a máquina está realmente reiniciando.
+As conquistas desbloqueadas são persistidas em:
+
+```text
+hossomii-os-achievements
+```
+
+Somente os ids desbloqueados são persistidos.
+
+A fila de notificações não é salva.
+
+Consequentemente:
+
+```text
+achievement unlocked
+      ↓
+localStorage
+      ↓
+refresh
+      ↓
+continua desbloqueado
+      ↓
+toast antigo não reaparece
+```
+
+As notificações são exibidas sequencialmente e possuem animações de
+entrada e saída.
 
 ---
 
-## Desligamento
+## Power System
 
-O desligamento passa por dois estágios antes da máquina ser considerada
-desligada:
+O estado da máquina é controlado pelo `systemStore`.
+
+Fluxo de inicialização:
+
+```text
+power
+   ↓
+powering-on
+   ↓
+login
+   ↓
+authentication
+   ↓
+boot
+   ↓
+desktop
+```
+
+Fluxo de restart:
 
 ```text
 Desktop
    ↓
-Salvando configurações
+Restarting
    ↓
-Desligando
+Remote Access
+```
+
+O restart retorna diretamente ao acesso remoto.
+
+Fluxo de desligamento:
+
+```text
+Desktop
+   ↓
+Shutting Down
    ↓
 Powered Off
 ```
 
-A tela final também oferece acesso a links externos e reinicialização.
+Da tela Powered Off é possível ligar novamente a máquina:
 
-Uma experiência de Power mais completa está planejada para a próxima
-fase de desenvolvimento.
-
----
-
-## Responsividade
-
-O Window Manager limita as janelas ao espaço disponível.
-
-Quando a viewport muda, as janelas são reposicionadas ou redimensionadas
-quando necessário.
-
-Aplicações específicas também utilizam regras responsivas próprias.
-
-Quick View e Project Viewer possuem layouts adaptáveis ao espaço interno
-da janela.
+```text
+Powered Off
+     ↓
+Ligar novamente
+     ↓
+Power On
+     ↓
+Remote Access
+```
 
 ---
 
-## Acessibilidade
+## Preferências
 
-O sistema já inclui elementos básicos como:
+O Painel de Controle permite alterar:
 
-- navegação por teclado em diferentes controles;
-- foco visível;
+- tema;
+- wallpaper.
+
+As preferências são armazenadas no `localStorage`.
+
+Temas atuais:
+
+```text
+HOSSOMII Default
+HOSSOMII Dark
+High Contrast
+```
+
+---
+
+## Responsividade e acessibilidade
+
+O sistema já possui suporte para diferentes dimensões de viewport.
+
+O Window Manager reajusta janelas quando necessário.
+
+Também existem:
+
+- labels ARIA;
 - textos alternativos;
-- labels ARIA em controles relevantes;
-- tema de Alto Contraste;
-- suporte a `prefers-reduced-motion` em determinadas animações.
+- foco visível;
+- tema de alto contraste;
+- `prefers-reduced-motion`;
+- layouts adaptáveis em aplicações específicas.
 
-Uma revisão de acessibilidade mais ampla está planejada para uma etapa
-posterior.
+Uma revisão mais profunda de acessibilidade, mobile e performance está
+reservada para a v0.8.
 
 ---
 
 ## Testes
 
-A lógica principal possui testes automatizados com Vitest.
+Vitest é utilizado para validar principalmente a lógica independente da
+interface.
 
-Atualmente são testados principalmente:
+Entre os comportamentos cobertos estão:
 
 - resolução de caminhos;
-- normalização de nomes;
+- normalização;
 - exclusão;
-- proteção de componentes críticos;
+- proteção de arquivos;
+- comportamento de componentes críticos;
 - restauração;
-- comportamento do filesystem.
+- filesystem.
 
-As verificações de checkpoint utilizam:
+Os checkpoints também utilizam:
 
 ```bash
 npm test
-npm run build
 npm run lint
+npm run build
 ```
 
-A v0.4 também passou por regressão manual envolvendo:
-
-- login;
-- boot;
-- Desktop;
-- Window Manager;
-- Quick View;
-- projetos;
-- Project Viewer;
-- documentos;
-- Explorer;
-- Terminal;
-- Lixeira;
-- Critical Flow;
-- HOSSOMII Web;
-- News;
-- Painel de Controle;
-- shutdown;
-- restart;
-- responsividade;
-- acessibilidade básica.
+Além dos testes automatizados, cada fase passa por regressão manual dos
+principais fluxos do sistema.
 
 ---
 
@@ -759,147 +756,128 @@ v0.4 — Portfolio Content
 COMPLETE
 
 v0.5 — Visual Polish / Motion
-NEXT
-```
-
-A v0.4 adicionou principalmente:
-
-- catálogo estruturado de projetos;
-- geração automática do filesystem dos projetos;
-- HOSSOMII Web;
-- Anthony Online;
-- HOSSOMII News;
-- Project Viewer em formato de case study;
-- HOSSOMII OS como projeto;
-- cases técnicos expandidos;
-- Quick View;
-- revisão de conteúdo profissional;
-- refinamentos de temas e wallpapers;
-- fluxo visual de restart.
-
----
-
-## Próxima fase — v0.5
-
-A próxima etapa é focada em polish visual e feedback do sistema.
-
-Já estão planejados:
-
-### File assets
-
-- ícone próprio para `.txt`;
-- ícone próprio para `.pdf`.
-
-### Power experience
-
-- tela inicial com computador desligado;
-- interação para ligar HOSSOMII-01;
-- transição para o acesso remoto;
-- redesign da tela Powered Off;
-- identidade visual mais colorida e próxima da personalidade do projeto.
-
-### Achievements
-
-Novas conquistas planejadas:
-
-- abrir um `.txt` pela primeira vez;
-- abrir um PDF pela primeira vez;
-- excluir um item pela primeira vez;
-- abrir um link externo pela primeira vez.
-
-Também está planejada persistência das conquistas já desbloqueadas.
-
-### External navigation
-
-A abertura de URLs externas deverá ser centralizada para:
-
-- manter comportamento consistente;
-- aplicar regras de segurança;
-- permitir integração com conquistas.
-
-### Motion
-
-Serão adicionadas microinterações adicionais sem transformar o sistema
-em uma interface excessivamente animada.
-
-`prefers-reduced-motion` continuará sendo respeitado.
-
----
-
-## Etapas posteriores
-
-```text
-v0.5 — Visual Polish / Motion
+COMPLETE
 
 v0.6 — Audio
+NEXT
 
 v0.7 — Narrative / Easter Eggs
+PLANNED
 
 v0.8 — Mobile / Accessibility / Performance
+PLANNED
 
 v0.9 — Complete OS Experience
+PLANNED
 
-v1.0 — Final Major Application + Integration
+v1.0 — game.exe + Final Integration
+PLANNED
 ```
-
-A aplicação final planejada permanecerá como o último grande recurso
-antes da versão 1.0.
 
 ---
 
-## Filosofia
+## v0.5 — Visual Polish / Motion
 
-### Explorar em vez de apenas rolar
+A v0.5 adicionou principalmente:
 
-Informações importantes podem ser descobertas através da interação.
+- ícones próprios para TXT e PDF;
+- tela inicial de Power;
+- splash HOSSOMII;
+- redesign do Remote Access;
+- redesign do Powered Off;
+- novas conquistas;
+- persistência de conquistas;
+- navegação externa centralizada;
+- animações de janelas;
+- animação do Start Menu;
+- animações das notificações;
+- suporte a reduced motion.
 
-### Acesso rápido sem remover a exploração
+O objetivo foi melhorar feedback e coesão sem transformar o sistema em uma
+interface excessivamente animada.
 
-Quick View oferece uma alternativa curta para quem não deseja percorrer o
-sistema inteiro.
+---
+
+## Próxima fase — v0.6 Audio
+
+A próxima fase introduzirá uma camada de áudio opcional.
+
+Arquitetura planejada:
+
+```text
+Audio Manager
+
+├── UI
+│   ├── click
+│   ├── hover
+│   ├── error
+│   └── notification
+│
+├── System
+│   ├── startup
+│   ├── login
+│   ├── shutdown
+│   └── recovery
+│
+└── Preferences
+    ├── mute
+    └── volume
+```
+
+O áudio deverá respeitar as limitações de autoplay do navegador e poderá
+ser controlado pelo usuário.
+
+---
+
+## Roadmap
+
+```text
+v0.6
+Audio
+
+v0.7
+Narrative / Easter Eggs
+
+v0.8
+Mobile / Accessibility / Performance
+
+v0.9
+Complete OS Experience / Freeze / QA
+
+v1.0
+game.exe + Final Integration
+```
+
+`game.exe` continuará sendo o último grande recurso antes da versão 1.0.
+
+---
+
+## Princípios
 
 ### Funcionalidade antes de decoração
 
-Interfaces devem funcionar sempre que isso for razoável.
+Interfaces devem funcionar sempre que isso fizer sentido.
 
 ### Estado compartilhado
 
-Aplicações diferentes devem operar sobre os mesmos dados quando
-representam o mesmo conceito.
+Interfaces que representam o mesmo conceito devem utilizar os mesmos
+dados.
 
 ### Fonte única de verdade
 
-Informações estruturadas, principalmente projetos, devem existir em um
-local central e ser derivadas para diferentes interfaces.
+Dados estruturados devem ser centralizados e derivados para diferentes
+interfaces.
 
-### Regras protegidas na camada correta
+### Regras na camada correta
 
-Regras críticas devem existir no estado e na lógica do sistema, não
-somente na interface.
+Proteções importantes pertencem à lógica do sistema, não apenas à UI.
+
+### Exploração
+
+O portfólio deve recompensar curiosidade sem impedir acesso rápido às
+informações profissionais.
 
 ### Nostalgia com identidade própria
 
-As referências dos anos 2000 servem como linguagem visual, não como
-reprodução literal de um sistema operacional existente.
-
-### Surpresas sem bloquear o visitante
-
-Easter eggs podem alterar a experiência, mas devem permitir recuperação.
-
----
-
-## Inspirações
-
-A identidade visual e interativa combina referências de:
-
-- interfaces desktop do começo dos anos 2000;
-- Windows XP;
-- sites pessoais antigos;
-- acesso remoto;
-- interfaces diegéticas;
-- The Operator;
-- Watch Dogs;
-- experiências digitais interativas.
-
-O objetivo é transformar essas referências em uma identidade própria do
-HOSSOMII OS.
+As referências dos anos 2000 são utilizadas como linguagem visual, não
+como reprodução literal de outro sistema operacional.

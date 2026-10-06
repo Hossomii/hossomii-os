@@ -1,4 +1,6 @@
 export type SystemPhase =
+  | "power"
+  | "powering-on"
   | "login"
   | "authenticating"
   | "booting"

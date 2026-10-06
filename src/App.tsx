@@ -14,12 +14,22 @@ import { ShutdownScreen } from "./system/power/ShutdownScreen";
 
 import { PoweredOffScreen } from "./system/power/PoweredOffScreen";
 
+import { PowerScreen } from "./system/power/PowerScreen";
+
+import { PowerOnScreen } from "./system/power/PowerOnScreen";
+
 import "./styles/power.css";
 
 function App() {
   const phase = useSystemStore((state) => state.phase);
 
   switch (phase) {
+    case "power":
+      return <PowerScreen />;
+
+    case "powering-on":
+      return <PowerOnScreen />;
+
     case "login":
       return <LoginScreen />;
 

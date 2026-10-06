@@ -1,12 +1,5 @@
 /* =========================================================
-   HOSSOMII OS
-   Authentication / Remote Access / Boot
-   Windows XP inspired visual language
-   ========================================================= */
-
-
-/* =========================================================
-   1. AUTHENTICATION BACKGROUND
+   1. AUTHENTICATION BASE
    ========================================================= */
 
 .auth-screen {
@@ -18,17 +11,18 @@
 
   width: 100%;
   min-height: 100vh;
-
-  padding: 32px;
+  min-height: 100dvh;
 
   overflow: hidden;
 
   background:
-    radial-gradient(circle at 50% 28%,
+    radial-gradient(
+      circle at 50% 28%,
       #315d91 0%,
       #17385f 34%,
       #0b1c31 66%,
-      #040912 100%);
+      #040912 100%
+    );
 
   color: #1b1b1b;
 
@@ -51,16 +45,24 @@
   pointer-events: none;
 
   background:
-    repeating-linear-gradient(to bottom,
+    repeating-linear-gradient(
+      to bottom,
       transparent 0,
       transparent 3px,
-      rgba(255, 255, 255, 0.012) 4px);
+      rgba(
+        255,
+        255,
+        255,
+        0.012
+      )
+      4px
+    );
 
   opacity: 0.55;
 }
 
 
-/* Ambient screen glow */
+/* Ambient glow */
 
 .auth-screen::after {
   content: "";
@@ -73,191 +75,309 @@
   width: 900px;
   height: 620px;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
 
   pointer-events: none;
 
   background:
-    radial-gradient(circle,
-      rgba(92, 163, 255, 0.15),
-      transparent 65%);
+    radial-gradient(
+      circle,
+      rgba(
+        92,
+        163,
+        255,
+        0.15
+      ),
+      transparent 65%
+    );
 
-  filter: blur(38px);
+  filter:
+    blur(
+      38px
+    );
 }
 
 
 /* =========================================================
-   2. REMOTE ACCESS WINDOW
+   2. FULLSCREEN REMOTE ACCESS
    ========================================================= */
 
-.access-window {
-  position: relative;
-  z-index: 1;
+.remote-access-screen {
+  display: block;
 
-  width: min(1040px, 100%);
+  width: 100%;
+
+  height: 100vh;
+  height: 100dvh;
+
+  min-height: 100svh;
+
+  padding: 0;
 
   overflow: hidden;
 
-  border: 2px solid #174d9b;
-  border-radius: 8px 8px 3px 3px;
-
-  background: #ece9d8;
-
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.55),
-    0 22px 70px rgba(0, 0, 0, 0.5);
+  background:
+    radial-gradient(
+      circle at 22% 42%,
+      #315d91 0%,
+      #17385f 32%,
+      #0b1c31 64%,
+      #040912 100%
+    );
 }
 
 
 /* =========================================================
-   3. XP-STYLE TITLE BAR
+   3. REMOTE ACCESS SHELL
    ========================================================= */
 
-.access-titlebar {
+.remote-access-shell {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+
+  width: 100%;
+  height: 100%;
+
+  min-height: 0;
+
+  grid-template-rows:
+    auto
+    minmax(
+      0,
+      1fr
+    )
+    auto;
+
+  overflow: hidden;
+
+  background:
+    #ece9d8;
+}
+
+
+/* =========================================================
+   4. REMOTE ACCESS HEADER
+   ========================================================= */
+
+.remote-access-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  height: 38px;
+  flex-shrink: 0;
 
-  padding: 0 5px 0 8px;
+  min-height: 58px;
+
+  padding:
+    0
+    clamp(
+      20px,
+      4vw,
+      56px
+    );
+
+  border-bottom:
+    1px solid
+    #003c98;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #4d98ef 0%,
       #1464d2 12%,
       #0755c3 52%,
       #0846a6 87%,
-      #2b6fd1 100%);
-
-  border-bottom: 1px solid #003c98;
+      #2b6fd1 100%
+    );
 
   color: #ffffff;
 
-  font-family: Tahoma, Verdana, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
 
   text-shadow:
-    1px 1px 1px rgba(0, 0, 0, 0.55);
+    1px
+    1px
+    1px
+    rgba(
+      0,
+      0,
+      0,
+      0.45
+    );
 
   user-select: none;
 }
 
-.titlebar-left {
+.remote-access-header > div {
   display: flex;
   align-items: center;
 
-  gap: 7px;
+  gap: 11px;
 }
 
-.titlebar-icon {
-  display: grid;
-  place-items: center;
+.remote-access-brand {
+  padding:
+    5px
+    7px;
 
-  width: 18px;
-  height: 18px;
-
-  border: 1px solid rgba(255, 255, 255, 0.7);
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.75
+    );
 
   background:
-    linear-gradient(145deg,
-      #ffffff,
-      #94b9ee);
+    rgba(
+      255,
+      255,
+      255,
+      0.13
+    );
 
-  color: #0754ba;
+  color: #ffffff;
 
-  font-size: 10px;
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
 
-  text-shadow: none;
+  font-size: 9px;
+
+  letter-spacing:
+    1px;
 }
 
-.titlebar-controls {
-  display: flex;
-
-  gap: 2px;
+.remote-access-header strong {
+  font-size: 13px;
 }
 
-.titlebar-controls span {
-  display: grid;
-  place-items: center;
+.remote-access-host-status {
+  color:
+    #eef8ff;
 
-  width: 23px;
-  height: 22px;
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
 
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-radius: 3px;
+  font-size: 9px;
 
-  background:
-    linear-gradient(145deg,
-      #67a6f2,
-      #1e64c5);
-
-  box-shadow:
-    inset 1px 1px rgba(255, 255, 255, 0.3);
-
-  color: white;
-
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.titlebar-controls span:last-child {
-  background:
-    linear-gradient(145deg,
-      #f48a6a,
-      #c53923);
+  letter-spacing:
+    0.6px;
 }
 
 
 /* =========================================================
-   4. WINDOW CONTENT
+   5. REMOTE ACCESS CONTENT
    ========================================================= */
 
-.access-content {
+.remote-access-content {
   display: grid;
 
-  grid-template-columns: 0.9fr 1.1fr;
+  min-width: 0;
+  min-height: 0;
 
-  min-height: 530px;
+  grid-template-columns:
+    minmax(
+      320px,
+      0.9fr
+    )
+    minmax(
+      420px,
+      1.1fr
+    );
 
-  background: #ece9d8;
+  overflow: auto;
+
+  background:
+    #ece9d8;
 }
 
 
 /* =========================================================
-   5. MACHINE PANEL
+   6. MACHINE PANEL
    ========================================================= */
 
 .machine-info {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 
-  padding: 46px 52px;
+  min-width: 0;
+  min-height: 0;
 
-  border-right: 1px solid #aca899;
+  padding:
+    clamp(
+      34px,
+      5vw,
+      70px
+    );
+
+  border-right:
+    1px solid
+    #aca899;
 
   background:
-    linear-gradient(to right,
-      #f8f7ee,
-      #ece9d8);
+    linear-gradient(
+      135deg,
+      #f9f8ef,
+      #e7e4d5
+    );
+}
+
+.machine-heading {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-bottom:
+    34px;
 }
 
 .machine-section-title {
-  margin: 0 0 34px;
+  margin: 0;
 
-  color: #316ac5;
+  color:
+    #316ac5;
 
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
 
-  letter-spacing: 0.04em;
+  letter-spacing:
+    0.05em;
+}
+
+.machine-heading strong {
+  color:
+    #163c72;
+
+  font-size:
+    clamp(
+      20px,
+      2.3vw,
+      29px
+    );
+
+  font-weight: 400;
 }
 
 
 /* =========================================================
-   6. COMPUTER VISUAL
+   7. COMPUTER VISUAL
    ========================================================= */
 
 .computer-visual {
@@ -265,7 +385,10 @@
   flex-direction: column;
   align-items: center;
 
-  margin: 0 auto 24px;
+  margin:
+    0
+    auto
+    24px;
 
   user-select: none;
 }
@@ -278,18 +401,37 @@
 
   padding: 9px;
 
-  border: 3px solid #7e8282;
+  border:
+    3px solid
+    #7e8282;
+
   border-radius: 8px;
 
   background:
-    linear-gradient(145deg,
+    linear-gradient(
+      145deg,
       #d6d6d4,
-      #858a8e);
+      #858a8e
+    );
 
   box-shadow:
-    inset 1px 1px #ffffff,
-    inset -1px -1px #55595b,
-    0 10px 20px rgba(0, 0, 0, 0.22);
+    inset
+      1px
+      1px
+      #ffffff,
+    inset
+      -1px
+      -1px
+      #55595b,
+    0
+      10px
+      20px
+      rgba(
+        0,
+        0,
+        0,
+        0.22
+      );
 }
 
 .computer-screen-desktop {
@@ -300,33 +442,46 @@
 
   overflow: hidden;
 
-  border: 2px solid #22272c;
+  border:
+    2px solid
+    #22272c;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #4d99e8 0%,
       #76b7f0 55%,
       #60a84e 56%,
-      #3d8f35 100%);
+      #3d8f35 100%
+    );
 }
 
 .desktop-hill {
   position: absolute;
 
-  width: 150%;
-  height: 80px;
-
   left: -22%;
   bottom: 14px;
 
-  border-radius: 50% 55% 0 0;
+  width: 150%;
+  height: 80px;
+
+  border-radius:
+    50%
+    55%
+    0
+    0;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #73c75f,
-      #338b32);
+      #338b32
+    );
 
-  transform: rotate(-5deg);
+  transform:
+    rotate(
+      -5deg
+    );
 }
 
 .desktop-cloud {
@@ -337,7 +492,13 @@
 
   border-radius: 20px;
 
-  background: rgba(255, 255, 255, 0.83);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.83
+    );
 }
 
 .desktop-cloud::before,
@@ -352,19 +513,19 @@
 }
 
 .desktop-cloud::before {
-  width: 15px;
-  height: 15px;
-
   left: 7px;
   bottom: 0;
+
+  width: 15px;
+  height: 15px;
 }
 
 .desktop-cloud::after {
-  width: 20px;
-  height: 20px;
-
   left: 17px;
   bottom: 0;
+
+  width: 20px;
+  height: 20px;
 }
 
 .desktop-cloud-one {
@@ -376,7 +537,10 @@
   top: 37px;
   right: 28px;
 
-  transform: scale(0.7);
+  transform:
+    scale(
+      0.7
+    );
 }
 
 .desktop-taskbar {
@@ -392,11 +556,13 @@
   height: 17px;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #2d7ee8,
-      #1457bd);
+      #1457bd
+    );
 
-  color: white;
+  color: #ffffff;
 
   font-size: 6px;
 }
@@ -407,14 +573,22 @@
 
   height: 100%;
 
-  padding: 0 8px;
+  padding:
+    0
+    8px;
 
-  border-radius: 0 8px 8px 0;
+  border-radius:
+    0
+    8px
+    8px
+    0;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #5eb85c,
-      #238632);
+      #238632
+    );
 
   font-style: italic;
 }
@@ -425,7 +599,9 @@
   width: 64px;
   height: 27px;
 
-  border-bottom: 6px solid #999b99;
+  border-bottom:
+    6px solid
+    #999b99;
 }
 
 .computer-stand::before {
@@ -439,18 +615,23 @@
   width: 9px;
   height: 23px;
 
-  transform: translateX(-50%);
+  transform:
+    translateX(
+      -50%
+    );
 
   background:
-    linear-gradient(to right,
+    linear-gradient(
+      to right,
       #777b7c,
       #babdbc,
-      #777b7c);
+      #777b7c
+    );
 }
 
 
 /* =========================================================
-   7. MACHINE STATUS
+   8. MACHINE STATUS
    ========================================================= */
 
 .machine-status {
@@ -460,9 +641,11 @@
 
   gap: 7px;
 
-  margin-bottom: 38px;
+  margin-bottom:
+    34px;
 
-  color: #4e4e4e;
+  color:
+    #4e4e4e;
 
   font-size: 10px;
   font-weight: 700;
@@ -472,22 +655,37 @@
   width: 9px;
   height: 9px;
 
-  border: 1px solid #247120;
+  flex-shrink: 0;
+
+  border:
+    1px solid
+    #247120;
+
   border-radius: 50%;
 
   background:
-    radial-gradient(circle at 35% 30%,
+    radial-gradient(
+      circle at 35% 30%,
       #a5f79d,
       #44b43d 50%,
-      #1c7b20 100%);
+      #1c7b20 100%
+    );
 
   box-shadow:
-    0 0 5px rgba(60, 180, 50, 0.38);
+    0
+    0
+    5px
+    rgba(
+      60,
+      180,
+      50,
+      0.38
+    );
 }
 
 
 /* =========================================================
-   8. MACHINE DETAILS
+   9. MACHINE DETAILS
    ========================================================= */
 
 .machine-details {
@@ -509,7 +707,8 @@
 .machine-details dt,
 .field-label,
 .connection-eyebrow {
-  color: #707070;
+  color:
+    #707070;
 
   font-size: 9px;
   font-weight: 700;
@@ -518,14 +717,15 @@
 .machine-details dd {
   margin: 0;
 
-  color: #2d2d2d;
+  color:
+    #2d2d2d;
 
   font-size: 12px;
 }
 
 
 /* =========================================================
-   9. CONNECTION PANEL
+   10. CONNECTION PANEL
    ========================================================= */
 
 .connection-panel {
@@ -533,33 +733,61 @@
   flex-direction: column;
   justify-content: center;
 
-  padding: 54px 60px;
+  min-width: 0;
+  min-height: 0;
+
+  padding:
+    clamp(
+      36px,
+      6vw,
+      86px
+    );
 
   background:
-    linear-gradient(to bottom,
-      #ffffff 0%,
-      #f9f8f1 100%);
+    linear-gradient(
+      to bottom,
+      #ffffff,
+      #f7f6ef
+    );
 }
 
 .connection-heading {
-  margin-bottom: 34px;
+  margin-bottom:
+    34px;
 }
 
 .connection-eyebrow {
   display: block;
 
-  margin-bottom: 10px;
+  margin-bottom:
+    10px;
 
-  color: #316ac5;
+  color:
+    #316ac5;
 }
 
 .connection-heading h1 {
-  margin: 0 0 10px;
+  margin:
+    0
+    0
+    10px;
 
-  color: #163c72;
+  color:
+    #163c72;
 
-  font-family: Tahoma, Verdana, sans-serif;
-  font-size: clamp(25px, 3vw, 34px);
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+
+  font-size:
+    clamp(
+      25px,
+      3vw,
+      34px
+    );
+
   font-weight: 400;
 }
 
@@ -568,7 +796,8 @@
 
   margin: 0;
 
-  color: #555555;
+  color:
+    #555555;
 
   font-size: 12px;
 
@@ -577,7 +806,7 @@
 
 
 /* =========================================================
-   10. USER ACCOUNT CARD
+   11. USER ACCOUNT CARD
    ========================================================= */
 
 .user-card {
@@ -588,19 +817,27 @@
 
   width: 100%;
 
-  margin-bottom: 27px;
+  margin-bottom:
+    27px;
 
   padding: 10px;
 
-  border: 1px solid #aca899;
+  border:
+    1px solid
+    #aca899;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #ffffff,
-      #f1f0e8);
+      #f1f0e8
+    );
 
   box-shadow:
-    inset 1px 1px #ffffff;
+    inset
+      1px
+      1px
+      #ffffff;
 }
 
 .user-avatar {
@@ -611,12 +848,18 @@
 
   object-fit: cover;
 
-  border: 2px solid white;
+  border:
+    2px solid
+    #ffffff;
+
   border-radius: 3px;
 
-  outline: 1px solid #7d9bc1;
+  outline:
+    1px solid
+    #7d9bc1;
 
-  background: #d8e8f5;
+  background:
+    #d8e8f5;
 }
 
 .user-information {
@@ -627,21 +870,23 @@
 }
 
 .user-information strong {
-  color: #133f79;
+  color:
+    #133f79;
 
   font-size: 14px;
   font-weight: 700;
 }
 
 .user-status {
-  color: #777;
+  color:
+    #777777;
 
   font-size: 10px;
 }
 
 
 /* =========================================================
-   11. PASSWORD
+   12. PASSWORD
    ========================================================= */
 
 .connection-form {
@@ -650,10 +895,12 @@
   margin: 0;
 }
 
-.connection-form>.field-label {
+.connection-form
+  > .field-label {
   display: block;
 
-  margin-bottom: 6px;
+  margin-bottom:
+    6px;
 }
 
 .password-field {
@@ -664,20 +911,37 @@
 
   overflow: hidden;
 
-  border: 1px solid #7f9db9;
+  border:
+    1px solid
+    #7f9db9;
 
-  background: #ffffff;
+  background:
+    #ffffff;
 
   transition:
-    border-color 120ms ease,
-    box-shadow 120ms ease;
+    border-color
+    120ms
+    ease,
+    box-shadow
+    120ms
+    ease;
 }
 
 .password-field:focus-within {
-  border-color: #316ac5;
+  border-color:
+    #316ac5;
 
   box-shadow:
-    0 0 0 1px rgba(49, 106, 197, 0.14);
+    0
+    0
+    0
+    1px
+    rgba(
+      49,
+      106,
+      197,
+      0.14
+    );
 }
 
 .password-field input {
@@ -685,27 +949,41 @@
 
   min-width: 0;
 
-  padding: 9px 10px;
+  padding:
+    9px
+    10px;
 
   border: 0;
+
   outline: 0;
 
-  background: white;
+  background:
+    #ffffff;
 
-  color: #151515;
+  color:
+    #151515;
 
-  caret-color: #111;
+  caret-color:
+    #111111;
 
-  font-family: Tahoma, Verdana, sans-serif;
+  font-family:
+    Tahoma,
+    Verdana,
+    Arial,
+    sans-serif;
+
   font-size: 13px;
 
-  letter-spacing: 0.12em;
+  letter-spacing:
+    0.12em;
 }
 
 .password-field input::selection {
-  background: #316ac5;
+  background:
+    #316ac5;
 
-  color: white;
+  color:
+    #ffffff;
 }
 
 .password-enter {
@@ -715,22 +993,31 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0 13px;
+  padding:
+    0
+    13px;
 
   border: 0;
-  border-left: 1px solid #aca899;
+
+  border-left:
+    1px solid
+    #aca899;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #ffffff 0%,
       #f4f3ec 45%,
-      #dedbd0 100%);
+      #dedbd0 100%
+    );
 
-  color: #333;
+  color:
+    #333333;
 
   font-family:
     Tahoma,
     Verdana,
+    Arial,
     sans-serif;
 
   font-size: 9px;
@@ -743,34 +1030,56 @@
 
 .password-enter:hover {
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #ffffff,
-      #e8f0fb);
+      #e8f0fb
+    );
 }
 
 .password-enter:active {
-  padding-top: 1px;
+  padding-top:
+    1px;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #d8d6cc,
-      #f5f4ed);
+      #f5f4ed
+    );
 
   box-shadow:
-    inset 1px 1px 2px rgba(0, 0, 0, 0.18);
+    inset
+      1px
+      1px
+      2px
+      rgba(
+        0,
+        0,
+        0,
+        0.18
+      );
 }
 
 .password-enter:focus-visible {
-  outline: 1px dotted #000;
-  outline-offset: -4px;
+  outline:
+    1px dotted
+    #000000;
+
+  outline-offset:
+    -4px;
 }
 
 .connection-help {
   min-height: 15px;
 
-  margin: 7px 0 0;
+  margin:
+    7px
+    0
+    0;
 
-  color: #666;
+  color:
+    #666666;
 
   font-size: 10px;
 
@@ -779,7 +1088,7 @@
 
 
 /* =========================================================
-   12. INFORMATION NOTICE
+   13. INFORMATION NOTICE
    ========================================================= */
 
 .connection-notice {
@@ -788,11 +1097,15 @@
 
   gap: 9px;
 
-  margin-top: 30px;
+  margin-top:
+    30px;
 
-  padding-top: 18px;
+  padding-top:
+    18px;
 
-  border-top: 1px solid #ddd9cb;
+  border-top:
+    1px solid
+    #ddd9cb;
 }
 
 .connection-notice-icon {
@@ -806,11 +1119,16 @@
 
   border-radius: 50%;
 
-  background: #316ac5;
+  background:
+    #316ac5;
 
-  color: #ffffff;
+  color:
+    #ffffff;
 
-  font-family: Georgia, serif;
+  font-family:
+    Georgia,
+    serif;
+
   font-size: 12px;
   font-weight: 700;
 }
@@ -818,51 +1136,81 @@
 .connection-notice p {
   margin: 0;
 
-  color: #777;
+  color:
+    #777777;
 
   font-size: 10px;
+
   line-height: 1.5;
 }
 
 
 /* =========================================================
-   13. STATUS BAR
+   14. REMOTE ACCESS FOOTER
    ========================================================= */
 
-.access-footer {
+.remote-access-footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  gap: 28px;
+  flex-shrink: 0;
 
-  min-height: 29px;
+  min-height: 38px;
 
-  padding: 0 10px;
+  padding:
+    0
+    clamp(
+      18px,
+      4vw,
+      56px
+    );
 
-  border-top: 1px solid #aca899;
+  padding-bottom:
+    env(
+      safe-area-inset-bottom,
+      0px
+    );
 
-  background: #ece9d8;
+  border-top:
+    1px solid
+    #aca899;
 
-  color: #555;
+  background:
+    #e6e2d3;
 
-  font-size: 9px;
+  color:
+    #575757;
+
+  font-family:
+    "Lucida Console",
+    "Courier New",
+    monospace;
+
+  font-size: 8px;
+
+  letter-spacing:
+    0.45px;
 
   user-select: none;
 }
 
-.access-footer span:first-child {
-  color: #247c27;
+.remote-access-footer
+  span:first-child {
+  color:
+    #247c27;
 }
 
 
 /* =========================================================
-   14. XP SESSION / AUTHENTICATION / WELCOME
+   15. XP SESSION / AUTHENTICATION / WELCOME
    ========================================================= */
 
 .xp-session-screen {
   padding: 0;
 
-  background: #003399;
+  background:
+    #003399;
 
   font-family:
     Tahoma,
@@ -883,20 +1231,27 @@
   flex-direction: column;
 
   width: 100%;
-  min-height: 100vh;
+
+  height: 100vh;
+  height: 100dvh;
+
+  min-height: 100svh;
 
   overflow: hidden;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #003399 0%,
       #003399 10%,
       #5b7edc 10%,
       #5b7edc 90%,
       #003399 90%,
-      #003399 100%);
+      #003399 100%
+    );
 
-  color: white;
+  color:
+    #ffffff;
 }
 
 .xp-top-band {
@@ -905,29 +1260,60 @@
 
   flex-shrink: 0;
 
-  border-bottom: 2px solid rgba(255, 255, 255, 0.55);
+  border-bottom:
+    2px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #002d91,
-      #003399);
+      #003399
+    );
 }
 
 .xp-session-content {
   display: grid;
 
   grid-template-columns:
-    minmax(260px, 0.9fr) 1px minmax(420px, 1.1fr);
+    minmax(
+      260px,
+      0.9fr
+    )
+    1px
+    minmax(
+      420px,
+      1.1fr
+    );
 
   align-items: center;
 
   flex: 1;
 
-  width: min(1050px, calc(100% - 64px));
+  min-height: 0;
 
-  margin: 0 auto;
+  width:
+    min(
+      1050px,
+      calc(
+        100% - 64px
+      )
+    );
 
-  padding: 60px 0;
+  margin:
+    0
+    auto;
+
+  padding:
+    60px
+    0;
+
+  overflow-y: auto;
 }
 
 .xp-brand {
@@ -937,7 +1323,8 @@
 
   gap: 16px;
 
-  padding-right: 56px;
+  padding-right:
+    56px;
 }
 
 .xp-brand-mark {
@@ -947,20 +1334,38 @@
   width: 70px;
   height: 70px;
 
-  border: 2px solid rgba(255, 255, 255, 0.75);
+  border:
+    2px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.75
+    );
 
   border-radius: 8px;
 
   background:
-    linear-gradient(145deg,
+    linear-gradient(
+      145deg,
       #ffffff,
       #c5d7ff 45%,
-      #7aa0ec);
+      #7aa0ec
+    );
 
   box-shadow:
-    0 6px 18px rgba(0, 0, 0, 0.18);
+    0
+    6px
+    18px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
 
-  color: #174da8;
+  color:
+    #174da8;
 
   font-size: 35px;
   font-weight: 700;
@@ -978,17 +1383,29 @@
 }
 
 .xp-brand strong {
-  color: white;
+  color:
+    #ffffff;
 
   font-size: 28px;
   font-weight: 400;
 
   text-shadow:
-    1px 2px 2px rgba(0, 0, 0, 0.3);
+    1px
+    2px
+    2px
+    rgba(
+      0,
+      0,
+      0,
+      0.3
+    );
 }
 
-.xp-brand div span {
-  color: #d7e2ff;
+.xp-brand
+  div
+  span {
+  color:
+    #d7e2ff;
 
   font-size: 12px;
 }
@@ -998,17 +1415,25 @@
   height: 280px;
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       transparent,
-      rgba(255, 255, 255, 0.7),
-      transparent);
+      rgba(
+        255,
+        255,
+        255,
+        0.7
+      ),
+      transparent
+    );
 }
 
 .xp-account-area {
   display: flex;
   flex-direction: column;
 
-  padding-left: 56px;
+  padding-left:
+    56px;
 }
 
 .xp-user-row {
@@ -1017,7 +1442,8 @@
 
   gap: 15px;
 
-  margin-bottom: 40px;
+  margin-bottom:
+    40px;
 }
 
 .xp-session-avatar {
@@ -1028,11 +1454,22 @@
 
   object-fit: cover;
 
-  border: 3px solid white;
+  border:
+    3px solid
+    #ffffff;
+
   border-radius: 4px;
 
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.28);
+    0
+    2px
+    8px
+    rgba(
+      0,
+      0,
+      0,
+      0.28
+    );
 }
 
 .xp-session-user {
@@ -1043,43 +1480,69 @@
 }
 
 .xp-session-user span {
-  color: white;
+  color:
+    #ffffff;
 
   font-size: 21px;
 
   text-shadow:
-    1px 1px 2px rgba(0, 0, 0, 0.3);
+    1px
+    1px
+    2px
+    rgba(
+      0,
+      0,
+      0,
+      0.3
+    );
 }
 
 .xp-session-user small {
-  color: #dbe5ff;
+  color:
+    #dbe5ff;
 
   font-size: 11px;
 }
 
 .xp-auth-message {
-  max-width: 480px;
+  max-width:
+    480px;
 
   animation:
-    xp-message-enter 180ms ease-out;
+    xp-message-enter
+    180ms
+    ease-out;
 }
 
 .xp-auth-message h1 {
-  margin: 0 0 9px;
+  margin:
+    0
+    0
+    9px;
 
-  color: white;
+  color:
+    #ffffff;
 
   font-size: 21px;
   font-weight: 400;
 
   text-shadow:
-    1px 1px 1px rgba(0, 0, 0, 0.25);
+    1px
+    1px
+    1px
+    rgba(
+      0,
+      0,
+      0,
+      0.25
+    );
 }
 
 .xp-auth-message p {
   margin: 0;
 
-  color: #e4ebff;
+  color:
+    #e4ebff;
 
   font-size: 12px;
 
@@ -1087,49 +1550,71 @@
 }
 
 .xp-auth-error h1 {
-  color: #fff2dc;
+  color:
+    #fff2dc;
 }
 
 .xp-auth-success h1 {
-  color: #ffffff;
+  color:
+    #ffffff;
 }
 
 @keyframes xp-message-enter {
   from {
     opacity: 0;
 
-    transform: translateY(4px);
+    transform:
+      translateY(
+        4px
+      );
   }
 
   to {
     opacity: 1;
 
-    transform: translateY(0);
+    transform:
+      translateY(
+        0
+      );
   }
 }
 
 
 /* =========================================================
-   15. XP MOVING BLOCK LOADER
+   16. XP MOVING BLOCK LOADER
    ========================================================= */
 
 .xp-loader {
   width: 136px;
   height: 18px;
 
-  margin-top: 22px;
+  margin-top:
+    22px;
 
   padding: 3px;
 
   overflow: hidden;
 
-  border: 1px solid #163c92;
+  border:
+    1px solid
+    #163c92;
+
   border-radius: 2px;
 
-  background: white;
+  background:
+    #ffffff;
 
   box-shadow:
-    inset 1px 1px 2px rgba(0, 0, 0, 0.28);
+    inset
+      1px
+      1px
+      2px
+      rgba(
+        0,
+        0,
+        0,
+        0.28
+      );
 }
 
 .xp-loader-track {
@@ -1150,54 +1635,83 @@
   border-radius: 1px;
 
   background:
-    linear-gradient(to right,
+    linear-gradient(
+      to right,
       #245fd2,
       #77a6ff,
-      #245fd2);
+      #245fd2
+    );
 
   animation:
-    xp-loader-move 1.45s linear infinite;
+    xp-loader-move
+    1.45s
+    linear
+    infinite;
 }
 
-.xp-loader-track span:nth-child(1) {
+.xp-loader-track
+  span:nth-child(1) {
   animation-delay: 0s;
 }
 
-.xp-loader-track span:nth-child(2) {
-  animation-delay: 0.12s;
+.xp-loader-track
+  span:nth-child(2) {
+  animation-delay:
+    0.12s;
 }
 
-.xp-loader-track span:nth-child(3) {
-  animation-delay: 0.24s;
+.xp-loader-track
+  span:nth-child(3) {
+  animation-delay:
+    0.24s;
 }
 
 @keyframes xp-loader-move {
   0% {
-    left: -20px;
+    left:
+      -20px;
   }
 
   100% {
-    left: 135px;
+    left:
+      135px;
   }
 }
 
 
 /* =========================================================
-   16. WATCH DOGS / SYSTEM RECOVERY INTERRUPTION
+   17. RECOVERY INTERRUPTION
    ========================================================= */
 
 .xp-recovery-message {
   display: inline-block;
 
-  margin-top: 22px;
+  margin-top:
+    22px;
 
-  padding: 7px 10px;
+  padding:
+    7px
+    10px;
 
-  border-left: 2px solid rgba(255, 255, 255, 0.75);
+  border-left:
+    2px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.75
+    );
 
-  background: rgba(0, 32, 80, 0.35);
+  background:
+    rgba(
+      0,
+      32,
+      80,
+      0.35
+    );
 
-  color: #ffffff;
+  color:
+    #ffffff;
 
   font-family:
     "Lucida Console",
@@ -1206,33 +1720,49 @@
 
   font-size: 10px;
 
-  letter-spacing: 0.04em;
+  letter-spacing:
+    0.04em;
 
   animation:
-    xp-recovery-glitch 120ms steps(2) 3;
+    xp-recovery-glitch
+    120ms
+    steps(2)
+    3;
 }
 
 @keyframes xp-recovery-glitch {
   0% {
-    transform: translateX(0);
+    transform:
+      translateX(
+        0
+      );
   }
 
   33% {
-    transform: translateX(-2px);
+    transform:
+      translateX(
+        -2px
+      );
   }
 
   66% {
-    transform: translateX(2px);
+    transform:
+      translateX(
+        2px
+      );
   }
 
   100% {
-    transform: translateX(0);
+    transform:
+      translateX(
+        0
+      );
   }
 }
 
 
 /* =========================================================
-   17. XP WELCOME
+   18. XP WELCOME
    ========================================================= */
 
 .xp-welcome-area {
@@ -1241,7 +1771,8 @@
 
   gap: 18px;
 
-  padding-left: 56px;
+  padding-left:
+    56px;
 }
 
 .xp-welcome-avatar {
@@ -1254,10 +1785,13 @@
   flex-direction: column;
 }
 
-.xp-welcome-message>span {
-  margin-bottom: 3px;
+.xp-welcome-message
+  > span {
+  margin-bottom:
+    3px;
 
-  color: #dfe8ff;
+  color:
+    #dfe8ff;
 
   font-size: 12px;
 }
@@ -1265,7 +1799,8 @@
 .xp-welcome-message h1 {
   margin: 0;
 
-  color: white;
+  color:
+    #ffffff;
 
   font-size: 31px;
   font-weight: 400;
@@ -1273,24 +1808,37 @@
   font-style: italic;
 
   text-shadow:
-    1px 2px 2px rgba(0, 0, 0, 0.3);
+    1px
+    2px
+    2px
+    rgba(
+      0,
+      0,
+      0,
+      0.3
+    );
 }
 
 .xp-welcome-message p {
-  margin: 8px 0 0;
+  margin:
+    8px
+    0
+    0;
 
-  color: #e3ebff;
+  color:
+    #e3ebff;
 
   font-size: 11px;
 }
 
 .xp-welcome-loader {
-  margin-top: 18px;
+  margin-top:
+    18px;
 }
 
 
 /* =========================================================
-   18. XP BOTTOM BAND
+   19. XP BOTTOM BAND
    ========================================================= */
 
 .xp-bottom-band {
@@ -1304,99 +1852,315 @@
   flex-shrink: 0;
 
   padding:
-    0 max(32px, calc((100vw - 1050px) / 2));
+    0
+    max(
+      32px,
+      calc(
+        (
+          100vw -
+          1050px
+        ) /
+        2
+      )
+    );
+
+  padding-bottom:
+    env(
+      safe-area-inset-bottom,
+      0px
+    );
 
   border-top:
-    2px solid rgba(255, 255, 255, 0.45);
+    2px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
 
   background:
-    linear-gradient(to bottom,
+    linear-gradient(
+      to bottom,
       #003399,
-      #002979);
+      #002979
+    );
 
-  color: #cbd9ff;
+  color:
+    #cbd9ff;
 
   font-size: 10px;
 }
 
 
 /* =========================================================
-   19. TABLET
+   20. TABLET
    ========================================================= */
 
-@media (max-width: 900px) {
-  .machine-info {
-    padding: 42px 34px;
+@media (
+  max-width: 900px
+) {
+  .remote-access-content
+    .machine-info {
+    padding:
+      38px
+      34px;
   }
 
-  .connection-panel {
-    padding: 48px 40px;
+  .remote-access-content
+    .connection-panel {
+    padding:
+      42px
+      40px;
   }
 }
 
 
 /* =========================================================
-   20. MOBILE LOGIN
+   21. SHORT VIEWPORT
    ========================================================= */
 
-@media (max-width: 760px) {
-  .auth-screen {
-    align-items: flex-start;
+@media (
+  max-height: 720px
+) and (
+  min-width: 761px
+) {
+  .remote-access-header {
+    min-height: 50px;
+  }
 
-    padding: 10px;
+  .remote-access-content
+    .machine-info {
+    padding:
+      24px
+      34px;
+  }
+
+  .remote-access-content
+    .connection-panel {
+    padding:
+      28px
+      42px;
+  }
+
+  .machine-heading {
+    margin-bottom:
+      18px;
+  }
+
+  .remote-access-content
+    .computer-screen {
+    width: 155px;
+    height: 105px;
+  }
+
+  .remote-access-content
+    .computer-visual {
+    margin-bottom:
+      14px;
+  }
+
+  .remote-access-content
+    .machine-status {
+    margin-bottom:
+      18px;
+  }
+
+  .remote-access-content
+    .machine-details {
+    gap: 10px;
+  }
+
+  .connection-heading {
+    margin-bottom:
+      20px;
+  }
+
+  .user-card {
+    margin-bottom:
+      18px;
+  }
+
+  .connection-notice {
+    margin-top:
+      18px;
+
+    padding-top:
+      13px;
+  }
+
+  .remote-access-footer {
+    min-height: 34px;
+  }
+
+  .xp-session-content {
+    padding:
+      32px
+      0;
+  }
+
+  .xp-user-row {
+    margin-bottom:
+      26px;
+  }
+
+  .xp-top-band,
+  .xp-bottom-band {
+    min-height: 48px;
+  }
+}
+
+
+/* =========================================================
+   22. VERY SHORT DESKTOP VIEWPORT
+   ========================================================= */
+
+@media (
+  max-height: 590px
+) and (
+  min-width: 761px
+) {
+  .remote-access-content
+    .machine-details {
+    display: none;
+  }
+
+  .remote-access-content
+    .computer-screen {
+    width: 135px;
+    height: 91px;
+  }
+
+  .machine-heading {
+    margin-bottom:
+      12px;
+  }
+
+  .remote-access-content
+    .machine-status {
+    margin-bottom: 0;
+  }
+
+  .connection-heading p {
+    line-height: 1.4;
+  }
+
+  .connection-notice {
+    display: none;
+  }
+
+  .remote-access-content
+    .connection-panel {
+    padding:
+      18px
+      36px;
+  }
+
+  .xp-session-content {
+    padding:
+      20px
+      0;
+  }
+
+  .xp-session-divider {
+    height: 220px;
+  }
+}
+
+
+/* =========================================================
+   23. MOBILE REMOTE ACCESS
+   ========================================================= */
+
+@media (
+  max-width: 760px
+) {
+  .remote-access-screen {
+    padding: 0;
+
+    overflow: hidden;
+  }
+
+  .remote-access-shell {
+    height: 100%;
+
+    overflow: hidden;
+  }
+
+  .remote-access-header {
+    min-height: 52px;
+
+    padding:
+      0
+      18px;
+  }
+
+  .remote-access-host-status {
+    display: none;
+  }
+
+  .remote-access-content {
+    display: flex;
+    flex-direction: column;
+
+    min-height: 0;
 
     overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior:
+      contain;
   }
 
-  .access-window {
-    margin: auto 0;
-  }
+  .remote-access-content
+    .machine-info {
+    flex-shrink: 0;
 
-  .access-titlebar {
-    font-size: 10px;
-  }
-
-  .titlebar-controls span {
-    width: 21px;
-    height: 20px;
-  }
-
-  .access-content {
-    grid-template-columns: 1fr;
-
-    min-height: auto;
-  }
-
-  .machine-info {
-    padding: 30px 24px;
+    padding:
+      26px
+      24px;
 
     border-right: 0;
-    border-bottom: 1px solid #aca899;
+
+    border-bottom:
+      1px solid
+      #aca899;
   }
 
-  .machine-section-title {
-    margin-bottom: 23px;
+  .machine-heading {
+    margin-bottom:
+      20px;
   }
 
-  .computer-screen {
+  .remote-access-content
+    .computer-screen {
     width: 150px;
     height: 101px;
   }
 
-  .machine-details {
+  .remote-access-content
+    .machine-details {
     display: none;
   }
 
-  .machine-status {
+  .remote-access-content
+    .machine-status {
     margin-bottom: 0;
   }
 
-  .connection-panel {
-    padding: 34px 24px 38px;
+  .remote-access-content
+    .connection-panel {
+    flex-shrink: 0;
+
+    padding:
+      30px
+      24px
+      36px;
   }
 
   .connection-heading {
-    margin-bottom: 27px;
+    margin-bottom:
+      27px;
   }
 
   .connection-heading h1 {
@@ -1404,28 +2168,39 @@
   }
 
   .password-field input {
-    padding: 12px 10px;
+    padding:
+      12px
+      10px;
 
     font-size: 16px;
   }
 
-  .access-footer {
-    justify-content: space-between;
+  .remote-access-footer {
+    flex-shrink: 0;
 
-    gap: 8px;
+    min-height: 36px;
+
+    padding-left:
+      18px;
+
+    padding-right:
+      18px;
   }
 
-  .access-footer span:nth-child(2) {
+  .remote-access-footer
+    span:nth-child(2) {
     display: none;
   }
 }
 
 
 /* =========================================================
-   21. MOBILE XP SESSION
+   24. MOBILE XP SESSION
    ========================================================= */
 
-@media (max-width: 760px) {
+@media (
+  max-width: 760px
+) {
   .xp-session-content {
     display: flex;
     flex-direction: column;
@@ -1433,9 +2208,14 @@
     align-items: flex-start;
     justify-content: center;
 
-    width: calc(100% - 48px);
+    width:
+      calc(
+        100% - 48px
+      );
 
-    padding: 40px 0;
+    padding:
+      40px
+      0;
   }
 
   .xp-brand {
@@ -1443,7 +2223,10 @@
 
     width: 100%;
 
-    padding: 0 0 34px;
+    padding:
+      0
+      0
+      34px;
   }
 
   .xp-brand div {
@@ -1465,13 +2248,21 @@
     width: 100%;
     height: 1px;
 
-    margin-bottom: 34px;
+    margin-bottom:
+      34px;
 
     background:
-      linear-gradient(to right,
+      linear-gradient(
+        to right,
         transparent,
-        rgba(255, 255, 255, 0.65),
-        transparent);
+        rgba(
+          255,
+          255,
+          255,
+          0.65
+        ),
+        transparent
+      );
   }
 
   .xp-account-area,
@@ -1482,7 +2273,8 @@
   }
 
   .xp-user-row {
-    margin-bottom: 28px;
+    margin-bottom:
+      28px;
   }
 
   .xp-session-avatar {
@@ -1495,39 +2287,55 @@
   }
 
   .xp-bottom-band {
-    padding: 0 24px;
+    padding:
+      0
+      24px;
+
+    padding-bottom:
+      env(
+        safe-area-inset-bottom,
+        0px
+      );
   }
 }
 
 
 /* =========================================================
-   22. VERY SMALL MOBILE
+   25. VERY SMALL MOBILE
    ========================================================= */
 
-@media (max-width: 420px) {
-  .auth-screen {
-    padding: 0;
+@media (
+  max-width: 420px
+) {
+  .remote-access-header {
+    min-height: 48px;
+
+    padding:
+      0
+      14px;
   }
 
-  .access-window {
-    width: 100%;
-
-    border-left: 0;
-    border-right: 0;
-
-    border-radius: 0;
+  .remote-access-brand {
+    font-size: 8px;
   }
 
-  .access-titlebar {
-    height: 34px;
+  .remote-access-header strong {
+    font-size: 11px;
   }
 
-  .machine-info {
-    padding: 25px 20px;
+  .remote-access-content
+    .machine-info {
+    padding:
+      22px
+      18px;
   }
 
-  .connection-panel {
-    padding: 30px 20px 34px;
+  .remote-access-content
+    .connection-panel {
+    padding:
+      26px
+      18px
+      32px;
   }
 
   .connection-heading h1 {
@@ -1535,17 +2343,35 @@
   }
 
   .password-enter {
-    padding: 0 10px;
+    padding:
+      0
+      10px;
 
     font-size: 8px;
   }
 
-  .access-footer span:last-child {
+  .remote-access-footer {
+    min-height: 34px;
+
+    padding-left:
+      14px;
+
+    padding-right:
+      14px;
+  }
+
+  .remote-access-footer
+    span:nth-child(2),
+  .remote-access-footer
+    span:nth-child(3) {
     display: none;
   }
 
   .xp-session-content {
-    width: calc(100% - 32px);
+    width:
+      calc(
+        100% - 32px
+      );
   }
 
   .xp-brand-mark {
@@ -1571,22 +2397,96 @@
     font-size: 27px;
   }
 
-  .xp-bottom-band span:last-child {
+  .xp-bottom-band
+    span:last-child {
     display: none;
   }
 }
 
 
 /* =========================================================
-   23. ACCESSIBILITY
+   26. MOBILE LANDSCAPE
    ========================================================= */
 
-@media (prefers-reduced-motion: reduce) {
+@media (
+  max-height: 500px
+) and (
+  max-width: 900px
+) {
+  .remote-access-header {
+    min-height: 44px;
+  }
 
+  .remote-access-content
+    .machine-info {
+    padding:
+      18px
+      24px;
+  }
+
+  .remote-access-content
+    .computer-visual {
+    display: none;
+  }
+
+  .remote-access-content
+    .connection-panel {
+    padding:
+      20px
+      24px;
+  }
+
+  .machine-heading,
+  .connection-heading {
+    margin-bottom:
+      16px;
+  }
+
+  .user-card {
+    margin-bottom:
+      14px;
+  }
+
+  .connection-notice {
+    display: none;
+  }
+
+  .remote-access-footer {
+    min-height: 32px;
+  }
+
+  .xp-top-band,
+  .xp-bottom-band {
+    min-height: 42px;
+  }
+
+  .xp-session-content {
+    padding:
+      16px
+      0;
+  }
+
+  .xp-user-row {
+    margin-bottom:
+      18px;
+  }
+}
+
+
+/* =========================================================
+   27. ACCESSIBILITY
+   ========================================================= */
+
+@media (
+  prefers-reduced-motion: reduce
+) {
   .xp-auth-message,
   .xp-recovery-message,
   .xp-loader-track span {
-    animation-duration: 0.01ms;
-    animation-iteration-count: 1;
+    animation-duration:
+      0.01ms;
+
+    animation-iteration-count:
+      1;
   }
 }

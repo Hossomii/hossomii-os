@@ -2,7 +2,10 @@ import type { FileSystemItem } from "../../../types/filesystem";
 
 import documentsIcon from "../../../assets/icons/documents.webp";
 import projectsIcon from "../../../assets/icons/projects.webp";
-import { getFileSystemIcon } from "../../../system/filesystem/iconRegistry";
+import {
+  getFileExtensionIcon,
+  getFileSystemIcon,
+} from "../../../system/filesystem/iconRegistry";
 
 type ExplorerDirectoryViewProps = {
   currentItem: FileSystemItem | undefined;
@@ -53,6 +56,14 @@ export function ExplorerDirectoryView({
       return <img src={customIcon} alt="" draggable={false} />;
     }
 
+    if (item.type === "file") {
+      const extensionIcon = getFileExtensionIcon(item.extension);
+
+      if (extensionIcon) {
+        return <img src={extensionIcon} alt="" draggable={false} />;
+      }
+    }
+
     if (item.id === "documents") {
       return <img src={documentsIcon} alt="" />;
     }
@@ -74,36 +85,6 @@ export function ExplorerDirectoryView({
     }
 
     if (item.type === "file") {
-      if (item.extension.toLowerCase() === "txt") {
-        return (
-          <span
-            className="
-          explorer-generic-icon
-          explorer-file-icon
-          explorer-file-icon-txt
-        "
-            aria-hidden="true"
-          >
-            TXT
-          </span>
-        );
-      }
-
-      if (item.extension.toLowerCase() === "pdf") {
-        return (
-          <span
-            className="
-          explorer-generic-icon
-          explorer-file-icon
-          explorer-file-icon-pdf
-        "
-            aria-hidden="true"
-          >
-            PDF
-          </span>
-        );
-      }
-
       if (
         item.type === "file" &&
         ["webp", "png", "jpg", "jpeg"].includes(item.extension.toLowerCase()) &&

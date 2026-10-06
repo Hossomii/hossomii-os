@@ -1,10 +1,140 @@
 /* =========================================================
-   HOSSOMII OS
-   Shutdown / Power Off
+   1. POWER / BOOT SPLASH
    ========================================================= */
 
+.power-screen,
+.power-on-screen {
+  position: fixed;
+  inset: 0;
+
+  display: grid;
+  place-items: center;
+
+  width: 100%;
+
+  height: 100vh;
+  height: 100dvh;
+
+  overflow: hidden;
+
+  background: #020304;
+
+  color: #ffffff;
+
+  user-select: none;
+}
+
 /* =========================================================
-   SHUTDOWN
+   2. MINIMAL POWER BUTTON
+   ========================================================= */
+
+.power-button-minimal {
+  display: grid;
+  place-items: center;
+
+  width: 74px;
+  height: 74px;
+
+  padding: 0;
+
+  border: 1px solid #303842;
+  border-radius: 50%;
+
+  background: radial-gradient(circle at 45% 38%, #1b222a, #090d11 68%);
+
+  color: #718092;
+
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.08),
+    0 12px 36px rgba(0, 0, 0, 0.6);
+
+  transition:
+    border-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease,
+    transform 100ms ease;
+}
+
+.power-button-minimal span {
+  transform: translateY(-1px);
+
+  font-size: 33px;
+}
+
+.power-button-minimal:hover,
+.power-button-minimal:focus-visible {
+  border-color: #568ed2;
+
+  color: #78b5ff;
+
+  outline: none;
+
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.1),
+    0 0 24px rgba(62, 133, 222, 0.18),
+    0 14px 38px rgba(0, 0, 0, 0.6);
+}
+
+.power-button-minimal:active {
+  transform: scale(0.96);
+}
+
+/* =========================================================
+   3. MOTHERBOARD / BOOT LOGO
+   ========================================================= */
+
+.power-on-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 18px;
+
+  text-align: center;
+
+  animation: power-brand-enter 500ms ease-out both;
+}
+
+.power-on-brand img {
+  display: block;
+
+  width: min(330px, 68vw);
+
+  max-height: 240px;
+
+  object-fit: contain;
+
+  image-rendering: auto;
+}
+
+.power-on-brand span {
+  color: #7d8793;
+
+  font-family: "Lucida Console", "Courier New", monospace;
+
+  font-size: 9px;
+
+  letter-spacing: 2.2px;
+}
+
+@keyframes power-brand-enter {
+  from {
+    opacity: 0;
+
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+}
+
+/* =========================================================
+   4. SHUTDOWN
    ========================================================= */
 
 .shutdown-screen {
@@ -16,13 +146,15 @@
   justify-content: center;
 
   width: 100%;
-  height: 100%;
+
+  height: 100vh;
+  height: 100dvh;
 
   overflow: hidden;
 
   background: linear-gradient(to bottom, #3168c6, #2454a7);
 
-  color: white;
+  color: #ffffff;
 
   font-family: Tahoma, Verdana, Arial, sans-serif;
 
@@ -79,6 +211,52 @@
   text-shadow: 1px 1px rgba(0, 0, 0, 0.3);
 }
 
+/* =========================================================
+   5. SHUTDOWN PROGRESS
+   ========================================================= */
+
+.shutdown-progress {
+  display: flex;
+
+  gap: 4px;
+
+  margin-top: 24px;
+}
+
+.shutdown-progress span {
+  width: 8px;
+  height: 8px;
+
+  background: #ffffff;
+
+  opacity: 0.25;
+
+  animation: shutdown-progress-block 900ms steps(1) infinite;
+}
+
+.shutdown-progress span:nth-child(2) {
+  animation-delay: 300ms;
+}
+
+.shutdown-progress span:nth-child(3) {
+  animation-delay: 600ms;
+}
+
+@keyframes shutdown-progress-block {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  33% {
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   6. RESTART
+   ========================================================= */
+
 .restart-screen {
   position: fixed;
   inset: 0;
@@ -87,7 +265,9 @@
   place-items: center;
 
   width: 100%;
-  height: 100%;
+
+  height: 100vh;
+  height: 100dvh;
 
   overflow: hidden;
 
@@ -191,166 +371,303 @@
 }
 
 /* =========================================================
-   OLD STYLE PROGRESS
-   ========================================================= */
-
-.shutdown-progress {
-  display: flex;
-
-  gap: 4px;
-
-  margin-top: 24px;
-}
-
-.shutdown-progress span {
-  width: 8px;
-  height: 8px;
-
-  background: white;
-
-  opacity: 0.25;
-
-  animation: shutdown-progress-block 900ms steps(1) infinite;
-}
-
-.shutdown-progress span:nth-child(2) {
-  animation-delay: 300ms;
-}
-
-.shutdown-progress span:nth-child(3) {
-  animation-delay: 600ms;
-}
-
-@keyframes shutdown-progress-block {
-  0%,
-  100% {
-    opacity: 0.2;
-  }
-
-  33% {
-    opacity: 1;
-  }
-}
-
-/* =========================================================
-   POWERED OFF
+   7. POWERED OFF
    ========================================================= */
 
 .powered-off-screen {
   position: fixed;
   inset: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
 
   width: 100%;
-  height: 100%;
 
-  padding: 24px;
+  height: 100vh;
+  height: 100dvh;
 
-  overflow: hidden;
+  min-height: 100svh;
 
-  background: #04091a;
+  padding: 28px;
 
-  color: #dce7ff;
+  overflow: auto;
+
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(83, 112, 255, 0.26),
+      transparent 32%
+    ),
+    radial-gradient(circle at 82% 78%, rgba(255, 73, 92, 0.2), transparent 30%),
+    linear-gradient(135deg, #111a45, #12142f 48%, #27132d);
+
+  color: #1f2440;
 
   font-family: Tahoma, Verdana, Arial, sans-serif;
 
   user-select: none;
 }
 
+/* dotted Y2K texture */
+
 .powered-off-screen::before {
   content: "";
 
-  position: absolute;
+  position: fixed;
   inset: 0;
 
   pointer-events: none;
 
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 3px,
-    rgba(255, 255, 255, 0.012) 4px
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.12) 1px,
+    transparent 1px
   );
 
-  opacity: 0.65;
+  background-size: 18px 18px;
+
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
 }
 
 /* =========================================================
-   CONTENT
+   DECORATIONS
+   ========================================================= */
+
+.powered-off-decoration {
+  position: fixed;
+
+  z-index: 0;
+
+  pointer-events: none;
+
+  font-family: Georgia, serif;
+
+  text-shadow: 0 3px rgba(0, 0, 0, 0.15);
+
+  animation: powered-off-float 4s ease-in-out infinite;
+}
+
+.powered-off-star-one {
+  top: 12%;
+  left: 8%;
+
+  color: #ffdf5a;
+
+  font-size: clamp(24px, 4vw, 48px);
+
+  transform: rotate(-12deg);
+}
+
+.powered-off-star-two {
+  right: 9%;
+  bottom: 15%;
+
+  color: #74d9ff;
+
+  font-size: clamp(22px, 3vw, 40px);
+
+  animation-delay: -1.4s;
+}
+
+.powered-off-heart {
+  top: 18%;
+  right: 11%;
+
+  color: #ff7385;
+
+  font-size: clamp(24px, 3vw, 42px);
+
+  transform: rotate(9deg);
+
+  animation-delay: -2.3s;
+}
+
+@keyframes powered-off-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -7px;
+  }
+}
+
+/* =========================================================
+   8. POWERED OFF CARD
+   ========================================================= */
+
+.powered-off-card {
+  position: relative;
+
+  z-index: 1;
+
+  width: min(620px, 100%);
+
+  overflow: hidden;
+
+  border: 2px solid #d8dcff;
+
+  border-radius: 11px;
+
+  background: #f5f4ec;
+
+  box-shadow:
+    0 0 0 3px rgba(66, 91, 196, 0.78),
+    0 24px 70px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.powered-off-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 34px;
+
+  padding: 0 11px;
+
+  border-bottom: 1px solid #4860b5;
+
+  background: linear-gradient(to bottom, #7089ee, #425db9);
+
+  color: #ffffff;
+
+  font-family: "Lucida Console", "Courier New", monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 0.65px;
+
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.powered-off-offline {
+  color: #ffd4da;
+}
+
+/* =========================================================
+   9. MAIN CONTENT
    ========================================================= */
 
 .powered-off-content {
   position: relative;
 
-  z-index: 1;
-
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  width: min(560px, 100%);
+  padding: 48px 52px 34px;
 
   text-align: center;
+
+  background: linear-gradient(180deg, #fffef8, #f3f0e6);
 }
 
-.powered-off-mark {
+.powered-off-content::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  top: 0;
+
+  height: 7px;
+
+  background: linear-gradient(
+    to right,
+    #ff5d6c 0%,
+    #ff5d6c 25%,
+    #f8d74a 25%,
+    #f8d74a 50%,
+    #61c879 50%,
+    #61c879 75%,
+    #5798ff 75%,
+    #5798ff 100%
+  );
+}
+
+.powered-off-sticker {
+  position: absolute;
+
+  top: 24px;
+  right: 28px;
+
   display: grid;
   place-items: center;
 
   width: 54px;
   height: 54px;
 
-  margin-bottom: 18px;
+  border: 2px solid #be3c4a;
 
-  border: 1px solid #7991b8;
+  border-radius: 50%;
 
-  background: #111d38;
+  background: #ff6977;
 
   color: #ffffff;
 
-  font-family: "Lucida Console", "Courier New", monospace;
+  font-family: "Comic Sans MS", "Trebuchet MS", sans-serif;
 
-  font-size: 28px;
+  font-size: 11px;
   font-weight: 700;
 
-  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.15);
+  transform: rotate(9deg);
+
+  box-shadow: 3px 4px 0 #d7d2b9;
+}
+
+.powered-off-eyebrow {
+  margin-bottom: 8px;
+
+  color: #5d6cb5;
+
+  font-family: "Lucida Console", "Courier New", monospace;
+
+  font-size: 8px;
+
+  letter-spacing: 1.5px;
 }
 
 .powered-off-content h1 {
-  margin: 0 0 16px;
+  margin: 0 0 14px;
 
-  color: white;
+  color: #273672;
 
-  font-size: clamp(26px, 5vw, 40px);
+  font-size: clamp(30px, 7vw, 48px);
 
   font-weight: 700;
 
-  letter-spacing: -0.5px;
+  letter-spacing: -1.5px;
+
+  text-shadow: 2px 2px 0 #cbd3ff;
 }
 
 .powered-off-message {
   margin: 0 0 8px;
 
-  color: #ffffff;
-
-  font-family: "Lucida Console", "Courier New", monospace;
+  color: #303653;
 
   font-size: clamp(13px, 2vw, 16px);
+
+  font-weight: 700;
 }
 
 .powered-off-subtitle {
-  margin: 0 0 34px;
+  margin: 0 0 30px;
 
-  color: #8798b5;
+  color: #75758a;
 
   font-size: 11px;
+
+  line-height: 1.55;
 }
 
 /* =========================================================
-   EXTERNAL LINKS
+   10. LINKS
    ========================================================= */
 
 .powered-off-links {
@@ -362,65 +679,84 @@
 
   gap: 12px;
 
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .powered-off-links a {
-  display: flex;
+  display: grid;
   align-items: center;
+
+  grid-template-columns:
+    auto
+    minmax(0, 1fr)
+    auto;
+
+  gap: 11px;
 
   min-width: 0;
 
-  gap: 12px;
+  padding: 11px 12px;
 
-  padding: 13px;
+  border: 1px solid #9ea7cf;
 
-  border: 1px solid #536784;
+  border-radius: 5px;
 
-  background: #111a2c;
+  background: linear-gradient(to bottom, #ffffff, #e8e9f4);
 
-  color: white;
+  color: #26315e;
 
   text-align: left;
 
   text-decoration: none;
 
-  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.07);
+  box-shadow:
+    inset 1px 1px #ffffff,
+    2px 3px 0 #d8d5c6;
 
-  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease;
 }
 
 .powered-off-links a:hover,
 .powered-off-links a:focus-visible {
-  border-color: #8daee0;
-
-  background: #182746;
+  border-color: #556fc9;
 
   outline: none;
+
+  transform: translateY(-2px);
 }
 
 .powered-off-link-icon {
   display: grid;
   place-items: center;
 
-  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
 
-  width: 36px;
-  height: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
 
-  border: 1px solid #657da5;
+  border-radius: 4px;
 
-  background: #e2e7ee;
-
-  color: #12244a;
+  color: #ffffff;
 
   font-family: "Lucida Console", "Courier New", monospace;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
+
+  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.35);
 }
 
-.powered-off-links a > span:last-child {
+.powered-off-github-icon {
+  background: linear-gradient(145deg, #45475f, #222435);
+}
+
+.powered-off-linkedin-icon {
+  background: linear-gradient(145deg, #5ba8eb, #2567ad);
+}
+
+.powered-off-links a > span:nth-child(2) {
   display: flex;
   flex-direction: column;
 
@@ -430,133 +766,251 @@
 }
 
 .powered-off-links strong {
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .powered-off-links small {
   overflow: hidden;
 
-  color: #93a5c1;
+  color: #777d9a;
 
-  font-size: 9px;
+  font-size: 8px;
 
   white-space: nowrap;
+
   text-overflow: ellipsis;
 }
 
+.powered-off-link-arrow {
+  color: #6874a9;
+
+  font-size: 13px;
+}
+
 /* =========================================================
-   RESTART
+   11. POWER ON AGAIN
    ========================================================= */
 
-.powered-off-restart {
-  padding: 8px 15px;
+.powered-off-power {
+  display: flex;
+  align-items: center;
 
-  border: 1px solid #7c91af;
+  gap: 8px;
 
-  background: linear-gradient(to bottom, #263c62, #152642);
+  padding: 9px 16px;
 
-  color: white;
+  border: 1px solid #4860ad;
 
-  font-family: Tahoma, Verdana, sans-serif;
+  border-radius: 4px;
 
-  font-size: 11px;
+  background: linear-gradient(to bottom, #7088e1, #405bae);
+
+  color: #ffffff;
+
+  font-family: Tahoma, Verdana, Arial, sans-serif;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-shadow: 1px 1px rgba(0, 0, 0, 0.25);
 
   cursor: pointer;
 
-  box-shadow: inset 1px 1px rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 1px 1px rgba(255, 255, 255, 0.35),
+    2px 3px 0 #d1cebf;
 }
 
-.powered-off-restart:hover {
-  background: linear-gradient(to bottom, #31517f, #1b3154);
+.powered-off-power span {
+  font-size: 16px;
 }
 
-.powered-off-restart:active {
-  box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.45);
+.powered-off-power:hover,
+.powered-off-power:focus-visible {
+  background: linear-gradient(to bottom, #829aff, #4c68c8);
+
+  outline: 1px dotted #ffffff;
+
+  outline-offset: -4px;
 }
 
-.powered-off-hint {
-  margin-top: 24px;
+.powered-off-power:active {
+  translate: 1px 1px;
 
-  color: #52647f;
-
-  font-family: "Lucida Console", "Courier New", monospace;
-
-  font-size: 9px;
-
-  letter-spacing: 0.7px;
+  box-shadow: inset 1px 2px 3px rgba(0, 0, 0, 0.25);
 }
 
 /* =========================================================
-   MOBILE
+   TICKER
    ========================================================= */
 
-@media (max-width: 520px) {
+.powered-off-ticker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 9px 16px;
+
+  width: 100%;
+
+  margin-top: 30px;
+
+  padding-top: 13px;
+
+  border-top: 1px dashed #b7b8c8;
+
+  color: #81839d;
+
+  font-family: "Lucida Console", "Courier New", monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.5px;
+}
+
+.powered-off-ticker span:first-child {
+  color: #d05262;
+}
+
+.powered-off-ticker span:nth-child(2) {
+  color: #5269b4;
+}
+
+.powered-off-ticker span:last-child {
+  color: #398d5d;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.powered-off-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  min-height: 30px;
+
+  padding: 0 11px;
+
+  background: #dedbcf;
+
+  color: #77766f;
+
+  font-family: "Lucida Console", "Courier New", monospace;
+
+  font-size: 7px;
+
+  letter-spacing: 0.4px;
+}
+
+/* =========================================================
+   12. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 560px) {
   .powered-off-screen {
-    padding: 18px 14px;
+    padding: 18px 12px;
+  }
+
+  .powered-off-content {
+    padding: 44px 20px 28px;
+  }
+
+  .powered-off-sticker {
+    top: 19px;
+    right: 18px;
+
+    width: 46px;
+    height: 46px;
+
+    font-size: 9px;
   }
 
   .powered-off-links {
     grid-template-columns: 1fr;
   }
 
-  .powered-off-subtitle {
-    margin-bottom: 24px;
+  .powered-off-decoration {
+    opacity: 0.55;
   }
 
-  .powered-off-links a {
-    padding: 11px;
+  .powered-off-card-footer span:last-child {
+    display: none;
   }
 }
 
-/* =========================================================
-   SHORT VIEWPORT
-   ========================================================= */
-
-@media (max-height: 620px) {
+@media (max-height: 650px) {
   .powered-off-screen {
-    align-items: flex-start;
+    place-items: start center;
 
-    overflow-y: auto;
+    padding-top: 22px;
 
-    padding-top: 28px;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   }
 
-  .powered-off-mark {
+  .powered-off-content {
+    padding-top: 38px;
+
+    padding-bottom: 24px;
+  }
+
+  .powered-off-sticker {
     width: 44px;
     height: 44px;
-
-    margin-bottom: 12px;
-
-    font-size: 22px;
-  }
-
-  .powered-off-content h1 {
-    margin-bottom: 10px;
   }
 
   .powered-off-subtitle {
     margin-bottom: 20px;
   }
 
-  .powered-off-hint {
-    margin-top: 16px;
+  .powered-off-links {
+    margin-bottom: 20px;
+  }
+
+  .powered-off-ticker {
+    margin-top: 22px;
   }
 }
 
 /* =========================================================
-   REDUCED MOTION
+   13. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .shutdown-progress span {
+  .power-button-minimal,
+  .power-on-brand {
+    animation: none;
+
+    transition: none;
+  }
+
+  .power-button-minimal:active {
+    transform: none;
+  }
+
+  .shutdown-progress span,
+  .restart-progress span {
     animation: none;
 
     opacity: 0.8;
   }
 
-  .restart-progress span {
+  .powered-off-decoration {
     animation: none;
+  }
 
-    opacity: 0.8;
+  .powered-off-links a {
+    transition: none;
+  }
+
+  .powered-off-links a:hover,
+  .powered-off-links a:focus-visible {
+    transform: none;
+  }
+
+  .powered-off-power:active {
+    translate: none;
   }
 }

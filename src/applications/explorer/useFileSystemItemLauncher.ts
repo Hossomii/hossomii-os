@@ -9,7 +9,10 @@ import terminalIcon from "../../assets/icons/terminal.webp";
 import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
 import browserIcon from "../../assets/icons/browser.webp";
 
-import { getFileSystemIcon } from "../../system/filesystem/iconRegistry";
+import {
+  getFileExtensionIcon,
+  getFileSystemIcon,
+} from "../../system/filesystem/iconRegistry";
 
 import type { FileSystemItem } from "../../types/filesystem";
 
@@ -153,7 +156,7 @@ export function useFileSystemItemLauncher({
 
         title: `${item.name} - Bloco de Notas`,
 
-        icon: documentsIcon,
+        icon: getFileExtensionIcon("txt") ?? documentsIcon,
 
         data: {
           fileId: item.id,
@@ -171,7 +174,7 @@ export function useFileSystemItemLauncher({
 
         title: `${item.name} - Visualizador de PDF`,
 
-        icon: documentsIcon,
+        icon: getFileExtensionIcon("pdf") ?? documentsIcon,
 
         data: {
           fileId: item.id,

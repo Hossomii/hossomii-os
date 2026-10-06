@@ -1,4 +1,14 @@
-import { useFileSystemStore } from "../../stores/filesystemStore";
+import {
+  useEffect,
+} from "react";
+
+import {
+  useAchievementStore,
+} from "../../stores/achievementStore";
+
+import {
+  useFileSystemStore,
+} from "../../stores/filesystemStore";
 
 type PdfViewerAppProps = {
   fileId: string;
@@ -7,12 +17,39 @@ type PdfViewerAppProps = {
 export function PdfViewerApp({
   fileId,
 }: PdfViewerAppProps) {
-  const file = useFileSystemStore(
-    (state) =>
-      state.items.find(
-        (item) => item.id === fileId
-      )
-  );
+  const file =
+    useFileSystemStore(
+      (state) =>
+        state.items.find(
+          (item) =>
+            item.id === fileId
+        )
+    );
+
+  const unlockAchievement =
+    useAchievementStore(
+      (state) =>
+        state.unlockAchievement
+    );
+
+  useEffect(() => {
+    if (
+      !file ||
+      file.type !== "file" ||
+      file.extension.toLowerCase() !==
+        "pdf" ||
+      !file.resourceUrl
+    ) {
+      return;
+    }
+
+    unlockAchievement(
+      "first-pdf-file"
+    );
+  }, [
+    file,
+    unlockAchievement,
+  ]);
 
   if (
     !file ||

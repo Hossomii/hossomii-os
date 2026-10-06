@@ -1,4 +1,13 @@
-import { useEffect } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
+
+import {
+  gsap,
+} from "gsap";
 
 import {
   ACHIEVEMENTS,
@@ -6,6 +15,16 @@ import {
 } from "../../stores/achievementStore";
 
 export function AchievementNotification() {
+  const notificationRef =
+    useRef<HTMLElement>(
+      null
+    );
+
+  const isDismissing =
+    useRef(
+      false
+    );
+
   const pendingNotifications =
     useAchievementStore(
       (state) =>
@@ -21,27 +40,158 @@ export function AchievementNotification() {
   const activeAchievementId =
     pendingNotifications[0];
 
-  useEffect(() => {
-    if (!activeAchievementId) {
+  const dismissWithAnimation =
+    useCallback(() => {
+      if (
+        isDismissing.current
+      ) {
+        return;
+      }
+
+      const element =
+        notificationRef.current;
+
+      const prefersReducedMotion =
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+      if (
+        !element ||
+        prefersReducedMotion
+      ) {
+        dismissNotification();
+
+        return;
+      }
+
+      isDismissing.current =
+        true;
+
+      gsap.killTweensOf(
+        element
+      );
+
+      gsap.to(
+        element,
+        {
+          opacity: 0,
+
+          y: 10,
+
+          scale: 0.985,
+
+          duration: 0.16,
+
+          ease:
+            "power2.in",
+
+          onComplete: () => {
+            dismissNotification();
+
+            isDismissing.current =
+              false;
+          },
+        }
+      );
+    }, [
+      dismissNotification,
+    ]);
+
+  useLayoutEffect(() => {
+    if (
+      !activeAchievementId
+    ) {
       return;
     }
 
-    const timer = window.setTimeout(
-      () => {
-        dismissNotification();
-      },
-      5500
+    const element =
+      notificationRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    isDismissing.current =
+      false;
+
+    const prefersReducedMotion =
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+    if (
+      prefersReducedMotion
+    ) {
+      return;
+    }
+
+    gsap.killTweensOf(
+      element
     );
 
+    const animation =
+      gsap.fromTo(
+        element,
+        {
+          opacity: 0,
+
+          y: 12,
+
+          scale: 0.985,
+        },
+        {
+          opacity: 1,
+
+          y: 0,
+
+          scale: 1,
+
+          duration: 0.2,
+
+          ease:
+            "power2.out",
+
+          clearProps:
+            "transform,opacity",
+        }
+      );
+
     return () => {
-      window.clearTimeout(timer);
+      animation.kill();
     };
   }, [
     activeAchievementId,
-    dismissNotification,
   ]);
 
-  if (!activeAchievementId) {
+  useEffect(() => {
+    if (
+      !activeAchievementId
+    ) {
+      return;
+    }
+
+    const timer =
+      window.setTimeout(
+        () => {
+          dismissWithAnimation();
+        },
+        5500
+      );
+
+    return () => {
+      window.clearTimeout(
+        timer
+      );
+    };
+  }, [
+    activeAchievementId,
+    dismissWithAnimation,
+  ]);
+
+  if (
+    !activeAchievementId
+  ) {
     return null;
   }
 
@@ -52,6 +202,9 @@ export function AchievementNotification() {
 
   return (
     <aside
+      ref={
+        notificationRef
+      }
       className="achievement-notification"
       role="status"
       aria-live="polite"
@@ -69,11 +222,15 @@ export function AchievementNotification() {
         </span>
 
         <strong>
-          {achievement.title}
+          {
+            achievement.title
+          }
         </strong>
 
         <p>
-          {achievement.description}
+          {
+            achievement.description
+          }
         </p>
       </div>
 
@@ -82,7 +239,7 @@ export function AchievementNotification() {
         className="achievement-notification-close"
         aria-label="Fechar notificação"
         onClick={
-          dismissNotification
+          dismissWithAnimation
         }
       >
         ×
