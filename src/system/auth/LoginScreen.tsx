@@ -1,8 +1,15 @@
-import { useRef, useState, type FormEvent } from "react";
+import {
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 
 import { useSystemStore } from "../../stores/systemStore";
 
 import profileAvatar from "../../assets/profile-avatar.webp";
+
+import { audioManager } from "../audio/audioManager";
 
 import "../../styles/auth.css";
 
@@ -29,6 +36,21 @@ export function LoginScreen() {
     }
 
     setPhase("authenticating");
+  }
+
+  function handlePasswordKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
+    if (
+      event.key.length !== 1 ||
+      event.ctrlKey ||
+      event.metaKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
+    void audioManager.play("ui-keypress", {
+      playbackRate: 0.96 + Math.random() * 0.08,
+    });
   }
 
   function handlePasswordChange() {
@@ -160,6 +182,7 @@ export function LoginScreen() {
                   autoCapitalize="none"
                   spellCheck={false}
                   autoFocus
+                  onKeyDown={handlePasswordKeyDown}
                   onInput={handlePasswordChange}
                   aria-describedby="password-help"
                 />

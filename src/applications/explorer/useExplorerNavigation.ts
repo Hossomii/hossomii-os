@@ -2,30 +2,20 @@ import { useState } from "react";
 
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
-export function useExplorerNavigation(
-  initialLocation: string
-) {
-  const items = useFileSystemStore(
-    (state) => state.items
-  );
+import { audioManager } from "../../system/audio/audioManager";
 
-  const getItem = useFileSystemStore(
-    (state) => state.getItem
-  );
+export function useExplorerNavigation(initialLocation: string) {
+  const items = useFileSystemStore((state) => state.items);
 
-  const getChildren = useFileSystemStore(
-    (state) => state.getChildren
-  );
+  const getItem = useFileSystemStore((state) => state.getItem);
 
-  const getPath = useFileSystemStore(
-    (state) => state.getPath
-  );
+  const getChildren = useFileSystemStore((state) => state.getChildren);
 
-  const [currentLocation, setCurrentLocation] =
-    useState(initialLocation);
+  const getPath = useFileSystemStore((state) => state.getPath);
 
-  const [history, setHistory] =
-    useState<string[]>([]);
+  const [currentLocation, setCurrentLocation] = useState(initialLocation);
+
+  const [history, setHistory] = useState<string[]>([]);
 
   /*
    * Mantém o hook reagindo a alterações no filesystem.
@@ -37,31 +27,21 @@ export function useExplorerNavigation(
   void items;
 
   const currentItem =
-    currentLocation === "computer"
-      ? undefined
-      : getItem(currentLocation);
+    currentLocation === "computer" ? undefined : getItem(currentLocation);
 
   const currentChildren =
-    currentLocation === "computer"
-      ? []
-      : getChildren(currentLocation);
+    currentLocation === "computer" ? [] : getChildren(currentLocation);
 
-  const canGoBack =
-    history.length > 0;
+  const canGoBack = history.length > 0;
 
-  function navigateTo(
-    location: string
-  ) {
-    if (
-      location === currentLocation
-    ) {
+  function navigateTo(location: string) {
+    if (location === currentLocation) {
       return;
     }
 
-    setHistory((currentHistory) => [
-      ...currentHistory,
-      currentLocation,
-    ]);
+    void audioManager.play("ui-folder-open");
+
+    setHistory((currentHistory) => [...currentHistory, currentLocation]);
 
     setCurrentLocation(location);
   }
@@ -71,22 +51,17 @@ export function useExplorerNavigation(
       return;
     }
 
-    const previousLocation =
-      history[history.length - 1];
+    const previousLocation = history[history.length - 1];
 
-    setHistory((currentHistory) =>
-      currentHistory.slice(0, -1)
-    );
+    void audioManager.play("ui-folder-open");
 
-    setCurrentLocation(
-      previousLocation
-    );
+    setHistory((currentHistory) => currentHistory.slice(0, -1));
+
+    setCurrentLocation(previousLocation);
   }
 
   function getAddress() {
-    if (
-      currentLocation === "computer"
-    ) {
+    if (currentLocation === "computer") {
       return "Meu Computador";
     }
 

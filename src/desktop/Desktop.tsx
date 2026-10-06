@@ -63,6 +63,8 @@ import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
 
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
+import { audioManager } from "../system/audio/audioManager";
+
 import "../styles/desktop/index.css";
 
 const WALLPAPERS = {
@@ -314,6 +316,8 @@ export function Desktop() {
     setStartMenuOpen(false);
 
     setSelectedIcon(null);
+
+    void audioManager.play("system-shutdown");
 
     resetWindows();
 
