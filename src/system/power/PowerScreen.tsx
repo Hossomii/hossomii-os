@@ -1,22 +1,14 @@
 import { useSystemStore } from "../../stores/systemStore";
 
-import { audioManager } from "../audio/audioManager";
+import { playSound, preloadAudioGroup } from "../audio/audioService";
 
 export function PowerScreen() {
   const powerOnSystem = useSystemStore((state) => state.powerOnSystem);
 
   function handlePowerOn() {
-    audioManager.preload([
-      "ui-keypress",
-      "ui-error",
-      "ui-folder-open",
-      "system-login",
-      "system-shutdown",
-      "system-recovery",
-      "system-glitch",
-    ]);
+    preloadAudioGroup("session");
 
-    void audioManager.play("system-startup");
+    void playSound("system-startup");
 
     powerOnSystem();
   }

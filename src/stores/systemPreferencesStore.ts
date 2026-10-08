@@ -2,10 +2,6 @@ import {
   create,
 } from "zustand";
 
-import {
-  audioManager,
-} from "../system/audio/audioManager";
-
 export type SystemTheme =
   | "default"
   | "dark"
@@ -263,14 +259,6 @@ const initialAudioMuted =
 const initialAudioVolume =
   getStoredAudioVolume();
 
-audioManager.setMuted(
-  initialAudioMuted
-);
-
-audioManager.setMasterVolume(
-  initialAudioVolume
-);
-
 export const useSystemPreferencesStore =
   create<SystemPreferencesStore>(
     (
@@ -324,10 +312,6 @@ export const useSystemPreferencesStore =
           )
         );
 
-        audioManager.setMuted(
-          muted
-        );
-
         set({
           audioMuted:
             muted,
@@ -349,10 +333,6 @@ export const useSystemPreferencesStore =
           String(
             nextVolume
           )
-        );
-
-        audioManager.setMasterVolume(
-          nextVolume
         );
 
         set({
@@ -377,14 +357,6 @@ export const useSystemPreferencesStore =
 
           window.localStorage.removeItem(
             AUDIO_VOLUME_STORAGE_KEY
-          );
-
-          audioManager.setMuted(
-            DEFAULT_AUDIO_MUTED
-          );
-
-          audioManager.setMasterVolume(
-            DEFAULT_AUDIO_VOLUME
           );
 
           set({

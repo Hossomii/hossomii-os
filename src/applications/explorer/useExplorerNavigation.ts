@@ -2,7 +2,9 @@ import { useState } from "react";
 
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
-import { audioManager } from "../../system/audio/audioManager";
+import {
+  playSound,
+} from "../../system/audio/audioService";
 
 export function useExplorerNavigation(initialLocation: string) {
   const items = useFileSystemStore((state) => state.items);
@@ -39,7 +41,7 @@ export function useExplorerNavigation(initialLocation: string) {
       return;
     }
 
-    void audioManager.play("ui-folder-open");
+    void playSound("ui-folder-open");
 
     setHistory((currentHistory) => [...currentHistory, currentLocation]);
 
@@ -53,7 +55,7 @@ export function useExplorerNavigation(initialLocation: string) {
 
     const previousLocation = history[history.length - 1];
 
-    void audioManager.play("ui-folder-open");
+    void playSound("ui-folder-open");
 
     setHistory((currentHistory) => currentHistory.slice(0, -1));
 

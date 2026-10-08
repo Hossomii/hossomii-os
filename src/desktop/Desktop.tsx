@@ -63,7 +63,9 @@ import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
 
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
-import { audioManager } from "../system/audio/audioManager";
+import {
+  playSound,
+} from "../system/audio/audioService";
 
 import "../styles/desktop/index.css";
 
@@ -82,6 +84,13 @@ const WALLPAPERS = {
 } as const;
 
 export function Desktop() {
+  const FOLDER_LIKE_APP_IDS: WindowAppId[] = [
+    "computer",
+    "documents",
+    "projects",
+    "recycle-bin",
+  ];
+
   const restartSystem = useSystemStore((state) => state.restartSystem);
 
   const shutdownSystem = useSystemStore((state) => state.shutdownSystem);
@@ -182,6 +191,10 @@ export function Desktop() {
 
   function handleOpenItem(id: WindowAppId) {
     setStartMenuOpen(false);
+
+    if (FOLDER_LIKE_APP_IDS.includes(id)) {
+      void playSound("ui-folder-open");
+    }
 
     if (id === "quick-view") {
       openWindow({
@@ -317,7 +330,7 @@ export function Desktop() {
 
     setSelectedIcon(null);
 
-    void audioManager.play("system-shutdown");
+    void playSound("system-shutdown");
 
     resetWindows();
 

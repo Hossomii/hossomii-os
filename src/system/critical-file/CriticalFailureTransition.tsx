@@ -3,7 +3,9 @@ import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useWindowStore } from "../../stores/windowStore";
 
-import { audioManager } from "../audio/audioManager";
+import {
+  playSound,
+} from "../audio/audioService";
 
 type FailureTransitionPhase =
   | "closing-windows"
@@ -135,7 +137,7 @@ export function CriticalFailureTransition() {
   useEffect(() => {
     const timer = window.setTimeout(() => {
       if (phase === "closing-windows") {
-        void audioManager.play("system-glitch");
+        void playSound("system-glitch");
 
         setPhase("glitching");
 
@@ -153,7 +155,7 @@ export function CriticalFailureTransition() {
       }
 
       if (phase === "blackout") {
-        void audioManager.play("system-recovery");
+        void playSound("system-recovery");
 
         setPhase("recovery-boot");
 

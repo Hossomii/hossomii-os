@@ -2,6 +2,11 @@ export type AudioChannel =
   | "ui"
   | "system";
 
+export type AudioPlaybackMode =
+  | "overlap"
+  | "restart"
+  | "ignore";
+
 export type AudioCueId =
   | "ui-click"
   | "ui-hover"
@@ -23,6 +28,10 @@ export type AudioDefinition = {
   src: string | null;
 
   volume: number;
+
+  playbackMode?: AudioPlaybackMode;
+
+  maxVoices?: number;
 };
 
 export type PlayAudioOptions = {
@@ -30,3 +39,9 @@ export type PlayAudioOptions = {
 
   playbackRate?: number;
 };
+
+// overlap = pode tocar várias instâncias simultaneamente
+
+// restart = se já estiver tocando, interrompe e começa novamente
+
+// ignore = se já estiver tocando, ignora o novo pedido

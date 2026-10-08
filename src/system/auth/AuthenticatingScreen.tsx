@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useSystemStore } from "../../stores/systemStore";
 import profileAvatar from "../../assets/profile-avatar.webp";
 
-import { audioManager } from "../audio/audioManager";
+import {
+  playSound,
+} from "../audio/audioService";
 
 import "../../styles/auth.css";
 
@@ -46,13 +48,13 @@ export function AuthenticatingScreen() {
 
   useEffect(() => {
     if (currentStep.status === "error") {
-      void audioManager.play("ui-error");
+      void playSound("ui-error");
 
       return;
     }
 
     if (currentStep.status === "success") {
-      void audioManager.play("system-login");
+      void playSound("system-login");
     }
   }, [currentStep.status]);
   useEffect(() => {

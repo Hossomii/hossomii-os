@@ -2,7 +2,10 @@ import { useSystemStore } from "../../stores/systemStore";
 
 import { ExternalLink } from "../../components/ExternalLink";
 
-import { audioManager } from "../audio/audioManager";
+import {
+  playSound,
+  preloadAudioGroup,
+} from "../audio/audioService";
 
 const GITHUB_URL = "https://github.com/Hossomii";
 
@@ -12,13 +15,9 @@ export function PoweredOffScreen() {
   const powerOnSystem = useSystemStore((state) => state.powerOnSystem);
 
   function handlePowerOn() {
-    audioManager.preload([
-      "system-login",
-      "system-shutdown",
-      "system-recovery",
-    ]);
+    preloadAudioGroup("session");
 
-    void audioManager.play("system-startup");
+    void playSound("system-startup");
 
     powerOnSystem();
   }

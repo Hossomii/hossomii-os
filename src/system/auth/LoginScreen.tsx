@@ -9,7 +9,9 @@ import { useSystemStore } from "../../stores/systemStore";
 
 import profileAvatar from "../../assets/profile-avatar.webp";
 
-import { audioManager } from "../audio/audioManager";
+import {
+  playSound,
+} from "../audio/audioService";
 
 import "../../styles/auth.css";
 
@@ -48,7 +50,7 @@ export function LoginScreen() {
       return;
     }
 
-    void audioManager.play("ui-keypress", {
+    void playSound("ui-keypress", {
       playbackRate: 0.96 + Math.random() * 0.08,
     });
   }

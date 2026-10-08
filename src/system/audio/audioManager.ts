@@ -2,18 +2,26 @@ import { AUDIO_REGISTRY } from "./audioRegistry";
 
 import type { AudioCueId, PlayAudioOptions } from "./types";
 
+type ActiveAudio = {
+  cueId: AudioCueId;
+
+  localVolume: number;
+
+  cleanup: () => void;
+};
+
 function clamp(value: number, minimum: number, maximum: number) {
   return Math.min(Math.max(value, minimum), maximum);
 }
 
-class AudioManager {
+export class AudioManager {
   private muted = false;
 
   private masterVolume = 1;
 
   private templates = new Map<AudioCueId, HTMLAudioElement>();
 
-  private activeAudio = new Map<HTMLAudioElement, number>();
+  private activeAudio = new Map<HTMLAudioElement, ActiveAudio>();
 
   setMuted(muted: boolean) {
     this.muted = muted;
@@ -30,8 +38,8 @@ class AudioManager {
   setMasterVolume(volume: number) {
     this.masterVolume = clamp(volume, 0, 1);
 
-    for (const [audio, localVolume] of this.activeAudio) {
-      audio.volume = this.calculateVolume(localVolume);
+    for (const [audio, active] of this.activeAudio) {
+      audio.volume = this.calculateVolume(active.localVolume);
     }
   }
 
@@ -39,7 +47,9 @@ class AudioManager {
     return this.masterVolume;
   }
 
-  preload(cueIds: AudioCueId[] = Object.keys(AUDIO_REGISTRY) as AudioCueId[]) {
+  preload(
+    cueIds: readonly AudioCueId[] = Object.keys(AUDIO_REGISTRY) as AudioCueId[],
+  ) {
     if (typeof Audio === "undefined") {
       return;
     }
@@ -50,7 +60,7 @@ class AudioManager {
   }
 
   async play(cueId: AudioCueId, options: PlayAudioOptions = {}) {
-    if (typeof Audio === "undefined") {
+    if (typeof Audio === "undefined" || this.muted || this.masterVolume <= 0) {
       return false;
     }
 
@@ -58,6 +68,37 @@ class AudioManager {
 
     if (!definition.src) {
       return false;
+    }
+
+    const activeForCue = this.getActiveAudioForCue(cueId);
+
+    const playbackMode = definition.playbackMode ?? "overlap";
+
+    if (playbackMode === "ignore" && activeForCue.length > 0) {
+      return false;
+    }
+
+    if (playbackMode === "restart") {
+      for (const audio of activeForCue) {
+        this.stopAudio(audio);
+      }
+    }
+
+    if (playbackMode === "overlap") {
+      const maxVoices = Math.max(
+        1,
+        Math.floor(definition.maxVoices ?? Number.POSITIVE_INFINITY),
+      );
+
+      while (activeForCue.length >= maxVoices) {
+        const oldestAudio = activeForCue.shift();
+
+        if (!oldestAudio) {
+          break;
+        }
+
+        this.stopAudio(oldestAudio);
+      }
     }
 
     const template = this.getTemplate(cueId);
@@ -78,8 +119,6 @@ class AudioManager {
 
     audio.playbackRate = clamp(options.playbackRate ?? 1, 0.5, 2);
 
-    this.activeAudio.set(audio, localVolume);
-
     const cleanup = () => {
       this.activeAudio.delete(audio);
 
@@ -87,6 +126,14 @@ class AudioManager {
 
       audio.removeEventListener("error", cleanup);
     };
+
+    this.activeAudio.set(audio, {
+      cueId,
+
+      localVolume,
+
+      cleanup,
+    });
 
     audio.addEventListener("ended", cleanup);
 
@@ -104,13 +151,33 @@ class AudioManager {
   }
 
   stopAll() {
-    for (const audio of this.activeAudio.keys()) {
-      audio.pause();
+    const active = Array.from(this.activeAudio.keys());
 
-      audio.currentTime = 0;
+    for (const audio of active) {
+      this.stopAudio(audio);
+    }
+  }
+
+  private stopAudio(audio: HTMLAudioElement) {
+    const active = this.activeAudio.get(audio);
+
+    audio.pause();
+
+    audio.currentTime = 0;
+
+    active?.cleanup();
+  }
+
+  private getActiveAudioForCue(cueId: AudioCueId) {
+    const result: HTMLAudioElement[] = [];
+
+    for (const [audio, active] of this.activeAudio) {
+      if (active.cueId === cueId) {
+        result.push(audio);
+      }
     }
 
-    this.activeAudio.clear();
+    return result;
   }
 
   private getTemplate(cueId: AudioCueId) {

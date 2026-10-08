@@ -7,6 +7,7 @@ import glitchSound from "../../assets/audio/system/glitch.mp3";
 import keypressSound from "../../assets/audio/ui/keypress.mp3";
 import errorSound from "../../assets/audio/ui/error.mp3";
 import folderOpenSound from "../../assets/audio/ui/folder-open.mp3";
+import notificationSound from "../../assets/audio/ui/notification.mp3";
 
 import type {
   AudioCueId,
@@ -36,6 +37,9 @@ export const AUDIO_REGISTRY: Record<
     channel: "ui",
     src: keypressSound,
     volume: 0.22,
+
+    playbackMode: "overlap",
+    maxVoices: 4,
   },
 
   "ui-error": {
@@ -43,13 +47,17 @@ export const AUDIO_REGISTRY: Record<
     channel: "ui",
     src: errorSound,
     volume: 0.55,
+
+    playbackMode: "restart",
   },
 
   "ui-notification": {
     id: "ui-notification",
     channel: "ui",
-    src: null,
+    src: notificationSound,
     volume: 0.5,
+
+    playbackMode: "restart",
   },
 
   "ui-folder-open": {
@@ -57,6 +65,8 @@ export const AUDIO_REGISTRY: Record<
     channel: "ui",
     src: folderOpenSound,
     volume: 0.35,
+
+    playbackMode: "restart",
   },
 
   "system-startup": {
@@ -64,6 +74,8 @@ export const AUDIO_REGISTRY: Record<
     channel: "system",
     src: startupSound,
     volume: 0.7,
+
+    playbackMode: "ignore",
   },
 
   "system-login": {
@@ -71,6 +83,8 @@ export const AUDIO_REGISTRY: Record<
     channel: "system",
     src: loginSound,
     volume: 0.65,
+
+    playbackMode: "ignore",
   },
 
   "system-shutdown": {
@@ -78,6 +92,8 @@ export const AUDIO_REGISTRY: Record<
     channel: "system",
     src: shutdownSound,
     volume: 0.7,
+
+    playbackMode: "ignore",
   },
 
   "system-recovery": {
@@ -85,6 +101,8 @@ export const AUDIO_REGISTRY: Record<
     channel: "system",
     src: recoverySound,
     volume: 0.65,
+
+    playbackMode: "ignore",
   },
 
   "system-glitch": {
@@ -92,5 +110,7 @@ export const AUDIO_REGISTRY: Record<
     channel: "system",
     src: glitchSound,
     volume: 0.6,
+
+    playbackMode: "ignore",
   },
 };
