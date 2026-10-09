@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import { useSystemStore } from "../../stores/systemStore";
 import profileAvatar from "../../assets/profile-avatar.webp";
+
+import {
+  playSound,
+} from "../audio/audioService";
+
 import "../../styles/auth.css";
 
 const authenticationSteps = [
   {
     title: "Verificando suas credenciais...",
-    description: "Aguarde enquanto o computador valida as informações da conta.",
+    description:
+      "Aguarde enquanto o computador valida as informações da conta.",
     technicalMessage: "",
     duration: 1700,
     status: "loading",
@@ -40,6 +46,17 @@ export function AuthenticatingScreen() {
 
   const currentStep = authenticationSteps[step];
 
+  useEffect(() => {
+    if (currentStep.status === "error") {
+      void playSound("ui-error");
+
+      return;
+    }
+
+    if (currentStep.status === "success") {
+      void playSound("system-login");
+    }
+  }, [currentStep.status]);
   useEffect(() => {
     const timer = window.setTimeout(() => {
       if (step === authenticationSteps.length - 1) {

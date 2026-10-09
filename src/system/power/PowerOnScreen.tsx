@@ -21,7 +21,7 @@ export function PowerOnScreen() {
         () => {
           completePowerOn();
         },
-        1700
+        1900
       );
 
     return () => {

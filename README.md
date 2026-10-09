@@ -59,6 +59,9 @@ It includes:
 - safe external navigation
 - critical-file recovery flow
 - persistent achievement system
+- centralized audio system with typed sound cues
+- persistent mute and master volume controls
+- controlled audio concurrency and preload groups
 - GSAP-based desktop motion
 - responsive window constraints
 - automated tests with Vitest
@@ -319,10 +322,10 @@ v0.5 — Visual Polish / Motion
 COMPLETE
 
 v0.6 — Audio
-NEXT
+COMPLETE
 
 v0.7 — Narrative / Easter Eggs
-PLANNED
+NEXT
 
 v0.8 — Mobile / Accessibility / Performance
 PLANNED
@@ -356,28 +359,100 @@ Motion remains intentionally subtle to preserve the early-2000s desktop characte
 
 ---
 
-## Next — v0.6 Audio
+## v0.6 — Audio
 
-The next phase will introduce an optional audio layer for:
+v0.6 introduced a centralized and optional audio layer across the operating-system experience.
+
+Current system cues include:
 
 ```text
 System
 ├── startup
 ├── login
 ├── shutdown
+├── critical glitch
 └── recovery
 
-UI
-├── click
-├── error
-└── notification
-
-Preferences
-├── mute
-└── volume
+Interface
+├── password keypress
+├── authentication error
+├── folder navigation
+└── achievement notification
 ```
 
+Audio preferences are available through the Control Panel:
+
+```text
+Audio
+├── mute
+└── master volume
+```
+
+Both settings persist between sessions.
+
+The audio architecture separates interface events from playback implementation:
+
+```text
+React Components
+       ↓
+Audio Service
+       ↓
+Audio Manager
+       ↓
+Audio Registry
+       ↓
+Browser Audio
+```
+
+`systemPreferencesStore` remains the source of truth for user preferences.
+
+```text
+systemPreferencesStore
+         ↓
+Audio Preferences Sync
+         ↓
+Audio Manager
+```
+
+The registry also defines playback behavior for each cue.
+
+Supported policies include:
+
+```text
+overlap
+→ allows controlled simultaneous playback
+
+restart
+→ replaces an existing instance of the same cue
+
+ignore
+→ prevents duplicate playback while the cue is active
+```
+
+Rapid sounds such as password keypresses use a voice limit to prevent excessive overlapping audio.
+
+System startup also preloads the main session sounds after the user's power interaction, helping respect browser autoplay restrictions while reducing first-play latency.
+
+Authentication failures combine audio with a short visual error state, while `prefers-reduced-motion` continues to be respected.
+
 ---
+
+## Next — v0.7 Narrative / Easter Eggs
+
+The next phase will deepen the fictional system without introducing another major application.
+
+The focus will be on subtle discoveries such as:
+
+- unusual files and system messages
+- rare Terminal responses
+- HOSSOMII SYSTEMS references
+- conditional anomalies
+- environmental storytelling
+- additional exploration rewards
+
+The existing critical recovery flow remains the main hidden system event.
+
+Narrative elements should remain subtle and avoid turning the interface into a generic glitch or cyberpunk experience.
 
 ## Documentation
 

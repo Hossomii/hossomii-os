@@ -15,44 +15,21 @@
 
   overflow: hidden;
 
-  background:
-    var(
-      --system-surface,
-      #ece9d8
-    );
+  background: var(--system-surface, #ece9d8);
 
-  color:
-    var(
-      --system-text,
-      #222
-    );
+  color: var(--system-text, #222);
 
-  font-family:
-    Tahoma,
-    Verdana,
-    Arial,
-    sans-serif;
+  font-family: Tahoma, Verdana, Arial, sans-serif;
 }
 
 .control-panel-header {
   flex: 0 0 auto;
 
-  padding:
-    20px
-    24px;
+  padding: 20px 24px;
 
-  border-bottom:
-    1px solid
-      var(
-        --system-border,
-        #aca899
-      );
+  border-bottom: 1px solid var(--system-border, #aca899);
 
-  background:
-    var(
-      --system-content,
-      #ffffff
-    );
+  background: var(--system-content, #ffffff);
 }
 
 .control-panel-eyebrow {
@@ -60,30 +37,18 @@
 
   margin-bottom: 4px;
 
-  color:
-    var(
-      --system-accent,
-      #2453a1
-    );
+  color: var(--system-accent, #2453a1);
 
   font-size: 9px;
   font-weight: 700;
 
-  letter-spacing:
-    1px;
+  letter-spacing: 1px;
 }
 
 .control-panel-header h1 {
-  margin:
-    0
-    0
-    5px;
+  margin: 0 0 5px;
 
-  color:
-    var(
-      --system-heading,
-      #17468a
-    );
+  color: var(--system-heading, #17468a);
 
   font-size: 20px;
 }
@@ -91,11 +56,7 @@
 .control-panel-header p {
   margin: 0;
 
-  color:
-    var(
-      --system-muted,
-      #666
-    );
+  color: var(--system-muted, #666);
 
   font-size: 11px;
 }
@@ -116,39 +77,25 @@
   margin-bottom: 30px;
 }
 
-.control-panel-section
-  > header {
+.control-panel-section > header {
   margin-bottom: 14px;
 }
 
 .control-panel-section h2 {
-  margin:
-    0
-    0
-    4px;
+  margin: 0 0 4px;
 
-  color:
-    var(
-      --system-heading,
-      #17468a
-    );
+  color: var(--system-heading, #17468a);
 
   font-size: 14px;
 }
 
-.control-panel-section
-  header p {
+.control-panel-section header p {
   margin: 0;
 
-  color:
-    var(
-      --system-muted,
-      #666
-    );
+  color: var(--system-muted, #666);
 
   font-size: 10px;
 }
-
 
 /* =========================================================
    THEMES
@@ -157,14 +104,7 @@
 .theme-options {
   display: grid;
 
-  grid-template-columns:
-    repeat(
-      3,
-      minmax(
-        0,
-        1fr
-      )
-    );
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: 12px;
 }
@@ -174,24 +114,11 @@
 
   padding: 9px;
 
-  border:
-    1px solid
-      var(
-        --system-border,
-        #aaa
-      );
+  border: 1px solid var(--system-border, #aaa);
 
-  background:
-    var(
-      --system-content,
-      #fff
-    );
+  background: var(--system-content, #fff);
 
-  color:
-    var(
-      --system-text,
-      #222
-    );
+  color: var(--system-text, #222);
 
   text-align: left;
 
@@ -199,22 +126,13 @@
 }
 
 .theme-option:hover {
-  border-color:
-    var(
-      --system-accent,
-      #316ac5
-    );
+  border-color: var(--system-accent, #316ac5);
 }
 
 .theme-option-selected {
   padding: 8px;
 
-  border:
-    2px solid
-      var(
-        --system-accent,
-        #316ac5
-      );
+  border: 2px solid var(--system-accent, #316ac5);
 }
 
 .theme-preview {
@@ -226,16 +144,14 @@
 
   overflow: hidden;
 
-  border:
-    1px solid #777;
+  border: 1px solid #777;
 }
 
 .theme-preview-window {
   width: 80%;
   height: 52px;
 
-  border:
-    2px solid;
+  border: 2px solid;
 
   background: white;
 }
@@ -247,58 +163,46 @@
 }
 
 .theme-preview-window div {
-  height:
-    calc(
-      100% - 13px
-    );
+  height: calc(100% - 13px);
 }
 
-.theme-option-default
-  .theme-preview {
+.theme-option-default .theme-preview {
   background: #3b88d8;
 }
 
-.theme-option-default
-  .theme-preview-window {
+.theme-option-default .theme-preview-window {
   border-color: #0a55c4;
 }
 
-.theme-option-default
-  .theme-preview-window span {
+.theme-option-default .theme-preview-window span {
   background: #1767c9;
 }
 
-.theme-option-dark
-  .theme-preview {
+.theme-option-dark .theme-preview {
   background: #10151d;
 }
 
-.theme-option-dark
-  .theme-preview-window {
+.theme-option-dark .theme-preview-window {
   border-color: #4b5e76;
 
   background: #202731;
 }
 
-.theme-option-dark
-  .theme-preview-window span {
+.theme-option-dark .theme-preview-window span {
   background: #243b59;
 }
 
-.theme-option-high-contrast
-  .theme-preview {
+.theme-option-high-contrast .theme-preview {
   background: #000;
 }
 
-.theme-option-high-contrast
-  .theme-preview-window {
+.theme-option-high-contrast .theme-preview-window {
   border-color: #00ffff;
 
   background: #000;
 }
 
-.theme-option-high-contrast
-  .theme-preview-window span {
+.theme-option-high-contrast .theme-preview-window span {
   background: #000080;
 }
 
@@ -313,16 +217,11 @@
 .theme-option small {
   display: block;
 
-  color:
-    var(
-      --system-muted,
-      #666
-    );
+  color: var(--system-muted, #666);
 
   font-size: 9px;
   line-height: 1.4;
 }
-
 
 /* =========================================================
    WALLPAPERS
@@ -331,14 +230,7 @@
 .wallpaper-options {
   display: grid;
 
-  grid-template-columns:
-    repeat(
-      auto-fit,
-      minmax(
-        135px,
-        1fr
-      )
-    );
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
 
   gap: 12px;
 }
@@ -348,45 +240,23 @@
 
   padding: 6px;
 
-  border:
-    1px solid
-      var(
-        --system-border,
-        #aaa
-      );
+  border: 1px solid var(--system-border, #aaa);
 
-  background:
-    var(
-      --system-content,
-      #fff
-    );
+  background: var(--system-content, #fff);
 
-  color:
-    var(
-      --system-text,
-      #222
-    );
+  color: var(--system-text, #222);
 
   cursor: pointer;
 }
 
 .wallpaper-option:hover {
-  border-color:
-    var(
-      --system-accent,
-      #316ac5
-    );
+  border-color: var(--system-accent, #316ac5);
 }
 
 .wallpaper-option-selected {
   padding: 5px;
 
-  border:
-    2px solid
-      var(
-        --system-accent,
-        #316ac5
-      );
+  border: 2px solid var(--system-accent, #316ac5);
 }
 
 .wallpaper-option img {
@@ -398,12 +268,7 @@
 
   object-fit: cover;
 
-  border:
-    1px solid
-      var(
-        --system-border,
-        #777
-      );
+  border: 1px solid var(--system-border, #777);
 
   background: #222;
 }
@@ -411,10 +276,7 @@
 .wallpaper-option span {
   display: block;
 
-  padding:
-    6px
-    2px
-    1px;
+  padding: 6px 2px 1px;
 
   overflow: hidden;
 
@@ -424,6 +286,142 @@
   text-overflow: ellipsis;
 }
 
+/* =========================================================
+   AUDIO
+   ========================================================= */
+
+.audio-settings {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.audio-setting-row,
+.audio-volume-setting {
+  padding: 14px;
+
+  border: 1px solid var(--system-border, #aaa);
+
+  background: var(--system-content, #fff);
+}
+
+.audio-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 16px;
+}
+
+.audio-setting-copy {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 0;
+}
+
+.audio-setting-copy strong {
+  color: var(--system-text, #222);
+
+  font-size: 11px;
+}
+
+.audio-setting-copy span {
+  color: var(--system-muted, #666);
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
+
+.audio-toggle {
+  flex: 0 0 auto;
+
+  min-width: 82px;
+
+  padding: 6px 10px;
+
+  border: 1px solid var(--system-border, #888);
+
+  background: var(--system-button, #ece9d8);
+
+  color: var(--system-text, #222);
+
+  font-family: inherit;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.audio-toggle-enabled {
+  border-color: var(--system-accent, #316ac5);
+
+  background: var(--system-accent, #316ac5);
+
+  color: #fff;
+}
+
+.audio-toggle:focus-visible,
+.audio-volume-setting input[type="range"]:focus-visible {
+  outline: 1px dotted var(--system-text, #222);
+
+  outline-offset: 2px;
+}
+
+.audio-volume-setting {
+  display: flex;
+  flex-direction: column;
+
+  gap: 9px;
+}
+
+.audio-volume-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.audio-volume-heading label {
+  color: var(--system-text, #222);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.audio-volume-heading output {
+  min-width: 36px;
+
+  color: var(--system-accent, #2453a1);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  text-align: right;
+}
+
+.audio-volume-setting input[type="range"] {
+  width: 100%;
+
+  margin: 0;
+
+  accent-color: var(--system-accent, #316ac5);
+
+  cursor: pointer;
+}
+
+.audio-volume-setting small {
+  color: var(--system-muted, #666);
+
+  font-size: 9px;
+
+  line-height: 1.45;
+}
 
 /* =========================================================
    RESET
@@ -437,40 +435,19 @@
 
   padding-top: 18px;
 
-  border-top:
-    1px solid
-      var(
-        --system-border,
-        #aaa
-      );
+  border-top: 1px solid var(--system-border, #aaa);
 }
 
 .control-panel-reset button {
-  padding:
-    6px
-    12px;
+  padding: 6px 12px;
 
-  border:
-    1px solid
-      var(
-        --system-border,
-        #888
-      );
+  border: 1px solid var(--system-border, #888);
 
-  background:
-    var(
-      --system-button,
-      #ece9d8
-    );
+  background: var(--system-button, #ece9d8);
 
-  color:
-    var(
-      --system-text,
-      #222
-    );
+  color: var(--system-text, #222);
 
-  font-family:
-    inherit;
+  font-family: inherit;
 
   font-size: 10px;
 
@@ -478,15 +455,10 @@
 }
 
 .control-panel-reset span {
-  color:
-    var(
-      --system-muted,
-      #666
-    );
+  color: var(--system-muted, #666);
 
   font-size: 9px;
 }
-
 
 /* =========================================================
    RESIZE
@@ -494,29 +466,29 @@
 
 @container (max-width: 620px) {
   .theme-options {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
 
   .wallpaper-options {
-    grid-template-columns:
-      repeat(
-        2,
-        minmax(
-          0,
-          1fr
-        )
-      );
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @container (max-width: 380px) {
   .wallpaper-options {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr;
   }
 
   .control-panel-content {
     padding: 14px;
+  }
+
+  .audio-setting-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .audio-toggle {
+    width: 100%;
   }
 }

@@ -2,6 +2,11 @@ import { useSystemStore } from "../../stores/systemStore";
 
 import { ExternalLink } from "../../components/ExternalLink";
 
+import {
+  playSound,
+  preloadAudioGroup,
+} from "../audio/audioService";
+
 const GITHUB_URL = "https://github.com/Hossomii";
 
 const LINKEDIN_URL = "https://www.linkedin.com/in/anthony-hossomii-bugs/";
@@ -9,6 +14,13 @@ const LINKEDIN_URL = "https://www.linkedin.com/in/anthony-hossomii-bugs/";
 export function PoweredOffScreen() {
   const powerOnSystem = useSystemStore((state) => state.powerOnSystem);
 
+  function handlePowerOn() {
+    preloadAudioGroup("session");
+
+    void playSound("system-startup");
+
+    powerOnSystem();
+  }
   return (
     <main className="powered-off-screen">
       <div
@@ -93,7 +105,7 @@ export function PoweredOffScreen() {
           <button
             className="powered-off-power"
             type="button"
-            onClick={powerOnSystem}
+            onClick={handlePowerOn}
           >
             <span aria-hidden="true">⏻</span>
             Ligar novamente
