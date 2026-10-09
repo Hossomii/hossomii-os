@@ -1,4 +1,4 @@
-# HOSSOMII OS — System Overview
+# HOSSOMII OS - System Overview
 
 HOSSOMII OS é um portfólio interativo apresentado como um sistema
 operacional fictício executado diretamente no navegador.
@@ -95,6 +95,7 @@ src/
 │   └── estado compartilhado com Zustand
 │
 ├── system/
+│   ├── audio/
 │   ├── auth/
 │   ├── boot/
 │   ├── critical-file/
@@ -119,7 +120,7 @@ systemStore
 → estados da máquina
 
 systemPreferencesStore
-→ tema e wallpaper
+→ tema, wallpaper e preferências de áudio
 
 achievementStore
 → conquistas
@@ -679,12 +680,226 @@ Remote Access
 
 ---
 
+## Sistema de áudio
+
+A v0.6 introduziu uma camada centralizada de áudio para eventos do
+sistema e feedback da interface.
+
+A arquitetura principal é:
+
+```text
+React Components
+       ↓
+audioService
+       ↓
+AudioManager
+       ↓
+audioRegistry
+       ↓
+HTMLAudioElement
+```
+
+Os componentes não acessam diretamente a implementação do
+`AudioManager`.
+
+Em vez disso, utilizam uma pequena API pública:
+
+```text
+playSound()
+preloadAudioGroup()
+stopAllSounds()
+```
+
+Isso reduz o acoplamento entre a interface e a implementação de
+reprodução.
+
+### Audio Registry
+
+`audioRegistry.ts` funciona como catálogo central dos sons.
+
+Cada cue pode definir:
+
+```text
+id
+channel
+source
+volume
+playback mode
+voice limit
+```
+
+Os canais atuais são:
+
+```text
+ui
+system
+```
+
+Os principais sons do sistema incluem:
+
+```text
+system-startup
+system-login
+system-shutdown
+system-glitch
+system-recovery
+```
+
+Os principais sons de interface incluem:
+
+```text
+ui-keypress
+ui-error
+ui-folder-open
+ui-notification
+```
+
+### Políticas de reprodução
+
+Cada som pode definir uma estratégia de concorrência.
+
+```text
+overlap
+→ permite reprodução simultânea
+
+restart
+→ interrompe a instância anterior e reinicia o som
+
+ignore
+→ ignora uma nova solicitação enquanto o mesmo cue estiver ativo
+```
+
+Sons rápidos como `ui-keypress` utilizam `overlap`, mas possuem um
+limite de vozes simultâneas.
+
+Isso impede que digitação muito rápida gere dezenas de elementos de
+áudio concorrentes.
+
+Sons de navegação e notificação utilizam `restart`, enquanto eventos
+importantes do sistema, como startup e recovery, utilizam `ignore`.
+
+### Audio Manager
+
+`AudioManager` é responsável por:
+
+```text
+preload
+playback
+volume
+mute
+active voices
+concurrency
+cleanup
+playback rate
+```
+
+Templates de áudio são mantidos em cache e clonados quando uma nova
+instância precisa ser reproduzida.
+
+Instâncias encerradas ou com erro são removidas da coleção de áudios
+ativos.
+
+Quando:
+
+```text
+mute = true
+```
+
+ou:
+
+```text
+master volume = 0
+```
+
+uma nova reprodução não é criada.
+
+Isso evita trabalho desnecessário no navegador.
+
+### Preload
+
+Os sons principais da sessão são agrupados em um preload centralizado.
+
+```text
+Power interaction
+      ↓
+preloadAudioGroup("session")
+      ↓
+main session sounds cached
+```
+
+O preload ocorre após interação explícita do usuário com o botão de
+energia.
+
+O som de startup também é iniciado a partir dessa interação.
+
+Isso ajuda a trabalhar de forma compatível com as restrições de autoplay
+dos navegadores.
+
+### Preferências de áudio
+
+O `systemPreferencesStore` permanece como fonte de verdade para:
+
+```text
+audioMuted
+audioVolume
+```
+
+O store não conhece diretamente o `AudioManager`.
+
+A sincronização é realizada separadamente:
+
+```text
+systemPreferencesStore
+         ↓
+audioPreferencesSync
+         ↓
+AudioManager
+```
+
+`audioPreferencesSync` observa alterações nas preferências e atualiza a
+camada de reprodução.
+
+Essa separação evita manter lógica de áudio dentro do store de
+preferências.
+
+### Feedback audiovisual
+
+Alguns eventos combinam feedback visual e sonoro.
+
+Na autenticação:
+
+```text
+authentication status = error
+          ↓
+ui-error
+          +
+visual error state
+```
+
+A mensagem de falha recebe destaque vermelho e uma animação curta.
+
+Ambos os efeitos são derivados do mesmo estado de autenticação, evitando
+timers independentes apenas para sincronização.
+
+O movimento respeita:
+
+```text
+prefers-reduced-motion
+```
+
+O feedback visual permanece disponível mesmo quando a animação é
+reduzida.
+
+---
+
 ## Preferências
 
 O Painel de Controle permite alterar:
 
 - tema;
-- wallpaper.
+- wallpaper;
+- áudio ativado/desativado;
+- volume geral.
 
 As preferências são armazenadas no `localStorage`.
 
@@ -695,6 +910,10 @@ HOSSOMII Default
 HOSSOMII Dark
 High Contrast
 ```
+
+As preferências de áudio são mantidas separadas da implementação de
+reprodução e sincronizadas com o `AudioManager` através da camada de
+`audioPreferencesSync`.
 
 ---
 
@@ -744,6 +963,21 @@ npm run build
 Além dos testes automatizados, cada fase passa por regressão manual dos
 principais fluxos do sistema.
 
+A camada de áudio também possui testes próprios para validar:
+
+```text
+mute
+master volume zero
+restart playback mode
+ignore playback mode
+voice limits
+cleanup após término
+```
+
+O navegador é substituído por uma implementação controlada de áudio nos
+testes, permitindo validar a lógica do `AudioManager` sem reproduzir sons
+reais.
+
 ---
 
 ## Estado atual
@@ -759,10 +993,10 @@ v0.5 — Visual Polish / Motion
 COMPLETE
 
 v0.6 — Audio
-NEXT
+COMPLETE
 
 v0.7 — Narrative / Easter Eggs
-PLANNED
+NEXT
 
 v0.8 — Mobile / Accessibility / Performance
 PLANNED
@@ -798,34 +1032,48 @@ interface excessivamente animada.
 
 ---
 
-## Próxima fase — v0.6 Audio
+## v0.6 — Audio
 
-A próxima fase introduzirá uma camada de áudio opcional.
+A v0.6 adicionou:
 
-Arquitetura planejada:
+- arquitetura centralizada de áudio;
+- sons de sistema e interface;
+- preferências persistentes de mute e volume;
+- preload centralizado;
+- políticas de concorrência;
+- limite de vozes para sons rápidos;
+- testes automatizados do AudioManager;
+- feedback sonoro para navegação e conquistas;
+- feedback audiovisual durante falha de autenticação.
+
+O objetivo foi adicionar identidade sonora ao HOSSOMII OS sem espalhar
+lógica de reprodução pelos componentes da aplicação.
+
+---
+
+## Próxima fase — v0.7 Narrative / Easter Eggs
+
+A v0.7 aprofundará a identidade do sistema através de elementos
+narrativos discretos.
+
+A intenção é introduzir:
 
 ```text
-Audio Manager
-
-├── UI
-│   ├── click
-│   ├── hover
-│   ├── error
-│   └── notification
-│
-├── System
-│   ├── startup
-│   ├── login
-│   ├── shutdown
-│   └── recovery
-│
-└── Preferences
-    ├── mute
-    └── volume
+arquivos incomuns
+mensagens de sistema
+respostas raras do Terminal
+referências à HOSSOMII SYSTEMS
+anomalias condicionais
+environmental storytelling
+novas recompensas por exploração
 ```
 
-O áudio deverá respeitar as limitações de autoplay do navegador e poderá
-ser controlado pelo usuário.
+O fluxo existente de falha crítica e Recovery continuará sendo o maior
+evento escondido do sistema.
+
+As anomalias devem permanecer sutis e coerentes com a estética do
+HOSSOMII OS, evitando transformar a experiência em uma interface
+genérica de glitch ou cyberpunk.
 
 ---
 
