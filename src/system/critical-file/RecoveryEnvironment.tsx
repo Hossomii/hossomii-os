@@ -30,7 +30,12 @@ type RecoveryToken = {
   value: string;
 };
 
-type RecoveryLineKind = "normal" | "section" | "prompt" | "activity" | "note";
+type RecoveryLineKind =
+  | "normal"
+  | "section"
+  | "prompt"
+  | "activity"
+  | "note";
 
 type RecoveryLine = {
   id: number;
@@ -38,138 +43,321 @@ type RecoveryLine = {
   tokens: RecoveryToken[];
 };
 
-type RecoveryLineInput = Omit<RecoveryLine, "id">;
+type RecoveryLineInput = Omit<
+  RecoveryLine,
+  "id"
+>;
 
-function token(type: RecoveryTokenType, value: string): RecoveryToken {
+function token(
+  type: RecoveryTokenType,
+  value: string,
+): RecoveryToken {
   return {
     type,
     value,
   };
 }
 
-const INITIAL_RECOVERY_OUTPUT: RecoveryLine[] = [
-  {
-    id: 1,
-    kind: "section",
-    tokens: [token("accent", "HOSSOMII RECOVERY CONSOLE")],
-  },
-  {
-    id: 2,
-    kind: "normal",
-    tokens: [token("muted", "Machine        "), token("text", "HOSSOMII-01")],
-  },
-  {
-    id: 3,
-    kind: "normal",
-    tokens: [token("muted", "Session        "), token("text", "RECOVERY")],
-  },
-  {
-    id: 4,
-    kind: "normal",
-    tokens: [token("muted", "Subsystem      "), token("text", "loaded")],
-  },
-  {
-    id: 5,
-    kind: "note",
-    tokens: [
-      token("muted", "Digite "),
-      token("command", "ajuda"),
-      token("muted", " caso precise de orientação."),
-    ],
-  },
-  {
-    id: 6,
-    kind: "section",
-    tokens: [token("accent", "RECOVERY_STAGE 01/03")],
-  },
-  {
-    id: 7,
-    kind: "normal",
-    tokens: [
-      token("muted", "STATUS         "),
-      token("text", "WAITING_FOR_DIAGNOSTIC"),
-    ],
-  },
-];
+const INITIAL_RECOVERY_OUTPUT:
+  RecoveryLine[] = [
+    {
+      id: 1,
+      kind: "section",
+      tokens: [
+        token(
+          "accent",
+          "HOSSOMII RECOVERY CONSOLE",
+        ),
+      ],
+    },
+    {
+      id: 2,
+      kind: "normal",
+      tokens: [
+        token(
+          "muted",
+          "Machine        ",
+        ),
+        token(
+          "text",
+          "HOSSOMII-01",
+        ),
+      ],
+    },
+    {
+      id: 3,
+      kind: "normal",
+      tokens: [
+        token(
+          "muted",
+          "Session        ",
+        ),
+        token(
+          "text",
+          "RECOVERY",
+        ),
+      ],
+    },
+    {
+      id: 4,
+      kind: "normal",
+      tokens: [
+        token(
+          "muted",
+          "Subsystem      ",
+        ),
+        token(
+          "text",
+          "loaded",
+        ),
+      ],
+    },
+    {
+      id: 5,
+      kind: "note",
+      tokens: [
+        token(
+          "muted",
+          "Digite ",
+        ),
+        token(
+          "command",
+          "ajuda",
+        ),
+        token(
+          "muted",
+          " caso precise de orientação.",
+        ),
+      ],
+    },
+    {
+      id: 6,
+      kind: "section",
+      tokens: [
+        token(
+          "accent",
+          "RECOVERY_STAGE 01/03",
+        ),
+      ],
+    },
+    {
+      id: 7,
+      kind: "normal",
+      tokens: [
+        token(
+          "muted",
+          "STATUS         ",
+        ),
+        token(
+          "text",
+          "WAITING_FOR_DIAGNOSTIC",
+        ),
+      ],
+    },
+  ];
 
-function wait(milliseconds: number) {
+function wait(
+  milliseconds: number,
+) {
   const reducedMotion =
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+    window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)",
+    ).matches ??
+    false;
 
-  return new Promise<void>((resolve) => {
-    window.setTimeout(resolve, reducedMotion ? 0 : milliseconds);
-  });
+  return new Promise<void>(
+    (
+      resolve,
+    ) => {
+      window.setTimeout(
+        resolve,
+        reducedMotion
+          ? 0
+          : milliseconds,
+      );
+    },
+  );
 }
 
 export function RecoveryEnvironment({
   targetId,
   targetName,
 }: RecoveryEnvironmentProps) {
-  const phase = useCriticalFileStore((state) => state.phase);
+  const phase =
+    useCriticalFileStore(
+      (
+        state,
+      ) =>
+        state.phase,
+    );
 
-  const markDiagnosed = useCriticalFileStore((state) => state.markDiagnosed);
+  const markDiagnosed =
+    useCriticalFileStore(
+      (
+        state,
+      ) =>
+        state.markDiagnosed,
+    );
 
-  const markRestored = useCriticalFileStore((state) => state.markRestored);
+  const markRestored =
+    useCriticalFileStore(
+      (
+        state,
+      ) =>
+        state.markRestored,
+    );
 
-  const markRecovered = useCriticalFileStore((state) => state.markRecovered);
+  const markRecovered =
+    useCriticalFileStore(
+      (
+        state,
+      ) =>
+        state.markRecovered,
+    );
 
-  const resetFlow = useCriticalFileStore((state) => state.resetFlow);
+  const resetFlow =
+    useCriticalFileStore(
+      (
+        state,
+      ) =>
+        state.resetFlow,
+    );
 
-  const restoreItem = useFileSystemStore((state) => state.restoreItem);
+  const restoreItem =
+    useFileSystemStore(
+      (
+        state,
+      ) =>
+        state.restoreItem,
+    );
 
-  const unlockAchievement = useAchievementStore(
-    (state) => state.unlockAchievement,
-  );
+  const unlockAchievement =
+    useAchievementStore(
+      (
+        state,
+      ) =>
+        state.unlockAchievement,
+    );
 
-  const [command, setCommand] = useState("");
+  const [
+    command,
+    setCommand,
+  ] =
+    useState("");
 
-  const [isBusy, setIsBusy] = useState(false);
+  const [
+    isBusy,
+    setIsBusy,
+  ] =
+    useState(false);
 
-  const [output, setOutput] = useState<RecoveryLine[]>(INITIAL_RECOVERY_OUTPUT);
+  const [
+    output,
+    setOutput,
+  ] =
+    useState<
+      RecoveryLine[]
+    >(
+      INITIAL_RECOVERY_OUTPUT,
+    );
 
-  const lineIdRef = useRef(INITIAL_RECOVERY_OUTPUT.length);
+  const lineIdRef =
+    useRef(
+      INITIAL_RECOVERY_OUTPUT.length,
+    );
 
-  const invalidAttemptsRef = useRef(0);
+  const invalidAttemptsRef =
+    useRef(0);
 
-  const outputRef = useRef<HTMLDivElement>(null);
+  const outputRef =
+    useRef<HTMLDivElement>(
+      null,
+    );
 
-  function createLine(line: RecoveryLineInput): RecoveryLine {
-    lineIdRef.current += 1;
+  function createLine(
+    line:
+      RecoveryLineInput,
+  ): RecoveryLine {
+    lineIdRef.current +=
+      1;
 
     return {
-      id: lineIdRef.current,
+      id:
+        lineIdRef.current,
+
       ...line,
     };
   }
 
-  function getStageHeaderLines(): RecoveryLineInput[] {
-    if (phase === "recovery-diagnostic") {
+  function getStageHeaderLines():
+    RecoveryLineInput[] {
+    if (
+      phase ===
+      "recovery-diagnostic"
+    ) {
       return [
         {
-          kind: "section",
-          tokens: [token("accent", "RECOVERY_STAGE 01/03")],
-        },
-        {
-          kind: "normal",
+          kind:
+            "section",
+
           tokens: [
-            token("muted", "STATUS         "),
-            token("text", "WAITING_FOR_DIAGNOSTIC"),
+            token(
+              "accent",
+              "RECOVERY_STAGE 01/03",
+            ),
+          ],
+        },
+
+        {
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "muted",
+              "STATUS         ",
+            ),
+
+            token(
+              "text",
+              "WAITING_FOR_DIAGNOSTIC",
+            ),
           ],
         },
       ];
     }
 
-    if (phase === "recovery-restore") {
+    if (
+      phase ===
+      "recovery-restore"
+    ) {
       return [
         {
-          kind: "section",
-          tokens: [token("accent", "RECOVERY_STAGE 02/03")],
-        },
-        {
-          kind: "normal",
+          kind:
+            "section",
+
           tokens: [
-            token("muted", "STATUS         "),
-            token("text", "COMPONENT_RESTORE_REQUIRED"),
+            token(
+              "accent",
+              "RECOVERY_STAGE 02/03",
+            ),
+          ],
+        },
+
+        {
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "muted",
+              "STATUS         ",
+            ),
+
+            token(
+              "text",
+              "COMPONENT_RESTORE_REQUIRED",
+            ),
           ],
         },
       ];
@@ -177,137 +365,284 @@ export function RecoveryEnvironment({
 
     return [
       {
-        kind: "section",
-        tokens: [token("accent", "RECOVERY_STAGE 03/03")],
-      },
-      {
-        kind: "normal",
+        kind:
+          "section",
+
         tokens: [
-          token("muted", "STATUS         "),
-          token("text", "SHELL_READY"),
+          token(
+            "accent",
+            "RECOVERY_STAGE 03/03",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "STATUS         ",
+          ),
+
+          token(
+            "text",
+            "SHELL_READY",
+          ),
         ],
       },
     ];
   }
 
-  useEffect(() => {
-    const element = outputRef.current;
+  useEffect(
+    () => {
+      const element =
+        outputRef.current;
 
-    if (!element) {
-      return;
-    }
+      if (
+        !element
+      ) {
+        return;
+      }
 
-    element.scrollTop = element.scrollHeight;
-  }, [output]);
+      element.scrollTop =
+        element.scrollHeight;
+    },
+    [
+      output,
+    ],
+  );
 
-  useEffect(() => {
-    if (phase !== "recovered") {
-      return;
-    }
+  useEffect(
+    () => {
+      if (
+        phase !==
+        "recovered"
+      ) {
+        return;
+      }
 
-    const timer = window.setTimeout(() => {
-      unlockAchievement("i-warned-you");
+      const timer =
+        window.setTimeout(
+          () => {
+            unlockAchievement(
+              "i-warned-you",
+            );
 
-      resetFlow();
-    }, 2200);
+            resetFlow();
+          },
+          2200,
+        );
 
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [phase, resetFlow, unlockAchievement]);
+      return () => {
+        window.clearTimeout(
+          timer,
+        );
+      };
+    },
+    [
+      phase,
+      resetFlow,
+      unlockAchievement,
+    ],
+  );
 
-  function appendLine(line: RecoveryLineInput) {
-    const createdLine = createLine(line);
+  function appendLine(
+    line:
+      RecoveryLineInput,
+  ) {
+    const createdLine =
+      createLine(
+        line,
+      );
 
-    setOutput((current) => [...current, createdLine]);
+    setOutput(
+      (
+        current,
+      ) => [
+        ...current,
+        createdLine,
+      ],
+    );
 
     return createdLine.id;
   }
 
-  function appendLines(...lines: RecoveryLineInput[]) {
-    const createdLines = lines.map(createLine);
+  function appendLines(
+    ...lines:
+      RecoveryLineInput[]
+  ) {
+    const createdLines =
+      lines.map(
+        createLine,
+      );
 
-    setOutput((current) => [...current, ...createdLines]);
+    setOutput(
+      (
+        current,
+      ) => [
+        ...current,
+        ...createdLines,
+      ],
+    );
   }
 
-  function replaceLine(id: number, line: RecoveryLineInput) {
-    setOutput((current) =>
-      current.map((currentLine) =>
-        currentLine.id === id
-          ? {
-              id,
-              ...line,
-            }
-          : currentLine,
-      ),
+  function replaceLine(
+    id: number,
+    line:
+      RecoveryLineInput,
+  ) {
+    setOutput(
+      (
+        current,
+      ) =>
+        current.map(
+          (
+            currentLine,
+          ) =>
+            currentLine.id ===
+            id
+              ? {
+                  id,
+
+                  ...line,
+                }
+              : currentLine,
+        ),
     );
   }
 
   async function runActivity(
-    initialTokens: RecoveryToken[],
-    finalTokens: RecoveryToken[],
+    initialTokens:
+      RecoveryToken[],
+    finalTokens:
+      RecoveryToken[],
     delay = 220,
   ) {
-    const id = appendLine({
-      kind: "activity",
-      tokens: initialTokens,
-    });
+    const id =
+      appendLine({
+        kind:
+          "activity",
 
-    await wait(delay);
+        tokens:
+          initialTokens,
+      });
 
-    replaceLine(id, {
-      kind: "normal",
-      tokens: finalTokens,
-    });
+    await wait(
+      delay,
+    );
+
+    replaceLine(
+      id,
+      {
+        kind:
+          "normal",
+
+        tokens:
+          finalTokens,
+      },
+    );
   }
 
-  function appendPrompt(rawCommand: string) {
+  function appendPrompt(
+    rawCommand: string,
+  ) {
     appendLine({
-      kind: "prompt",
+      kind:
+        "prompt",
+
       tokens: [
-        token("path", "C:\\RECOVERY"),
-        token("text", "> "),
-        token("command", rawCommand),
+        token(
+          "path",
+          "C:\\RECOVERY",
+        ),
+
+        token(
+          "text",
+          "> ",
+        ),
+
+        token(
+          "command",
+          rawCommand,
+        ),
       ],
     });
   }
 
   function resetInvalidAttempts() {
-    invalidAttemptsRef.current = 0;
+    invalidAttemptsRef.current =
+      0;
   }
 
   function registerInvalidAttempt() {
-    invalidAttemptsRef.current += 1;
+    invalidAttemptsRef.current +=
+      1;
 
-    if (invalidAttemptsRef.current < 2) {
+    if (
+      invalidAttemptsRef.current <
+      2
+    ) {
       return;
     }
 
-    invalidAttemptsRef.current = 0;
+    invalidAttemptsRef.current =
+      0;
 
-    if (phase === "recovery-diagnostic") {
+    if (
+      phase ===
+      "recovery-diagnostic"
+    ) {
       appendLine({
-        kind: "note",
+        kind:
+          "note",
+
         tokens: [
-          token("accent", "SYSTEM NOTE  "),
+          token(
+            "accent",
+            "SYSTEM NOTE  ",
+          ),
+
           token(
             "muted",
             "Talvez seja melhor descobrir o que quebrou primeiro. Tente ",
           ),
-          token("command", "diagnosticar"),
-          token("muted", "."),
+
+          token(
+            "command",
+            "diagnosticar",
+          ),
+
+          token(
+            "muted",
+            ".",
+          ),
         ],
       });
 
       return;
     }
 
-    if (phase === "recovery-restore") {
+    if (
+      phase ===
+      "recovery-restore"
+    ) {
       appendLine({
-        kind: "note",
+        kind:
+          "note",
+
         tokens: [
-          token("accent", "SYSTEM NOTE  "),
-          token("file", targetName),
+          token(
+            "accent",
+            "SYSTEM NOTE  ",
+          ),
+
+          token(
+            "file",
+            targetName,
+          ),
+
           token(
             "muted",
             " já foi localizado. Talvez seja hora de restaurá-lo.",
@@ -318,14 +653,34 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase === "recovery-restart") {
+    if (
+      phase ===
+      "recovery-restart"
+    ) {
       appendLine({
-        kind: "note",
+        kind:
+          "note",
+
         tokens: [
-          token("accent", "SYSTEM NOTE  "),
-          token("muted", "O componente está de volta. Experimente "),
-          token("command", "iniciar shell"),
-          token("muted", "."),
+          token(
+            "accent",
+            "SYSTEM NOTE  ",
+          ),
+
+          token(
+            "muted",
+            "O componente está de volta. Experimente ",
+          ),
+
+          token(
+            "command",
+            "iniciar shell",
+          ),
+
+          token(
+            "muted",
+            ".",
+          ),
         ],
       });
     }
@@ -334,110 +689,258 @@ export function RecoveryEnvironment({
   function handleHelp() {
     appendLines(
       {
-        kind: "section",
-        tokens: [token("accent", "AVAILABLE COMMANDS")],
-      },
-      {
-        kind: "normal",
+        kind:
+          "section",
+
         tokens: [
-          token("command", "diagnosticar"),
-          token("muted", "   analisar falha"),
+          token(
+            "accent",
+            "AVAILABLE COMMANDS",
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "status"),
-          token("muted", "         estado atual"),
+          token(
+            "command",
+            "diagnosticar",
+          ),
+
+          token(
+            "muted",
+            "   analisar falha",
+          ),
         ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("command", `restaurar ${targetName}`)],
-      },
-      {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "iniciar shell"),
-          token("muted", "  iniciar ambiente gráfico"),
+          token(
+            "command",
+            "status",
+          ),
+
+          token(
+            "muted",
+            "         estado atual",
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "dir"),
-          token("muted", "            listar diretórios"),
+          token(
+            "command",
+            `restaurar ${targetName}`,
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "lixeira"),
-          token("muted", "        inspecionar lixeira"),
+          token(
+            "command",
+            "iniciar shell",
+          ),
+
+          token(
+            "muted",
+            "  iniciar ambiente gráfico",
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "whoami"),
-          token("muted", "         sessão atual"),
+          token(
+            "command",
+            "dir",
+          ),
+
+          token(
+            "muted",
+            "            listar diretórios",
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "versao"),
-          token("muted", "         versão do recovery"),
+          token(
+            "command",
+            "lixeira",
+          ),
+
+          token(
+            "muted",
+            "        inspecionar lixeira",
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("command", "cls"),
-          token("muted", " / "),
-          token("command", "clear"),
+          token(
+            "command",
+            "whoami",
+          ),
+
+          token(
+            "muted",
+            "         sessão atual",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "command",
+            "versao",
+          ),
+
+          token(
+            "muted",
+            "         versão do recovery",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "command",
+            "cls",
+          ),
+
+          token(
+            "muted",
+            " / ",
+          ),
+
+          token(
+            "command",
+            "clear",
+          ),
         ],
       },
     );
   }
 
   function handleStatus() {
-    if (phase === "recovery-diagnostic") {
+    if (
+      phase ===
+      "recovery-diagnostic"
+    ) {
       appendLine({
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("status", "[WAIT]"),
-          token("text", " diagnóstico ainda não executado"),
+          token(
+            "status",
+            "[WAIT]",
+          ),
+
+          token(
+            "text",
+            " diagnóstico ainda não executado",
+          ),
         ],
       });
 
       return;
     }
 
-    if (phase === "recovery-restore") {
+    if (
+      phase ===
+      "recovery-restore"
+    ) {
       appendLines(
         {
-          kind: "normal",
+          kind:
+            "normal",
+
           tokens: [
-            token("error", "[FAIL]"),
-            token("text", " componente crítico ausente"),
+            token(
+              "error",
+              "[FAIL]",
+            ),
+
+            token(
+              "text",
+              " componente crítico ausente",
+            ),
           ],
         },
+
         {
-          kind: "normal",
-          tokens: [token("path", "C:\\Sistema\\"), token("file", targetName)],
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "path",
+              "C:\\Sistema\\",
+            ),
+
+            token(
+              "file",
+              targetName,
+            ),
+          ],
         },
       );
 
       return;
     }
 
-    if (phase === "recovery-restart") {
+    if (
+      phase ===
+      "recovery-restart"
+    ) {
       appendLine({
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("ok", "[ OK ]"),
-          token("text", " shell aguardando inicialização"),
+          token(
+            "ok",
+            "[ OK ]",
+          ),
+
+          token(
+            "text",
+            " shell aguardando inicialização",
+          ),
         ],
       });
 
@@ -445,93 +948,278 @@ export function RecoveryEnvironment({
     }
 
     appendLine({
-      kind: "normal",
-      tokens: [token("ok", "[ OK ]"), token("text", " sistema recuperado")],
+      kind:
+        "normal",
+
+      tokens: [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " sistema recuperado",
+        ),
+      ],
     });
   }
 
   async function handleDiagnostic() {
-    if (phase !== "recovery-diagnostic") {
+    if (
+      phase !==
+      "recovery-diagnostic"
+    ) {
       appendLine({
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("status", "[INFO]"),
-          token("muted", " diagnóstico já concluído"),
+          token(
+            "status",
+            "[INFO]",
+          ),
+
+          token(
+            "muted",
+            " diagnóstico já concluído",
+          ),
         ],
       });
 
       return;
     }
 
-    setIsBusy(true);
-
-    await runActivity(
-      [token("status", "[SCAN]"), token("text", " DISK_00")],
-      [token("ok", "[ OK ]"), token("text", " disco virtual acessível")],
+    setIsBusy(
+      true,
     );
 
     await runActivity(
-      [token("status", "[SCAN]"), token("text", " filesystem")],
-      [token("ok", "[ OK ]"), token("text", " filesystem carregado")],
+      [
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " DISK_00",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " disco virtual acessível",
+        ),
+      ],
     );
 
     await runActivity(
-      [token("status", "[SCAN]"), token("text", " sessão de usuário")],
-      [token("ok", "[ OK ]"), token("text", " sessão Anthony localizada")],
+      [
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " filesystem",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " filesystem carregado",
+        ),
+      ],
     );
 
     await runActivity(
-      [token("status", "[SCAN]"), token("text", " componente principal")],
-      [token("error", "[FAIL]"), token("text", " shell principal ausente")],
+      [
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " sessão de usuário",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " sessão Anthony localizada",
+        ),
+      ],
+    );
+
+    await runActivity(
+      [
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " componente principal",
+        ),
+      ],
+
+      [
+        token(
+          "error",
+          "[FAIL]",
+        ),
+
+        token(
+          "text",
+          " shell principal ausente",
+        ),
+      ],
+
       300,
     );
 
     appendLines(
       {
-        kind: "normal",
-        tokens: [token("error", "CRITICAL_FILE_MISSING")],
-      },
-      {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("muted", "Expected  "),
-          token("path", "C:\\Sistema\\"),
-          token("file", targetName),
+          token(
+            "error",
+            "CRITICAL_FILE_MISSING",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Expected  ",
+          ),
+
+          token(
+            "path",
+            "C:\\Sistema\\",
+          ),
+
+          token(
+            "file",
+            targetName,
+          ),
         ],
       },
     );
 
     await runActivity(
-      [token("status", "[SCAN]"), token("text", " recycle storage")],
       [
-        token("status", "[FOUND]"),
-        token("text", " "),
-        token("path", "C:\\Lixeira\\"),
-        token("file", targetName),
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " recycle storage",
+        ),
       ],
+
+      [
+        token(
+          "status",
+          "[FOUND]",
+        ),
+
+        token(
+          "text",
+          " ",
+        ),
+
+        token(
+          "path",
+          "C:\\Lixeira\\",
+        ),
+
+        token(
+          "file",
+          targetName,
+        ),
+      ],
+
       340,
     );
 
     appendLine({
-      kind: "note",
-      tokens: [token("muted", "Curioso. Foi exatamente onde você o deixou.")],
+      kind:
+        "note",
+
+      tokens: [
+        token(
+          "muted",
+          "Curioso. Foi exatamente onde você o deixou.",
+        ),
+      ],
     });
 
     appendLines(
       {
-        kind: "section",
-        tokens: [token("accent", "RECOVERY_STAGE 02/03")],
-      },
-      {
-        kind: "normal",
+        kind:
+          "section",
+
         tokens: [
-          token("muted", "STATUS         "),
-          token("text", "COMPONENT_RESTORE_REQUIRED"),
+          token(
+            "accent",
+            "RECOVERY_STAGE 02/03",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "STATUS         ",
+          ),
+
+          token(
+            "text",
+            "COMPONENT_RESTORE_REQUIRED",
+          ),
         ],
       },
     );
 
-    setIsBusy(false);
+    setIsBusy(
+      false,
+    );
 
     resetInvalidAttempts();
 
@@ -539,17 +1227,32 @@ export function RecoveryEnvironment({
   }
 
   async function handleRestore() {
-    if (phase === "recovery-diagnostic") {
+    if (
+      phase ===
+      "recovery-diagnostic"
+    ) {
       appendLines(
         {
-          kind: "normal",
+          kind:
+            "normal",
+
           tokens: [
-            token("error", "[FAIL]"),
-            token("text", " nenhum diagnóstico disponível"),
+            token(
+              "error",
+              "[FAIL]",
+            ),
+
+            token(
+              "text",
+              " nenhum diagnóstico disponível",
+            ),
           ],
         },
+
         {
-          kind: "note",
+          kind:
+            "note",
+
           tokens: [
             token(
               "muted",
@@ -564,92 +1267,205 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase === "recovery-restart" || phase === "recovered") {
+    if (
+      phase ===
+        "recovery-restart" ||
+      phase ===
+        "recovered"
+    ) {
       appendLine({
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("ok", "[ OK ]"),
-          token("file", targetName),
-          token("text", " já está restaurado"),
+          token(
+            "ok",
+            "[ OK ]",
+          ),
+
+          token(
+            "file",
+            targetName,
+          ),
+
+          token(
+            "text",
+            " já está restaurado",
+          ),
         ],
       });
 
       return;
     }
 
-    if (phase !== "recovery-restore") {
+    if (
+      phase !==
+      "recovery-restore"
+    ) {
       return;
     }
 
-    setIsBusy(false);
-
-    markRecovered();
-
-    void evaluateNarrative({
-      trigger:
-        "system-recovered",
-    });
+    setIsBusy(
+      true,
+    );
 
     await runActivity(
       [
-        token("status", "[SCAN]"),
-        token("text", " "),
-        token("path", "C:\\Lixeira\\"),
+        token(
+          "status",
+          "[SCAN]",
+        ),
+
+        token(
+          "text",
+          " ",
+        ),
+
+        token(
+          "path",
+          "C:\\Lixeira\\",
+        ),
       ],
+
       [
-        token("status", "[FOUND]"),
-        token("text", " "),
-        token("path", "C:\\Lixeira\\"),
-        token("file", targetName),
+        token(
+          "status",
+          "[FOUND]",
+        ),
+
+        token(
+          "text",
+          " ",
+        ),
+
+        token(
+          "path",
+          "C:\\Lixeira\\",
+        ),
+
+        token(
+          "file",
+          targetName,
+        ),
       ],
+
       260,
     );
 
-    const restored = restoreItem(targetId);
+    const restored =
+      restoreItem(
+        targetId,
+      );
 
-    if (!restored) {
+    if (
+      !restored
+    ) {
       appendLine({
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("error", "[FAIL]"),
-          token("text", " não foi possível restaurar o componente"),
+          token(
+            "error",
+            "[FAIL]",
+          ),
+
+          token(
+            "text",
+            " não foi possível restaurar o componente",
+          ),
         ],
       });
 
-      setIsBusy(false);
+      setIsBusy(
+        false,
+      );
 
       return;
     }
 
     await runActivity(
       [
-        token("status", "[COPY]"),
-        token("text", " "),
-        token("path", "C:\\Lixeira\\"),
-        token("file", targetName),
+        token(
+          "status",
+          "[COPY]",
+        ),
+
+        token(
+          "text",
+          " ",
+        ),
+
+        token(
+          "path",
+          "C:\\Lixeira\\",
+        ),
+
+        token(
+          "file",
+          targetName,
+        ),
       ],
-      [token("ok", "[ OK ]"), token("text", " arquivo recuperado")],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " arquivo recuperado",
+        ),
+      ],
+
       320,
     );
 
     appendLines(
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("muted", "Target    "),
-          token("path", "C:\\Sistema\\"),
-          token("file", targetName),
+          token(
+            "muted",
+            "Target    ",
+          ),
+
+          token(
+            "path",
+            "C:\\Sistema\\",
+          ),
+
+          token(
+            "file",
+            targetName,
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("ok", "[ OK ]"),
-          token("text", " integridade básica validada"),
+          token(
+            "ok",
+            "[ OK ]",
+          ),
+
+          token(
+            "text",
+            " integridade básica validada",
+          ),
         ],
       },
+
       {
-        kind: "note",
+        kind:
+          "note",
+
         tokens: [
           token(
             "muted",
@@ -657,20 +1473,40 @@ export function RecoveryEnvironment({
           ),
         ],
       },
+
       {
-        kind: "section",
-        tokens: [token("accent", "RECOVERY_STAGE 03/03")],
-      },
-      {
-        kind: "normal",
+        kind:
+          "section",
+
         tokens: [
-          token("muted", "STATUS         "),
-          token("text", "SHELL_READY"),
+          token(
+            "accent",
+            "RECOVERY_STAGE 03/03",
+          ),
+        ],
+      },
+
+      {
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "STATUS         ",
+          ),
+
+          token(
+            "text",
+            "SHELL_READY",
+          ),
         ],
       },
     );
 
-    setIsBusy(false);
+    setIsBusy(
+      false,
+    );
 
     resetInvalidAttempts();
 
@@ -678,18 +1514,38 @@ export function RecoveryEnvironment({
   }
 
   async function handleStartShell() {
-    if (phase === "recovery-diagnostic") {
+    if (
+      phase ===
+      "recovery-diagnostic"
+    ) {
       appendLines(
         {
-          kind: "normal",
+          kind:
+            "normal",
+
           tokens: [
-            token("error", "[FAIL]"),
-            token("text", " causa da falha ainda desconhecida"),
+            token(
+              "error",
+              "[FAIL]",
+            ),
+
+            token(
+              "text",
+              " causa da falha ainda desconhecida",
+            ),
           ],
         },
+
         {
-          kind: "note",
-          tokens: [token("muted", "Começar pelo diagnóstico costuma ajudar.")],
+          kind:
+            "note",
+
+          tokens: [
+            token(
+              "muted",
+              "Começar pelo diagnóstico costuma ajudar.",
+            ),
+          ],
         },
       );
 
@@ -698,19 +1554,42 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase === "recovery-restore") {
+    if (
+      phase ===
+      "recovery-restore"
+    ) {
       appendLines(
         {
-          kind: "normal",
+          kind:
+            "normal",
+
           tokens: [
-            token("error", "[FAIL]"),
-            token("text", " "),
-            token("file", targetName),
-            token("text", " continua ausente"),
+            token(
+              "error",
+              "[FAIL]",
+            ),
+
+            token(
+              "text",
+              " ",
+            ),
+
+            token(
+              "file",
+              targetName,
+            ),
+
+            token(
+              "text",
+              " continua ausente",
+            ),
           ],
         },
+
         {
-          kind: "note",
+          kind:
+            "note",
+
           tokens: [
             token(
               "muted",
@@ -725,73 +1604,249 @@ export function RecoveryEnvironment({
       return;
     }
 
-    if (phase !== "recovery-restart") {
+    if (
+      phase !==
+      "recovery-restart"
+    ) {
       return;
     }
 
-    setIsBusy(true);
-
-    await runActivity(
-      [token("status", "[BOOT]"), token("text", " verifying critical files")],
-      [token("ok", "[ OK ]"), token("text", " arquivos críticos íntegros")],
+    setIsBusy(
+      true,
     );
 
     await runActivity(
-      [token("status", "[LOAD]"), token("text", " Explorer")],
-      [token("ok", "[ OK ]"), token("text", " Explorer carregado")],
+      [
+        token(
+          "status",
+          "[BOOT]",
+        ),
+
+        token(
+          "text",
+          " verifying critical files",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " arquivos críticos íntegros",
+        ),
+      ],
     );
 
     await runActivity(
-      [token("status", "[LOAD]"), token("text", " Window Manager")],
-      [token("ok", "[ OK ]"), token("text", " Window Manager carregado")],
+      [
+        token(
+          "status",
+          "[LOAD]",
+        ),
+
+        token(
+          "text",
+          " Explorer",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " Explorer carregado",
+        ),
+      ],
     );
 
     await runActivity(
-      [token("status", "[LOAD]"), token("text", " user session")],
-      [token("ok", "[ OK ]"), token("text", " sessão restaurada")],
+      [
+        token(
+          "status",
+          "[LOAD]",
+        ),
+
+        token(
+          "text",
+          " Window Manager",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " Window Manager carregado",
+        ),
+      ],
+    );
+
+    await runActivity(
+      [
+        token(
+          "status",
+          "[LOAD]",
+        ),
+
+        token(
+          "text",
+          " user session",
+        ),
+      ],
+
+      [
+        token(
+          "ok",
+          "[ OK ]",
+        ),
+
+        token(
+          "text",
+          " sessão restaurada",
+        ),
+      ],
     );
 
     appendLines(
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("accent", "SYSTEM INTEGRITY"),
-          token("text", "  "),
-          token("ok", "OK"),
+          token(
+            "accent",
+            "SYSTEM INTEGRITY",
+          ),
+
+          token(
+            "text",
+            "  ",
+          ),
+
+          token(
+            "ok",
+            "OK",
+          ),
         ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("ok", "HOSSOMII OS RECUPERADO")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "ok",
+            "HOSSOMII OS RECUPERADO",
+          ),
+        ],
       },
     );
 
-    setIsBusy(false);
+    setIsBusy(
+      false,
+    );
 
     markRecovered();
+
+    void evaluateNarrative({
+      trigger:
+        "system-recovered",
+    });
   }
 
   function handleWhoAmI() {
     appendLines(
       {
-        kind: "normal",
-        tokens: [token("muted", "USER       "), token("text", "visitor")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "USER       ",
+          ),
+
+          token(
+            "text",
+            "visitor",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "ACCESS     "), token("text", "restricted")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "ACCESS     ",
+          ),
+
+          token(
+            "text",
+            "restricted",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "SESSION    "), token("text", "recovery")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "SESSION    ",
+          ),
+
+          token(
+            "text",
+            "recovery",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "MACHINE    "), token("text", "HOSSOMII-01")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "MACHINE    ",
+          ),
+
+          token(
+            "text",
+            "HOSSOMII-01",
+          ),
+        ],
       },
+
       {
-        kind: "note",
-        tokens: [token("muted", "Trust level: questionable.")],
+        kind:
+          "note",
+
+        tokens: [
+          token(
+            "muted",
+            "Trust level: questionable.",
+          ),
+        ],
       },
     );
   }
@@ -799,19 +1854,55 @@ export function RecoveryEnvironment({
   function handleVersion() {
     appendLines(
       {
-        kind: "normal",
-        tokens: [token("accent", "HOSSOMII Recovery Console")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "accent",
+            "HOSSOMII Recovery Console",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "Version    "), token("text", "2.2")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Version    ",
+          ),
+
+          token(
+            "text",
+            "2.2",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "Host       "), token("text", "HOSSOMII-01")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Host       ",
+          ),
+
+          token(
+            "text",
+            "HOSSOMII-01",
+          ),
+        ],
       },
+
       {
-        kind: "note",
+        kind:
+          "note",
+
         tokens: [
           token(
             "muted",
@@ -825,32 +1916,112 @@ export function RecoveryEnvironment({
   function handleDir() {
     appendLines(
       {
-        kind: "normal",
-        tokens: [token("muted", "Directory "), token("path", "C:\\")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Directory ",
+          ),
+
+          token(
+            "path",
+            "C:\\",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "Mode       Name")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Mode       Name",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "----       ----")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "----       ----",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("status", "d----"), token("text", "Sistema")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "status",
+            "d----",
+          ),
+
+          token(
+            "text",
+            "Sistema",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("status", "d----"), token("text", "Usuários")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "status",
+            "d----",
+          ),
+
+          token(
+            "text",
+            "Usuários",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("status", "d----"), token("text", "Programas")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "status",
+            "d----",
+          ),
+
+          token(
+            "text",
+            "Programas",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("status", "d----"), token("text", "Lixeira")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "status",
+            "d----",
+          ),
+
+          token(
+            "text",
+            "Lixeira",
+          ),
+        ],
       },
     );
   }
@@ -858,32 +2029,93 @@ export function RecoveryEnvironment({
   function handleTrash() {
     appendLines(
       {
-        kind: "normal",
-        tokens: [token("muted", "Directory "), token("path", "C:\\Lixeira\\")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Directory ",
+          ),
+
+          token(
+            "path",
+            "C:\\Lixeira\\",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "Mode       Name")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "Mode       Name",
+          ),
+        ],
       },
+
       {
-        kind: "normal",
-        tokens: [token("muted", "----       ----")],
+        kind:
+          "normal",
+
+        tokens: [
+          token(
+            "muted",
+            "----       ----",
+          ),
+        ],
       },
     );
 
-    if (phase === "recovery-diagnostic" || phase === "recovery-restore") {
+    if (
+      phase ===
+        "recovery-diagnostic" ||
+      phase ===
+        "recovery-restore"
+    ) {
       appendLines(
         {
-          kind: "normal",
-          tokens: [token("status", "-a---"), token("file", targetName)],
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "status",
+              "-a---",
+            ),
+
+            token(
+              "file",
+              targetName,
+            ),
+          ],
         },
+
         {
-          kind: "normal",
-          tokens: [token("muted", "1 arquivo")],
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "muted",
+              "1 arquivo",
+            ),
+          ],
         },
+
         {
-          kind: "note",
-          tokens: [token("muted", "Isso parece importante.")],
+          kind:
+            "note",
+
+          tokens: [
+            token(
+              "muted",
+              "Isso parece importante.",
+            ),
+          ],
         },
       );
 
@@ -891,122 +2123,250 @@ export function RecoveryEnvironment({
     }
 
     appendLine({
-      kind: "normal",
-      tokens: [token("muted", "0 arquivos")],
+      kind:
+        "normal",
+
+      tokens: [
+        token(
+          "muted",
+          "0 arquivos",
+        ),
+      ],
     });
   }
 
   function clearTerminal() {
-    const clearedLines: RecoveryLineInput[] = [
-      {
-        kind: "section",
-        tokens: [token("accent", "HOSSOMII RECOVERY CONSOLE")],
-      },
-      {
-        kind: "normal",
-        tokens: [
-          token("muted", "Machine        "),
-          token("text", "HOSSOMII-01"),
-        ],
-      },
-      {
-        kind: "normal",
-        tokens: [token("muted", "Session        "), token("text", "RECOVERY")],
-      },
-      ...getStageHeaderLines(),
-    ];
+    const clearedLines:
+      RecoveryLineInput[] = [
+        {
+          kind:
+            "section",
 
-    const createdLines = clearedLines.map(createLine);
+          tokens: [
+            token(
+              "accent",
+              "HOSSOMII RECOVERY CONSOLE",
+            ),
+          ],
+        },
 
-    setOutput(createdLines);
+        {
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "muted",
+              "Machine        ",
+            ),
+
+            token(
+              "text",
+              "HOSSOMII-01",
+            ),
+          ],
+        },
+
+        {
+          kind:
+            "normal",
+
+          tokens: [
+            token(
+              "muted",
+              "Session        ",
+            ),
+
+            token(
+              "text",
+              "RECOVERY",
+            ),
+          ],
+        },
+
+        ...getStageHeaderLines(),
+      ];
+
+    const createdLines =
+      clearedLines.map(
+        createLine,
+      );
+
+    setOutput(
+      createdLines,
+    );
 
     resetInvalidAttempts();
   }
 
-  async function handleCommand(event: FormEvent<HTMLFormElement>) {
+  async function handleCommand(
+    event:
+      FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    if (isBusy) {
+    if (
+      isBusy
+    ) {
       return;
     }
 
-    const rawCommand = command.trim();
+    const rawCommand =
+      command.trim();
 
-    if (!rawCommand) {
+    if (
+      !rawCommand
+    ) {
       return;
     }
 
-    const normalizedCommand = rawCommand.toLowerCase();
+    const normalizedCommand =
+      rawCommand.toLowerCase();
 
-    appendPrompt(rawCommand);
+    appendPrompt(
+      rawCommand,
+    );
 
     setCommand("");
 
-    if (normalizedCommand === "ajuda" || normalizedCommand === "help") {
+    if (
+      normalizedCommand ===
+        "ajuda" ||
+      normalizedCommand ===
+        "help"
+    ) {
       handleHelp();
+
       return;
     }
 
-    if (normalizedCommand === "status") {
+    if (
+      normalizedCommand ===
+      "status"
+    ) {
       handleStatus();
+
       return;
     }
 
-    if (normalizedCommand === "diagnosticar") {
+    if (
+      normalizedCommand ===
+      "diagnosticar"
+    ) {
       await handleDiagnostic();
+
       return;
     }
 
-    if (normalizedCommand === `restaurar ${targetName.toLowerCase()}`) {
+    if (
+      normalizedCommand ===
+      `restaurar ${targetName.toLowerCase()}`
+    ) {
       await handleRestore();
+
       return;
     }
 
-    if (normalizedCommand === "iniciar shell") {
+    if (
+      normalizedCommand ===
+      "iniciar shell"
+    ) {
       await handleStartShell();
+
       return;
     }
 
-    if (normalizedCommand === "whoami") {
+    if (
+      normalizedCommand ===
+      "whoami"
+    ) {
       handleWhoAmI();
+
       return;
     }
 
-    if (normalizedCommand === "dir") {
+    if (
+      normalizedCommand ===
+      "dir"
+    ) {
       handleDir();
+
       return;
     }
 
-    if (normalizedCommand === "lixeira") {
+    if (
+      normalizedCommand ===
+      "lixeira"
+    ) {
       handleTrash();
+
       return;
     }
 
-    if (normalizedCommand === "versao" || normalizedCommand === "versão") {
+    if (
+      normalizedCommand ===
+        "versao" ||
+      normalizedCommand ===
+        "versão"
+    ) {
       handleVersion();
+
       return;
     }
 
-    if (normalizedCommand === "cls" || normalizedCommand === "clear") {
+    if (
+      normalizedCommand ===
+        "cls" ||
+      normalizedCommand ===
+        "clear"
+    ) {
       clearTerminal();
+
       return;
     }
 
     appendLines(
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("error", "COMMAND_NOT_FOUND"),
-          token("text", "  "),
-          token("command", rawCommand),
+          token(
+            "error",
+            "COMMAND_NOT_FOUND",
+          ),
+
+          token(
+            "text",
+            "  ",
+          ),
+
+          token(
+            "command",
+            rawCommand,
+          ),
         ],
       },
+
       {
-        kind: "normal",
+        kind:
+          "normal",
+
         tokens: [
-          token("muted", "Digite "),
-          token("command", "ajuda"),
-          token("muted", " para consultar os comandos disponíveis."),
+          token(
+            "muted",
+            "Digite ",
+          ),
+
+          token(
+            "command",
+            "ajuda",
+          ),
+
+          token(
+            "muted",
+            " para consultar os comandos disponíveis.",
+          ),
         ],
       },
     );
@@ -1023,64 +2383,122 @@ export function RecoveryEnvironment({
           </span>
         </header>
 
-        <div ref={outputRef} className="recovery-output" aria-live="polite">
-          {output.map((line) => (
-            <div
-              key={line.id}
-              className={`recovery-line recovery-line-${line.kind}`}
-            >
-              {line.tokens.map((lineToken, index) => (
-                <span
-                  key={`${line.id}-${index}`}
-                  className={`recovery-token recovery-token-${lineToken.type}`}
-                >
-                  {lineToken.value}
-                </span>
-              ))}
+        <div
+          ref={
+            outputRef
+          }
+          className="recovery-output"
+          aria-live="polite"
+        >
+          {output.map(
+            (
+              line,
+            ) => (
+              <div
+                key={
+                  line.id
+                }
+                className={`recovery-line recovery-line-${line.kind}`}
+              >
+                {line.tokens.map(
+                  (
+                    lineToken,
+                    index,
+                  ) => (
+                    <span
+                      key={`${line.id}-${index}`}
+                      className={`recovery-token recovery-token-${lineToken.type}`}
+                    >
+                      {
+                        lineToken.value
+                      }
+                    </span>
+                  ),
+                )}
 
-              {line.kind === "activity" && (
-                <span className="recovery-inline-spinner" aria-hidden="true" />
-              )}
-            </div>
-          ))}
+                {line.kind ===
+                  "activity" && (
+                  <span
+                    className="recovery-inline-spinner"
+                    aria-hidden="true"
+                  />
+                )}
+              </div>
+            ),
+          )}
 
-          {phase === "recovered" && (
+          {phase ===
+            "recovered" && (
             <div className="recovery-restored-message">
-              <strong>Session restored.</strong>
+              <strong>
+                Session restored.
+              </strong>
 
-              <span>Retornando ao ambiente gráfico...</span>
+              <span>
+                Retornando ao ambiente gráfico...
+              </span>
             </div>
           )}
         </div>
 
-        {phase !== "recovered" && (
-          <form className="recovery-command-line" onSubmit={handleCommand}>
-            <span className="recovery-prompt-path">C:\RECOVERY</span>
+        {phase !==
+          "recovered" && (
+          <form
+            className="recovery-command-line"
+            onSubmit={
+              handleCommand
+            }
+          >
+            <span className="recovery-prompt-path">
+              C:\RECOVERY
+            </span>
 
-            <span className="recovery-prompt-chevron">&gt;</span>
+            <span className="recovery-prompt-chevron">
+              &gt;
+            </span>
 
             <input
               type="text"
-              value={command}
-              onChange={(event) => setCommand(event.target.value)}
-              disabled={isBusy}
+              value={
+                command
+              }
+              onChange={(
+                event,
+              ) =>
+                setCommand(
+                  event
+                    .target
+                    .value,
+                )
+              }
+              disabled={
+                isBusy
+              }
               autoFocus
               autoComplete="off"
-              spellCheck={false}
+              spellCheck={
+                false
+              }
               aria-label="Comando de recuperação"
             />
           </form>
         )}
 
         <footer className="recovery-footer">
-          <span>HELP: ajuda</span>
+          <span>
+            HELP: ajuda
+          </span>
 
           <span
             className={
-              isBusy ? "recovery-status-busy" : "recovery-status-ready"
+              isBusy
+                ? "recovery-status-busy"
+                : "recovery-status-ready"
             }
           >
-            {isBusy ? "SYS BUSY" : "SYS READY"}
+            {isBusy
+              ? "SYS BUSY"
+              : "SYS READY"}
           </span>
         </footer>
       </div>
