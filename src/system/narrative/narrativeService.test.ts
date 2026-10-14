@@ -126,4 +126,68 @@ describe("narrativeService", () => {
       useNarrativeStore.getState().getTriggerCount("terminal-command"),
     ).toBe(2);
   });
+
+  it("marks recovery completion as discovered", () => {
+    const effects = evaluateNarrative({
+      trigger: "system-recovered",
+    });
+
+    expect(effects).toEqual([]);
+
+    expect(
+      useNarrativeStore.getState().hasDiscovered("recovery-completed"),
+    ).toBe(true);
+  });
+
+  it("does not reveal recovery host metadata before recovery", () => {
+    const effects = evaluateNarrative({
+      trigger: "terminal-command",
+
+      command: "hostname",
+    });
+
+    expect(effects).toEqual([]);
+  });
+
+  it("reveals recovery metadata through hostname after recovery", () => {
+    evaluateNarrative({
+      trigger: "system-recovered",
+    });
+
+    const effects = evaluateNarrative({
+      trigger: "terminal-command",
+
+      command: "hostname",
+    });
+
+    expect(effects).toEqual([
+      {
+        type: "terminal-lines",
+
+        lines: [
+          "[recovery] registro de falha de integridade associado a este host.",
+        ],
+      },
+    ]);
+  });
+
+  it("shows the recovery hostname response only once", () => {
+    evaluateNarrative({
+      trigger: "system-recovered",
+    });
+
+    evaluateNarrative({
+      trigger: "terminal-command",
+
+      command: "hostname",
+    });
+
+    const effects = evaluateNarrative({
+      trigger: "terminal-command",
+
+      command: "hostname",
+    });
+
+    expect(effects).toEqual([]);
+  });
 });

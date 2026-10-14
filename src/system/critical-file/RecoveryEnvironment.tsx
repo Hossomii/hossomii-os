@@ -4,6 +4,10 @@ import { useAchievementStore } from "../../stores/achievementStore";
 import { useCriticalFileStore } from "../../stores/criticalFileStore";
 import { useFileSystemStore } from "../../stores/filesystemStore";
 
+import {
+  evaluateNarrative,
+} from "../narrative/narrativeService";
+
 type RecoveryEnvironmentProps = {
   targetId: string;
   targetName: string;
@@ -577,7 +581,14 @@ export function RecoveryEnvironment({
       return;
     }
 
-    setIsBusy(true);
+    setIsBusy(false);
+
+    markRecovered();
+
+    void evaluateNarrative({
+      trigger:
+        "system-recovered",
+    });
 
     await runActivity(
       [

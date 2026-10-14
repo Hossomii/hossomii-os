@@ -10,7 +10,9 @@ export type NarrativeEventId =
   | "operator-record-discovered"
   | "maintenance-record-discovered"
   | "operator-identity-acknowledged"
-  | "maintenance-version-acknowledged";
+  | "maintenance-version-acknowledged"
+  | "recovery-completed"
+  | "recovery-host-acknowledged";
 
 export type NarrativeContext = {
   trigger: NarrativeTriggerId;
