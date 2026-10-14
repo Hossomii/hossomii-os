@@ -14,6 +14,10 @@ import {
   getFileSystemIcon,
 } from "../../system/filesystem/iconRegistry";
 
+import {
+  evaluateNarrative,
+} from "../../system/narrative/narrativeService";
+
 import type { FileSystemItem } from "../../types/filesystem";
 
 import type { WindowAppId } from "../../types/window";
@@ -144,40 +148,54 @@ export function useFileSystemItemLauncher({
       return;
     }
 
-    const extension = item.extension.toLowerCase();
+    const extension =
+      item.extension.toLowerCase();
+      
+    const imageExtensions = [
+      "webp",
+      "png",
+      "jpg",
+      "jpeg",
+    ];
 
-    const imageExtensions = ["webp", "png", "jpg", "jpeg"];
+    const textExtensions = [
+      "txt",
+      "log",
+      "ini",
+    ];
 
-    if (extension === "txt") {
-      openWindow({
-        appId: "notepad",
+    if (
+      textExtensions.includes(
+        extension,
+      )
+    ) {
+      void evaluateNarrative({
+        trigger:
+          "file-opened",
 
-        instanceId: item.id,
-
-        title: `${item.name} - Bloco de Notas`,
-
-        icon: getFileExtensionIcon("txt") ?? documentsIcon,
-
-        data: {
-          fileId: item.id,
-        },
+        itemId:
+          item.id,
       });
 
-      return;
-    }
-
-    if (extension === "pdf") {
       openWindow({
-        appId: "pdf-viewer",
+        appId:
+          "notepad",
 
-        instanceId: item.id,
+        instanceId:
+          item.id,
 
-        title: `${item.name} - Visualizador de PDF`,
+        title:
+          `${item.name} - Bloco de Notas`,
 
-        icon: getFileExtensionIcon("pdf") ?? documentsIcon,
+        icon:
+          getFileExtensionIcon(
+            extension,
+          ) ??
+          documentsIcon,
 
         data: {
-          fileId: item.id,
+          fileId:
+            item.id,
         },
       });
 

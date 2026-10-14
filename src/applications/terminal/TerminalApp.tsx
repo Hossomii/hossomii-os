@@ -735,6 +735,13 @@ export function TerminalApp() {
 
       return;
     }
+    void evaluateNarrative({
+      trigger:
+        "file-opened",
+
+      itemId:
+        target.id,
+    });
 
     const contentLines =
       target.content.split(

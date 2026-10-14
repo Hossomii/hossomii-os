@@ -6,7 +6,11 @@ export type NarrativeTriggerId =
   | "system-recovered"
   | "session-started";
 
-export type NarrativeEventId = "placeholder-terminal-event";
+export type NarrativeEventId =
+  | "operator-record-discovered"
+  | "maintenance-record-discovered"
+  | "operator-identity-acknowledged"
+  | "maintenance-version-acknowledged";
 
 export type NarrativeContext = {
   trigger: NarrativeTriggerId;
