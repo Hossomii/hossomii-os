@@ -8,6 +8,10 @@ import {
   initialFileSystem,
 } from "./initialFileSystem";
 
+import type {
+  FileSystemItem,
+} from "../../types/filesystem";
+
 import {
   formatPath,
   getChildren,
@@ -16,9 +20,125 @@ import {
   resolveItemPath,
 } from "./pathUtils";
 
+const hiddenTestFile:
+  FileSystemItem = {
+    id:
+      "hidden-test-file",
+
+    name:
+      "segredo.txt",
+
+    type:
+      "file",
+
+    parentId:
+      "documents",
+
+    extension:
+      "txt",
+
+    content:
+      "hidden",
+
+    hidden:
+      true,
+
+    deletable:
+      false,
+
+    critical:
+      false,
+
+    recoverable:
+      false,
+
+    trashed:
+      false,
+
+    originalParentId:
+      null,
+  };
+
+const fileSystemWithHidden =
+  [
+    ...initialFileSystem,
+    hiddenTestFile,
+  ];
+
 describe(
   "virtual filesystem path utilities",
   () => {
+    it(
+      "does not list hidden children by default",
+      () => {
+        const children =
+          getChildren(
+            fileSystemWithHidden,
+            "documents",
+          );
+
+        expect(
+          children.some(
+            (item) =>
+              item.id ===
+              "hidden-test-file",
+          ),
+        ).toBe(false);
+      },
+    );
+
+    it(
+      "lists hidden children when explicitly requested",
+      () => {
+        const children =
+          getChildren(
+            fileSystemWithHidden,
+            "documents",
+            true,
+          );
+
+        expect(
+          children.some(
+            (item) =>
+              item.id ===
+              "hidden-test-file",
+          ),
+        ).toBe(true);
+      },
+    );
+
+    it(
+      "does not resolve hidden items by default",
+      () => {
+        expect(
+          resolveItemPath(
+            fileSystemWithHidden,
+            "documents",
+            "segredo.txt",
+          ),
+        ).toBeNull();
+      },
+    );
+
+    it(
+      "resolves hidden items when explicitly allowed",
+      () => {
+        expect(
+          resolveItemPath(
+            fileSystemWithHidden,
+            "documents",
+            "segredo.txt",
+            {
+              includeHidden:
+                true,
+            },
+          )?.id,
+        ).toBe(
+          "hidden-test-file",
+        );
+      },
+    );
+
     it(
       "normalizes case and diacritics",
       () => {
