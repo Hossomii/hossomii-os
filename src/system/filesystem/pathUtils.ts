@@ -4,39 +4,46 @@ import type {
 
 const ROOT_ID = "drive-c";
 
+export type ResolveItemPathOptions = {
+  includeHidden?: boolean;
+};
+
 export function normalizeValue(
-  value: string
+  value: string,
 ) {
   return value
     .normalize("NFD")
     .replace(
       /[\u0300-\u036f]/g,
-      ""
+      "",
     )
     .trim()
     .toLocaleLowerCase(
-      "pt-BR"
+      "pt-BR",
     );
 }
 
 export function getItemById(
   items: FileSystemItem[],
-  id: string
+  id: string,
 ) {
   return items.find(
     (item) =>
-      item.id === id
+      item.id === id,
   );
 }
 
 export function getChildren(
   items: FileSystemItem[],
-  parentId: string | null,
-  includeHidden = false
+  parentId:
+    string | null,
+  includeHidden = false,
 ) {
   return items.filter(
     (item) => {
-      if (item.trashed) {
+      if (
+        item.trashed
+      ) {
         return false;
       }
 
@@ -55,32 +62,37 @@ export function getChildren(
       }
 
       return true;
-    }
+    },
   );
 }
 
 function findChildByName(
   items: FileSystemItem[],
-  parentId: string | null,
-  name: string
+  parentId:
+    string | null,
+  name: string,
+  includeHidden = false,
 ) {
   const normalizedName =
-    normalizeValue(name);
+    normalizeValue(
+      name,
+    );
 
   return getChildren(
     items,
-    parentId
+    parentId,
+    includeHidden,
   ).find(
     (item) =>
       normalizeValue(
-        item.name
-      ) === normalizedName
+        item.name,
+      ) === normalizedName,
   );
 }
 
 function getPathItems(
   items: FileSystemItem[],
-  id: string
+  id: string,
 ) {
   const path:
     FileSystemItem[] = [];
@@ -91,24 +103,26 @@ function getPathItems(
   let current =
     getItemById(
       items,
-      id
+      id,
     );
 
-  while (current) {
+  while (
+    current
+  ) {
     if (
       visited.has(
-        current.id
+        current.id,
       )
     ) {
       break;
     }
 
     visited.add(
-      current.id
+      current.id,
     );
 
     path.unshift(
-      current
+      current,
     );
 
     if (
@@ -121,7 +135,7 @@ function getPathItems(
     current =
       getItemById(
         items,
-        current.parentId
+        current.parentId,
       );
   }
 
@@ -130,12 +144,12 @@ function getPathItems(
 
 export function formatPath(
   items: FileSystemItem[],
-  id: string
+  id: string,
 ) {
   const path =
     getPathItems(
       items,
-      id
+      id,
     );
 
   if (
@@ -156,12 +170,13 @@ export function formatPath(
   }
 
   if (
-    root.id !== ROOT_ID
+    root.id !==
+    ROOT_ID
   ) {
     return `C:\\${segments
       .map(
         (item) =>
-          item.name
+          item.name,
       )
       .join("\\")}`;
   }
@@ -169,16 +184,23 @@ export function formatPath(
   return `${root.name}\\${segments
     .map(
       (item) =>
-        item.name
+        item.name,
     )
     .join("\\")}`;
 }
 
 export function resolveItemPath(
   items: FileSystemItem[],
-  currentDirectoryId: string,
-  rawPath: string
+  currentDirectoryId:
+    string,
+  rawPath: string,
+  options:
+    ResolveItemPathOptions = {},
 ): FileSystemItem | null {
+  const {
+    includeHidden = false,
+  } = options;
+
   const trimmedPath =
     rawPath.trim();
 
@@ -189,7 +211,7 @@ export function resolveItemPath(
     return (
       getItemById(
         items,
-        currentDirectoryId
+        currentDirectoryId,
       ) ?? null
     );
   }
@@ -197,17 +219,17 @@ export function resolveItemPath(
   const normalizedSeparators =
     trimmedPath.replace(
       /\//g,
-      "\\"
+      "\\",
     );
 
   const absolute =
     normalizedSeparators.startsWith(
-      "\\"
+      "\\",
     ) ||
     normalizeValue(
-      normalizedSeparators
+      normalizedSeparators,
     ).startsWith(
-      "c:"
+      "c:",
     );
 
   let current =
@@ -215,10 +237,12 @@ export function resolveItemPath(
       items,
       absolute
         ? ROOT_ID
-        : currentDirectoryId
+        : currentDirectoryId,
     );
 
-  if (!current) {
+  if (
+    !current
+  ) {
     return null;
   }
 
@@ -227,25 +251,26 @@ export function resolveItemPath(
 
   if (
     normalizeValue(
-      pathWithoutDrive
+      pathWithoutDrive,
     ).startsWith(
-      "c:"
+      "c:",
     )
   ) {
     pathWithoutDrive =
       pathWithoutDrive.slice(
-        2
+        2,
       );
   }
 
   pathWithoutDrive =
     pathWithoutDrive.replace(
       /^\\+/,
-      ""
+      "",
     );
 
   if (
-    pathWithoutDrive === ""
+    pathWithoutDrive ===
+    ""
   ) {
     return current;
   }
@@ -256,7 +281,8 @@ export function resolveItemPath(
       .filter(Boolean);
 
   for (
-    const segment of segments
+    const segment
+    of segments
   ) {
     if (
       segment === "."
@@ -273,11 +299,14 @@ export function resolveItemPath(
         const parent =
           getItemById(
             items,
-            current.parentId
+            current.parentId,
           );
 
-        if (parent) {
-          current = parent;
+        if (
+          parent
+        ) {
+          current =
+            parent;
         }
       }
 
@@ -295,14 +324,18 @@ export function resolveItemPath(
       findChildByName(
         items,
         current.id,
-        segment
+        segment,
+        includeHidden,
       );
 
-    if (!child) {
+    if (
+      !child
+    ) {
       return null;
     }
 
-    current = child;
+    current =
+      child;
   }
 
   return current;
