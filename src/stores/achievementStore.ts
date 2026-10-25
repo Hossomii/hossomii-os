@@ -6,92 +6,55 @@ import {
   persist,
 } from "zustand/middleware";
 
-export type AchievementId =
-  | "i-warned-you"
-  | "first-text-file"
-  | "first-pdf-file"
-  | "first-delete"
-  | "first-external-link";
+import {
+  ACHIEVEMENTS,
+} from "../system/achievements/achievementRegistry";
 
-export type AchievementDefinition = {
-  id: AchievementId;
+import type {
+  AchievementDefinition,
+  AchievementId,
+} from "../system/achievements/types";
 
-  title: string;
-
-  description: string;
+export {
+  ACHIEVEMENTS,
 };
 
-export const ACHIEVEMENTS: Record<
+export type {
+  AchievementDefinition,
   AchievementId,
-  AchievementDefinition
-> = {
-  "i-warned-you": {
-    id: "i-warned-you",
-
-    title: "Eu avisei.",
-
-    description:
-      "Recupere o HOSSOMII OS depois de excluir um arquivo crítico.",
-  },
-
-  "first-text-file": {
-    id: "first-text-file",
-
-    title:
-      "Leitura obrigatória",
-
-    description:
-      "Abra um arquivo de texto pela primeira vez.",
-  },
-
-  "first-pdf-file": {
-    id: "first-pdf-file",
-
-    title:
-      "Papelada digital",
-
-    description:
-      "Abra um documento PDF pela primeira vez.",
-  },
-
-  "first-delete": {
-    id: "first-delete",
-
-    title:
-      "Sem apego",
-
-    description:
-      "Mova seu primeiro arquivo para a Lixeira.",
-  },
-
-  "first-external-link": {
-    id: "first-external-link",
-
-    title:
-      "Saindo da rede",
-
-    description:
-      "Abra um link externo pela primeira vez.",
-  },
 };
 
 type AchievementStore = {
   unlockedAchievements:
     AchievementId[];
 
+  unlockedAtById:
+    Partial<
+      Record<
+        AchievementId,
+        string
+      >
+    >;
+
   pendingNotifications:
     AchievementId[];
 
   unlockAchievement: (
-    id: AchievementId
+    id: AchievementId,
   ) => void;
 
   dismissNotification:
     () => void;
 
   hasUnlocked: (
-    id: AchievementId
+    id: AchievementId,
   ) => boolean;
+
+  getUnlockedAt: (
+    id: AchievementId,
+  ) =>
+    string |
+    undefined;
 };
 
 export const useAchievementStore =
@@ -99,32 +62,40 @@ export const useAchievementStore =
     persist(
       (
         set,
-        get
+        get,
       ) => ({
         unlockedAchievements:
           [],
+
+        unlockedAtById:
+          {},
 
         pendingNotifications:
           [],
 
         unlockAchievement: (
-          id
+          id,
         ) => {
           const {
             unlockedAchievements,
-          } = get();
+          } =
+            get();
 
           if (
             unlockedAchievements.includes(
-              id
+              id,
             )
           ) {
             return;
           }
 
+          const unlockedAt =
+            new Date()
+              .toISOString();
+
           set(
             (
-              state
+              state,
             ) => ({
               unlockedAchievements:
                 [
@@ -132,12 +103,20 @@ export const useAchievementStore =
                   id,
                 ],
 
+              unlockedAtById:
+                {
+                  ...state.unlockedAtById,
+
+                  [id]:
+                    unlockedAt,
+                },
+
               pendingNotifications:
                 [
                   ...state.pendingNotifications,
                   id,
                 ],
-            })
+            }),
           );
         },
 
@@ -145,36 +124,63 @@ export const useAchievementStore =
           () => {
             set(
               (
-                state
+                state,
               ) => ({
                 pendingNotifications:
                   state.pendingNotifications.slice(
-                    1
+                    1,
                   ),
-              })
+              }),
             );
           },
 
         hasUnlocked: (
-          id
+          id,
         ) => {
-          return get().unlockedAchievements.includes(
-            id
-          );
+          return get()
+            .unlockedAchievements
+            .includes(
+              id,
+            );
+        },
+
+        getUnlockedAt: (
+          id,
+        ) => {
+          return get()
+            .unlockedAtById[
+              id
+            ];
         },
       }),
+
       {
         name:
           "hossomii-os-achievements",
 
-        version: 1,
+        /*
+         * Mantemos a versão 1 porque a alteração
+         * é aditiva.
+         *
+         * Estados antigos possuem
+         * unlockedAchievements e continuam válidos.
+         *
+         * unlockedAtById simplesmente começa vazio
+         * para conquistas desbloqueadas em versões
+         * anteriores.
+         */
+        version:
+          1,
 
         partialize: (
-          state
+          state,
         ) => ({
           unlockedAchievements:
             state.unlockedAchievements,
+
+          unlockedAtById:
+            state.unlockedAtById,
         }),
-      }
-    )
+      },
+    ),
   );
