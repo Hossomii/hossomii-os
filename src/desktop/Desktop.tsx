@@ -63,9 +63,11 @@ import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
 
 import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
 
-import {
-  playSound,
-} from "../system/audio/audioService";
+import { playSound } from "../system/audio/audioService";
+
+import achievementAlbumIcon from "../assets/achievements/icons/achievement-album.png";
+
+import { AchievementAlbumApp } from "../applications/achievement-album/AchievementAlbumApp";
 
 import "../styles/desktop/index.css";
 
@@ -139,6 +141,38 @@ export function Desktop() {
 
   const wallpaperImage = WALLPAPERS[wallpaper] ?? wallpaperDefault;
 
+  const quickLaunchItems = [
+    {
+      id: "quick-view",
+
+      title: "Quick View",
+
+      icon: profileAvatar,
+
+      onOpen: () => handleOpenItem("quick-view"),
+    },
+
+    {
+      id: "browser",
+
+      title: "HOSSOMII Web",
+
+      icon: browserIcon,
+
+      onOpen: () => handleOpenItem("browser"),
+    },
+
+    {
+      id: "achievement-album",
+
+      title: "Álbum de Conquistas",
+
+      icon: achievementAlbumIcon,
+
+      onOpen: () => handleOpenItem("achievement-album"),
+    },
+  ];
+
   const desktopItems = [
     {
       id: "quick-view",
@@ -165,6 +199,13 @@ export function Desktop() {
       id: "browser",
       label: "HOSSOMII Web",
       icon: browserIcon,
+    },
+    {
+      id: "achievement-album",
+
+      label: "Álbum de Conquistas",
+
+      icon: achievementAlbumIcon,
     },
     {
       id: "terminal",
@@ -275,6 +316,18 @@ export function Desktop() {
         title: "HOSSOMII Web",
 
         icon: browserIcon,
+      });
+
+      return;
+    }
+
+    if (id === "achievement-album") {
+      openWindow({
+        appId: "achievement-album",
+
+        title: "Álbum de Conquistas",
+
+        icon: achievementAlbumIcon,
       });
 
       return;
@@ -432,6 +485,14 @@ export function Desktop() {
           );
         }
 
+        if (windowItem.appId === "achievement-album") {
+          return (
+            <WindowFrame key={windowItem.id} windowItem={windowItem}>
+              <AchievementAlbumApp />
+            </WindowFrame>
+          );
+        }
+
         if (windowItem.appId === "terminal") {
           return (
             <WindowFrame key={windowItem.id} windowItem={windowItem}>
@@ -500,7 +561,7 @@ export function Desktop() {
         startMenuOpen={startMenuOpen}
         windows={windows}
         activeWindowId={activeWindow?.id ?? null}
-        onBrowserOpen={() => handleOpenItem("browser")}
+        quickLaunchItems={quickLaunchItems}
         onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
         onWindowClick={handleTaskbarWindowClick}
       />

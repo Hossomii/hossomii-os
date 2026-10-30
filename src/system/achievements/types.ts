@@ -27,4 +27,8 @@ export type AchievementDefinition = {
   description: string;
 
   rarity: AchievementRarity;
+
+  icon: string;
+
+  stickerImage: string;
 };

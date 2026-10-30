@@ -1,182 +1,177 @@
-import type {
-  AchievementDefinition,
-  AchievementId,
-} from "./types";
+import type { AchievementDefinition, AchievementId } from "./types";
 
-export const ACHIEVEMENTS:
-  Record<
-    AchievementId,
-    AchievementDefinition
-  > = {
-    "first-text-file": {
-      id:
-        "first-text-file",
+import firstTextFileIcon from "../../assets/achievements/icons/first-text-file.webp";
+import firstTextFileSticker from "../../assets/achievements/stickers/first-text-file.webp";
 
-      number:
-        1,
+import firstPdfFileIcon from "../../assets/achievements/icons/first-pdf-file.webp";
+import firstPdfFileSticker from "../../assets/achievements/stickers/first-pdf-file.webp";
 
-      order:
-        1,
+import firstDeleteIcon from "../../assets/achievements/icons/first-delete.webp";
+import firstDeleteSticker from "../../assets/achievements/stickers/first-delete.webp";
 
-      title:
-        "Leitura obrigatória",
+import firstExternalLinkIcon from "../../assets/achievements/icons/first-external-link.webp";
+import firstExternalLinkSticker from "../../assets/achievements/stickers/first-external-link.webp";
 
-      description:
-        "Abra um arquivo de texto pela primeira vez.",
+import iWarnedYouIcon from "../../assets/achievements/icons/i-warned-you.webp";
+import iWarnedYouSticker from "../../assets/achievements/stickers/i-warned-you.webp";
 
-      rarity:
-        "common",
-    },
+import hiddenArchiveIcon from "../../assets/achievements/icons/hidden-archive.webp";
+import hiddenArchiveSticker from "../../assets/achievements/stickers/hidden-archive.webp";
 
-    "first-pdf-file": {
-      id:
-        "first-pdf-file",
+import operatorArchiveIcon from "../../assets/achievements/icons/operator-archive.webp";
+import operatorArchiveSticker from "../../assets/achievements/stickers/operator-archive.webp";
 
-      number:
-        2,
+import firstStickerPastedIcon from "../../assets/achievements/icons/first-sticker-pasted.webp";
+import firstStickerPastedSticker from "../../assets/achievements/stickers/first-sticker-pasted.webp";
 
-      order:
-        2,
+export const ACHIEVEMENTS: Record<AchievementId, AchievementDefinition> = {
+  "first-text-file": {
+    id: "first-text-file",
 
-      title:
-        "Papelada digital",
+    number: 1,
 
-      description:
-        "Abra um documento PDF pela primeira vez.",
+    order: 1,
 
-      rarity:
-        "common",
-    },
+    title: "Leitura obrigatória",
 
-    "first-delete": {
-      id:
-        "first-delete",
+    description: "Abra um arquivo de texto pela primeira vez.",
 
-      number:
-        3,
+    rarity: "common",
 
-      order:
-        3,
+    icon: firstTextFileIcon,
 
-      title:
-        "Sem apego",
+    stickerImage: firstTextFileSticker,
+  },
 
-      description:
-        "Mova seu primeiro arquivo para a Lixeira.",
+  "first-pdf-file": {
+    id: "first-pdf-file",
 
-      rarity:
-        "common",
-    },
+    number: 2,
 
-    "first-external-link": {
-      id:
-        "first-external-link",
+    order: 2,
 
-      number:
-        4,
+    title: "Papelada digital",
 
-      order:
-        4,
+    description: "Abra um documento PDF pela primeira vez.",
 
-      title:
-        "Saindo da rede",
+    rarity: "common",
 
-      description:
-        "Abra um link externo pela primeira vez.",
+    icon: firstPdfFileIcon,
 
-      rarity:
-        "uncommon",
-    },
+    stickerImage: firstPdfFileSticker,
+  },
 
-    "i-warned-you": {
-      id:
-        "i-warned-you",
+  "first-delete": {
+    id: "first-delete",
 
-      number:
-        5,
+    number: 3,
 
-      order:
-        5,
+    order: 3,
 
-      title:
-        "Eu avisei.",
+    title: "Sem apego",
 
-      description:
-        "Recupere o HOSSOMII OS depois de excluir um arquivo crítico.",
+    description: "Mova seu primeiro arquivo para a Lixeira.",
 
-      rarity:
-        "special",
-    },
+    rarity: "common",
 
-    "hidden-archive": {
-      id:
-        "hidden-archive",
+    icon: firstDeleteIcon,
 
-      number:
-        6,
+    stickerImage: firstDeleteSticker,
+  },
 
-      order:
-        6,
+  "first-external-link": {
+    id: "first-external-link",
 
-      title:
-        "Fora do índice",
+    number: 4,
 
-      description:
-        "Encontre uma área que a interface gráfica prefere não mostrar.",
+    order: 4,
 
-      rarity:
-        "secret",
-    },
+    title: "Saindo da rede",
 
-    "operator-archive": {
-      id:
-        "operator-archive",
+    description: "Abra um link externo pela primeira vez.",
 
-      number:
-        7,
+    rarity: "uncommon",
 
-      order:
-        7,
+    icon: firstExternalLinkIcon,
 
-      title:
-        "Arquivo do Operador",
+    stickerImage: firstExternalLinkSticker,
+  },
 
-      description:
-        "Descubra registros pessoais preservados no arquivo do sistema.",
+  "i-warned-you": {
+    id: "i-warned-you",
 
-      rarity:
-        "secret",
-    },
+    number: 5,
 
-    "first-sticker-pasted": {
-      id:
-        "first-sticker-pasted",
+    order: 5,
 
-      number:
-        8,
+    title: "Eu avisei.",
 
-      order:
-        8,
+    description: "Recupere o HOSSOMII OS depois de excluir um arquivo crítico.",
 
-      title:
-        "Colecionador",
+    rarity: "special",
 
-      description:
-        "Cole sua primeira figurinha no Álbum de Conquistas.",
+    icon: iWarnedYouIcon,
 
-      rarity:
-        "uncommon",
-    },
-  };
+    stickerImage: iWarnedYouSticker,
+  },
 
-export const ACHIEVEMENT_LIST =
-  Object.values(
-    ACHIEVEMENTS,
-  ).sort(
-    (
-      first,
-      second,
-    ) =>
-      first.order -
-      second.order,
-  );
+  "hidden-archive": {
+    id: "hidden-archive",
+
+    number: 6,
+
+    order: 6,
+
+    title: "Fora do índice",
+
+    description:
+      "Encontre uma área que a interface gráfica prefere não mostrar.",
+
+    rarity: "secret",
+
+    icon: hiddenArchiveIcon,
+
+    stickerImage: hiddenArchiveSticker,
+  },
+
+  "operator-archive": {
+    id: "operator-archive",
+
+    number: 7,
+
+    order: 7,
+
+    title: "Arquivo do Operador",
+
+    description:
+      "Descubra registros pessoais preservados no arquivo do sistema.",
+
+    rarity: "secret",
+
+    icon: operatorArchiveIcon,
+
+    stickerImage: operatorArchiveSticker,
+  },
+
+  "first-sticker-pasted": {
+    id: "first-sticker-pasted",
+
+    number: 8,
+
+    order: 8,
+
+    title: "Colecionador",
+
+    description: "Cole sua primeira figurinha no Álbum de Conquistas.",
+
+    rarity: "uncommon",
+
+    icon: firstStickerPastedIcon,
+
+    stickerImage: firstStickerPastedSticker,
+  },
+};
+
+export const ACHIEVEMENT_LIST = Object.values(ACHIEVEMENTS).sort(
+  (first, second) => first.order - second.order,
+);

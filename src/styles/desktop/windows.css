@@ -367,6 +367,8 @@
 
   flex: 0 0 auto;
 
+  gap: 10px;
+
   height: 100%;
 
   padding: 0 4px;
