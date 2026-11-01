@@ -95,17 +95,22 @@ The Terminal supports discovery-oriented behavior associated with the hidden fil
 
 Narrative events are handled through the narrative registry/service/store architecture.
 
-Current narrative-related achievements include discoveries such as:
+Current narrative-related achievement state:
 
-Fora do índice
+- Eu avisei. — implemented and reachable through the Recovery flow.
+- Fora do índice — definition and sticker implemented; unlock integration pending.
+- Arquivo do Operador — definition and sticker implemented; unlock integration pending.
 
-Arquivo do Operador
-
-Eu avisei.
+The next functional task is to integrate the two pending narrative achievements
+with the existing narrative system before continuing Achievement Album polish.
 
 The achievement system also contains the album-specific achievement:
 
 Colecionador
+
+Narrative achievement unlock integration
+        ↓
+Achievement Album polish
 
 Achievement Album
 
