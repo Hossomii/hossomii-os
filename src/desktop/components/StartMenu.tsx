@@ -8,22 +8,28 @@ import {
 } from "gsap";
 
 import profileAvatar from "../../assets/profile-avatar.webp";
-import projectsIcon from "../../assets/icons/projects.webp";
-import terminalIcon from "../../assets/icons/terminal.webp";
+
+import {
+  getApplicationDefinition,
+} from "../../system/applications/applicationRegistry";
 
 import type {
   WindowAppId,
 } from "../../types/window";
 
 type StartMenuProps = {
-  open: boolean;
+  open:
+    boolean;
 
-  onRestart: () => void;
+  onRestart:
+    () => void;
 
-  onShutdown: () => void;
+  onShutdown:
+    () => void;
 
   onOpenItem: (
-    id: WindowAppId
+    id:
+      WindowAppId,
   ) => void;
 };
 
@@ -35,66 +41,96 @@ export function StartMenu({
 }: StartMenuProps) {
   const menuRef =
     useRef<HTMLElement>(
-      null
+      null,
     );
 
-  useLayoutEffect(() => {
-    if (!open) {
-      return;
-    }
+  const quickView =
+    getApplicationDefinition(
+      "quick-view",
+    );
 
-    const element =
-      menuRef.current;
+  const terminal =
+    getApplicationDefinition(
+      "terminal",
+    );
 
-    if (!element) {
-      return;
-    }
+  const projects =
+    getApplicationDefinition(
+      "projects",
+    );
 
-    const prefersReducedMotion =
-      window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
+  useLayoutEffect(
+    () => {
+      if (!open) {
+        return;
+      }
 
-    if (
-      prefersReducedMotion
-    ) {
-      return;
-    }
+      const element =
+        menuRef.current;
 
-    const animation =
-      gsap.fromTo(
-        element,
-        {
-          opacity: 0,
-          y: 10,
-          scaleX: 0.985,
-          scaleY: 0.965,
+      if (!element) {
+        return;
+      }
 
-          transformOrigin:
-            "left bottom",
-        },
-        {
-          opacity: 1,
-          y: 0,
-          scaleX: 1,
-          scaleY: 1,
+      if (
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        ).matches
+      ) {
+        return;
+      }
 
-          duration: 0.15,
+      const animation =
+        gsap.fromTo(
+          element,
+          {
+            opacity:
+              0,
 
-          ease:
-            "power2.out",
+            y:
+              10,
 
-          clearProps:
-            "transform,opacity,transformOrigin",
-        }
-      );
+            scaleX:
+              0.985,
 
-    return () => {
-      animation.kill();
-    };
-  }, [
-    open,
-  ]);
+            scaleY:
+              0.965,
+
+            transformOrigin:
+              "left bottom",
+          },
+          {
+            opacity:
+              1,
+
+            y:
+              0,
+
+            scaleX:
+              1,
+
+            scaleY:
+              1,
+
+            duration:
+              0.15,
+
+            ease:
+              "power2.out",
+
+            clearProps:
+              "transform,opacity,transformOrigin",
+          },
+        );
+
+      return () => {
+        animation.kill();
+      };
+    },
+    [
+      open,
+    ],
+  );
 
   if (!open) {
     return null;
@@ -102,11 +138,13 @@ export function StartMenu({
 
   return (
     <section
-      ref={menuRef}
+      ref={
+        menuRef
+      }
       id="hossomii-start-menu"
       className="start-menu"
       onClick={(
-        event
+        event,
       ) =>
         event.stopPropagation()
       }
@@ -130,14 +168,14 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "quick-view"
+                quickView.id,
               )
             }
           >
             <img
               className="start-menu-program-image"
               src={
-                profileAvatar
+                quickView.icon
               }
               alt=""
             />
@@ -157,14 +195,14 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "terminal"
+                terminal.id,
               )
             }
           >
             <img
               className="start-menu-program-image"
               src={
-                terminalIcon
+                terminal.icon
               }
               alt=""
             />
@@ -184,14 +222,14 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "projects"
+                projects.id,
               )
             }
           >
             <img
               className="start-menu-program-image"
               src={
-                projectsIcon
+                projects.icon
               }
               alt=""
             />
@@ -213,7 +251,7 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "documents"
+                "documents",
               )
             }
           >
@@ -224,7 +262,7 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "computer"
+                "computer",
               )
             }
           >
@@ -235,7 +273,7 @@ export function StartMenu({
             type="button"
             onClick={() =>
               onOpenItem(
-                "control-panel"
+                "control-panel",
               )
             }
           >
@@ -244,7 +282,9 @@ export function StartMenu({
 
           <div className="start-menu-separator" />
 
-          <button type="button">
+          <button
+            type="button"
+          >
             Ajuda e suporte
           </button>
         </div>

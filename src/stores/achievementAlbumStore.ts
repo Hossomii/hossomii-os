@@ -22,19 +22,30 @@ type AchievementAlbumStore = {
       >
     >;
 
+  currentPage:
+    number;
+
   markPasted: (
-    id: AchievementId,
+    id:
+      AchievementId,
   ) => boolean;
 
   hasPasted: (
-    id: AchievementId,
+    id:
+      AchievementId,
   ) => boolean;
 
   getPastedAt: (
-    id: AchievementId,
+    id:
+      AchievementId,
   ) =>
-    string |
-    undefined;
+    | string
+    | undefined;
+
+  setCurrentPage: (
+    page:
+      number,
+  ) => void;
 
   resetAlbum:
     () => void;
@@ -53,22 +64,22 @@ export const useAchievementAlbumStore =
         pastedAtById:
           {},
 
+        currentPage:
+          0,
+
         markPasted: (
           id,
         ) => {
           if (
-            get()
-              .pastedAchievements
-              .includes(
-                id,
-              )
+            get().pastedAchievements.includes(
+              id,
+            )
           ) {
             return false;
           }
 
           const pastedAt =
-            new Date()
-              .toISOString();
+            new Date().toISOString();
 
           set(
             (
@@ -95,21 +106,30 @@ export const useAchievementAlbumStore =
 
         hasPasted: (
           id,
-        ) => {
-          return get()
-            .pastedAchievements
-            .includes(
-              id,
-            );
-        },
+        ) =>
+          get().pastedAchievements.includes(
+            id,
+          ),
 
         getPastedAt: (
           id,
+        ) =>
+          get().pastedAtById[
+            id
+          ],
+
+        setCurrentPage: (
+          page,
         ) => {
-          return get()
-            .pastedAtById[
-              id
-            ];
+          set({
+            currentPage:
+              Math.max(
+                0,
+                Math.floor(
+                  page,
+                ),
+              ),
+          });
         },
 
         resetAlbum:
@@ -120,6 +140,9 @@ export const useAchievementAlbumStore =
 
               pastedAtById:
                 {},
+
+              currentPage:
+                0,
             });
           },
       }),

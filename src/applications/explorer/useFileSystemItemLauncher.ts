@@ -2,12 +2,8 @@ import { useFileSystemStore } from "../../stores/filesystemStore";
 
 import { useWindowStore } from "../../stores/windowStore";
 
-import computerIcon from "../../assets/icons/computer.webp";
-import documentsIcon from "../../assets/icons/documents.webp";
 import projectsIcon from "../../assets/icons/projects.webp";
-import terminalIcon from "../../assets/icons/terminal.webp";
-import emptyTrashIcon from "../../assets/icons/empty-trash.webp";
-import browserIcon from "../../assets/icons/browser.webp";
+import documentsIcon from "../../assets/icons/documents.webp";
 
 import {
   getFileExtensionIcon,
@@ -15,115 +11,132 @@ import {
 } from "../../system/filesystem/iconRegistry";
 
 import {
+  getApplicationDefinition,
+} from "../../system/applications/applicationRegistry";
+
+import {
+  getFileAssociation,
+} from "../../system/filesystem/fileAssociations";
+
+import {
   evaluateNarrative,
 } from "../../system/narrative/narrativeService";
 
-import type { FileSystemItem } from "../../types/filesystem";
-
-import type { WindowAppId } from "../../types/window";
+import type {
+  FileSystemItem,
+} from "../../types/filesystem";
 
 type UseFileSystemItemLauncherParams = {
-  navigateTo: (location: string) => void;
+  navigateTo: (
+    location: string,
+  ) => void;
 };
 
-function getApplicationIcon(appId: WindowAppId) {
-  switch (appId) {
-    case "computer":
-      return computerIcon;
-
-    case "browser":
-      return browserIcon;
-
-    case "projects":
-    case "project-viewer":
-      return projectsIcon;
-
-    case "documents":
-    case "notepad":
-    case "pdf-viewer":
-    case "image-viewer":
-      return documentsIcon;
-
-    case "terminal":
-      return terminalIcon;
-
-    case "recycle-bin":
-      return emptyTrashIcon;
-
-    case "control-panel":
-      return computerIcon;
-
-    default:
-      return documentsIcon;
-  }
-}
-
-function getApplicationTitle(
-  item: Extract<
-    FileSystemItem,
-    {
-      type: "application";
-    }
-  >,
+function registerFileOpened(
+  itemId: string,
 ) {
-  switch (item.appId) {
-    case "terminal":
-      return "Terminal - HOSSOMII OS";
+  void evaluateNarrative({
+    trigger:
+      "file-opened",
 
-    case "control-panel":
-      return "Painel de Controle";
-
-    default:
-      return item.name;
-  }
+    itemId,
+  });
 }
 
 export function useFileSystemItemLauncher({
   navigateTo,
 }: UseFileSystemItemLauncherParams) {
-  const getItem = useFileSystemStore((state) => state.getItem);
+  const getItem =
+    useFileSystemStore(
+      (
+        state,
+      ) =>
+        state.getItem,
+    );
 
-  const openWindow = useWindowStore((state) => state.openWindow);
+  const openWindow =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.openWindow,
+    );
 
-  function openItem(item: FileSystemItem) {
-    if (item.type === "directory") {
-      navigateTo(item.id);
+  function openItem(
+    item:
+      FileSystemItem,
+  ) {
+    if (
+      item.type ===
+      "directory"
+    ) {
+      navigateTo(
+        item.id,
+      );
 
       return;
     }
 
-    if (item.type === "shortcut") {
-      const targetItem = getItem(item.targetId);
+    if (
+      item.type ===
+      "shortcut"
+    ) {
+      const targetItem =
+        getItem(
+          item.targetId,
+        );
 
       if (!targetItem) {
         return;
       }
 
-      openItem(targetItem);
+      openItem(
+        targetItem,
+      );
 
       return;
     }
 
-    if (item.type === "application") {
-      if (item.appId === "project-viewer") {
-        const projectId = item.data?.projectId;
+    if (
+      item.type ===
+      "application"
+    ) {
+      if (
+        item.appId ===
+        "project-viewer"
+      ) {
+        const projectId =
+          item.data
+            ?.projectId;
 
         if (!projectId) {
           return;
         }
 
-        const project = getItem(projectId);
+        const project =
+          getItem(
+            projectId,
+          );
 
-        const projectIcon = getFileSystemIcon(project?.iconId);
+        const projectIcon =
+          getFileSystemIcon(
+            project?.iconId,
+          );
 
         openWindow({
-          appId: "project-viewer",
+          appId:
+            "project-viewer",
 
-          instanceId: item.instanceId ?? projectId,
+          instanceId:
+            item.instanceId ??
+            projectId,
 
-          title: `${project?.name ?? "Projeto"} - HOSSOMII Portfolio`,
+          title:
+            `${project?.name ?? "Projeto"} - HOSSOMII Portfolio`,
 
-          icon: projectIcon ?? projectsIcon,
+          icon:
+            projectIcon ??
+            projectsIcon,
 
           data: {
             projectId,
@@ -133,16 +146,26 @@ export function useFileSystemItemLauncher({
         return;
       }
 
+      const application =
+        getApplicationDefinition(
+          item.appId,
+        );
+
       openWindow({
-        appId: item.appId,
+        appId:
+          item.appId,
 
-        instanceId: item.instanceId,
+        instanceId:
+          item.instanceId,
 
-        title: getApplicationTitle(item),
+        title:
+          application.windowTitle,
 
-        icon: getApplicationIcon(item.appId),
+        icon:
+          application.icon,
 
-        data: item.data,
+        data:
+          item.data,
       });
 
       return;
@@ -150,42 +173,28 @@ export function useFileSystemItemLauncher({
 
     const extension =
       item.extension.toLowerCase();
-      
-    const imageExtensions = [
-      "webp",
-      "png",
-      "jpg",
-      "jpeg",
-    ];
 
-    const textExtensions = [
-      "txt",
-      "log",
-      "ini",
-    ];
+    const association =
+      getFileAssociation(
+        extension,
+      );
 
     if (
-      textExtensions.includes(
-        extension,
-      )
+      association
     ) {
-      void evaluateNarrative({
-        trigger:
-          "file-opened",
-
-        itemId:
-          item.id,
-      });
+      registerFileOpened(
+        item.id,
+      );
 
       openWindow({
         appId:
-          "notepad",
+          association.appId,
 
         instanceId:
           item.id,
 
         title:
-          `${item.name} - Bloco de Notas`,
+          `${item.name} - ${association.titleSuffix}`,
 
         icon:
           getFileExtensionIcon(
@@ -202,31 +211,20 @@ export function useFileSystemItemLauncher({
       return;
     }
 
-    if (imageExtensions.includes(extension)) {
-      openWindow({
-        appId: "image-viewer",
-
-        instanceId: item.id,
-
-        title: `${item.name} - Visualizador de Imagens`,
-
-        icon: documentsIcon,
-
-        data: {
-          fileId: item.id,
-        },
-      });
+    if (
+      extension ===
+      "sys"
+    ) {
+      console.log(
+        `Arquivo de sistema: ${item.name}`,
+      );
 
       return;
     }
 
-    if (extension === "sys") {
-      console.log(`Arquivo de sistema: ${item.name}`);
-
-      return;
-    }
-
-    console.log(`Nenhum aplicativo associado a: ${item.name}`);
+    console.log(
+      `Nenhum aplicativo associado a: ${item.name}`,
+    );
   }
 
   return {

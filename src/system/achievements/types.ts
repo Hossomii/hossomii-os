@@ -16,19 +16,24 @@ export type AchievementRarity =
   | "secret";
 
 export type AchievementDefinition = {
-  id: AchievementId;
+  id:
+    AchievementId;
 
-  number: number;
+  number:
+    number;
 
-  order: number;
+  order:
+    number;
 
-  title: string;
+  title:
+    string;
 
-  description: string;
+  description:
+    string;
 
-  rarity: AchievementRarity;
+  rarity:
+    AchievementRarity;
 
-  icon: string;
-
-  stickerImage: string;
+  stickerImage:
+    string;
 };

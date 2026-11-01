@@ -1,26 +1,76 @@
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
-import { useSystemStore } from "../stores/systemStore";
+import {
+  useSystemStore,
+} from "../stores/systemStore";
 
-import { useWindowStore } from "../stores/windowStore";
+import {
+  useWindowStore,
+} from "../stores/windowStore";
 
-import { useFileSystemStore } from "../stores/filesystemStore";
+import {
+  useFileSystemStore,
+} from "../stores/filesystemStore";
 
-import { useSystemPreferencesStore } from "../stores/systemPreferencesStore";
+import {
+  useSystemPreferencesStore,
+} from "../stores/systemPreferencesStore";
 
-import { AchievementNotification } from "./components/AchievementNotification";
+import {
+  useAchievementAlbumStore,
+} from "../stores/achievementAlbumStore";
 
-import { TerminalApp } from "../applications/terminal/TerminalApp";
+import {
+  AchievementNotification,
+} from "./components/AchievementNotification";
 
-import type { WindowAppId } from "../types/window";
+import {
+  DesktopIcon,
+} from "./components/DesktopIcon";
 
-import computerIcon from "../assets/icons/computer.webp";
-import projectsIcon from "../assets/icons/projects.webp";
-import documentsIcon from "../assets/icons/documents.webp";
-import terminalIcon from "../assets/icons/terminal.webp";
+import {
+  DesktopWindow,
+} from "./components/DesktopWindow";
+
+import {
+  StartMenu,
+} from "./components/StartMenu";
+
+import {
+  Taskbar,
+} from "./components/Taskbar";
+
+import {
+  CriticalDeleteFlow,
+} from "../system/critical-file/CriticalDeleteFlow";
+
+import {
+  DESKTOP_APPLICATIONS,
+  QUICK_LAUNCH_APPLICATIONS,
+  getApplicationDefinition,
+} from "../system/applications/applicationRegistry";
+
+import {
+  getAchievementAlbumPage,
+} from "../system/achievements/achievementAlbumService";
+
+import {
+  playSound,
+} from "../system/audio/audioService";
+
+import type {
+  WindowAppId,
+} from "../types/window";
+
+import type {
+  AchievementId,
+} from "../system/achievements/types";
+
 import emptyTrashIcon from "../assets/icons/empty-trash.webp";
 import defaultTrashIcon from "../assets/icons/default-trash.webp";
-import browserIcon from "../assets/icons/browser.webp";
 
 import wallpaperDefault from "../assets/wallpapers/default.webp";
 import wallpaper01 from "../assets/wallpapers/wallpaper-01.webp";
@@ -29,349 +79,333 @@ import wallpaper03 from "../assets/wallpapers/wallpaper-03.webp";
 import wallpaper04 from "../assets/wallpapers/wallpaper-04.webp";
 import wallpaper05 from "../assets/wallpapers/wallpaper-05.webp";
 
-import { ComputerApp } from "../applications/computer/ComputerApp";
-
-import { DocumentsApp } from "../applications/documents/DocumentsApp";
-
-import { ProjectsApp } from "../applications/projects/ProjectsApp";
-
-import { RecycleBinApp } from "../applications/recycle-bin/RecycleBinApp";
-
-import { ControlPanelApp } from "../applications/control-panel/ControlPanelApp";
-
-import { DesktopIcon } from "./components/DesktopIcon";
-
-import { BrowserApp } from "../applications/browser/BrowserApp";
-
-import { StartMenu } from "./components/StartMenu";
-
-import { Taskbar } from "./components/Taskbar";
-
-import { WindowFrame } from "./components/WindowFrame";
-
-import { NotepadApp } from "../applications/notepad/NotepadApp";
-
-import { PdfViewerApp } from "../applications/pdf/PdfViewerApp";
-
-import { ImageViewerApp } from "../applications/image-viewer/ImageViewerApp";
-
-import { ProjectViewerApp } from "../applications/project-viewer/ProjectViewerApp";
-
-import profileAvatar from "../assets/profile-avatar.webp";
-
-import { QuickViewApp } from "../applications/quick-view/QuickViewApp";
-
-import { CriticalDeleteFlow } from "../system/critical-file/CriticalDeleteFlow";
-
-import { playSound } from "../system/audio/audioService";
-
-import achievementAlbumIcon from "../assets/achievements/icons/achievement-album.png";
-
-import { AchievementAlbumApp } from "../applications/achievement-album/AchievementAlbumApp";
-
 import "../styles/desktop/index.css";
 
 const WALLPAPERS = {
-  default: wallpaperDefault,
+  default:
+    wallpaperDefault,
 
-  "wallpaper-01": wallpaper01,
+  "wallpaper-01":
+    wallpaper01,
 
-  "wallpaper-02": wallpaper02,
+  "wallpaper-02":
+    wallpaper02,
 
-  "wallpaper-03": wallpaper03,
+  "wallpaper-03":
+    wallpaper03,
 
-  "wallpaper-04": wallpaper04,
+  "wallpaper-04":
+    wallpaper04,
 
-  "wallpaper-05": wallpaper05,
+  "wallpaper-05":
+    wallpaper05,
 } as const;
 
 export function Desktop() {
-  const FOLDER_LIKE_APP_IDS: WindowAppId[] = [
-    "computer",
-    "documents",
-    "projects",
-    "recycle-bin",
-  ];
+  const restartSystem =
+    useSystemStore(
+      (
+        state,
+      ) =>
+        state.restartSystem,
+    );
 
-  const restartSystem = useSystemStore((state) => state.restartSystem);
+  const shutdownSystem =
+    useSystemStore(
+      (
+        state,
+      ) =>
+        state.shutdownSystem,
+    );
 
-  const shutdownSystem = useSystemStore((state) => state.shutdownSystem);
+  const windows =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.windows,
+    );
 
-  const windows = useWindowStore((state) => state.windows);
+  const openWindow =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.openWindow,
+    );
 
-  const openWindow = useWindowStore((state) => state.openWindow);
+  const restoreWindow =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.restoreWindow,
+    );
 
-  const restoreWindow = useWindowStore((state) => state.restoreWindow);
+  const focusWindow =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.focusWindow,
+    );
 
-  const focusWindow = useWindowStore((state) => state.focusWindow);
+  const minimizeWindow =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.minimizeWindow,
+    );
 
-  const minimizeWindow = useWindowStore((state) => state.minimizeWindow);
+  const resetWindows =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.resetWindows,
+    );
 
-  const resetWindows = useWindowStore((state) => state.resetWindows);
+  const fitWindowsToViewport =
+    useWindowStore(
+      (
+        state,
+      ) =>
+        state.fitWindowsToViewport,
+    );
 
-  const fitWindowsToViewport = useWindowStore(
-    (state) => state.fitWindowsToViewport,
+  const fileSystemItems =
+    useFileSystemStore(
+      (
+        state,
+      ) =>
+        state.items,
+    );
+
+  const theme =
+    useSystemPreferencesStore(
+      (
+        state,
+      ) =>
+        state.theme,
+    );
+
+  const wallpaper =
+    useSystemPreferencesStore(
+      (
+        state,
+      ) =>
+        state.wallpaper,
+    );
+
+  const setAchievementAlbumPage =
+    useAchievementAlbumStore(
+      (
+        state,
+      ) =>
+        state.setCurrentPage,
+    );
+
+  const [
+    selectedIcon,
+    setSelectedIcon,
+  ] =
+    useState<
+      | string
+      | null
+    >(
+      null,
+    );
+
+  const [
+    startMenuOpen,
+    setStartMenuOpen,
+  ] =
+    useState(
+      false,
+    );
+
+  useEffect(
+    () => {
+      function handleResize() {
+        fitWindowsToViewport();
+      }
+
+      window.addEventListener(
+        "resize",
+        handleResize,
+      );
+
+      return () => {
+        window.removeEventListener(
+          "resize",
+          handleResize,
+        );
+      };
+    },
+    [
+      fitWindowsToViewport,
+    ],
   );
 
-  const fileSystemItems = useFileSystemStore((state) => state.items);
+  const trashIsEmpty =
+    !fileSystemItems.some(
+      (
+        item,
+      ) =>
+        item.trashed,
+    );
 
-  const theme = useSystemPreferencesStore((state) => state.theme);
+  const trashIcon =
+    trashIsEmpty
+      ? emptyTrashIcon
+      : defaultTrashIcon;
 
-  const wallpaper = useSystemPreferencesStore((state) => state.wallpaper);
-
-  const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
-
-  const [startMenuOpen, setStartMenuOpen] = useState(false);
-
-  useEffect(() => {
-    function handleResize() {
-      fitWindowsToViewport();
-    }
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [fitWindowsToViewport]);
-
-  const trashIsEmpty = !fileSystemItems.some((item) => item.trashed);
-
-  const trashIcon = trashIsEmpty ? emptyTrashIcon : defaultTrashIcon;
-
-  const wallpaperImage = WALLPAPERS[wallpaper] ?? wallpaperDefault;
-
-  const quickLaunchItems = [
-    {
-      id: "quick-view",
-
-      title: "Quick View",
-
-      icon: profileAvatar,
-
-      onOpen: () => handleOpenItem("quick-view"),
-    },
-
-    {
-      id: "browser",
-
-      title: "HOSSOMII Web",
-
-      icon: browserIcon,
-
-      onOpen: () => handleOpenItem("browser"),
-    },
-
-    {
-      id: "achievement-album",
-
-      title: "Álbum de Conquistas",
-
-      icon: achievementAlbumIcon,
-
-      onOpen: () => handleOpenItem("achievement-album"),
-    },
-  ];
-
-  const desktopItems = [
-    {
-      id: "quick-view",
-      label: "Quick View",
-      icon: profileAvatar,
-    },
-
-    {
-      id: "computer",
-      label: "Meu Computador",
-      icon: computerIcon,
-    },
-    {
-      id: "projects",
-      label: "Meus Projetos",
-      icon: projectsIcon,
-    },
-    {
-      id: "documents",
-      label: "Meus Documentos",
-      icon: documentsIcon,
-    },
-    {
-      id: "browser",
-      label: "HOSSOMII Web",
-      icon: browserIcon,
-    },
-    {
-      id: "achievement-album",
-
-      label: "Álbum de Conquistas",
-
-      icon: achievementAlbumIcon,
-    },
-    {
-      id: "terminal",
-      label: "Terminal",
-      icon: terminalIcon,
-    },
-    {
-      id: "recycle-bin",
-      label: "Lixeira",
-      icon: trashIcon,
-    },
-  ] as const;
+  const wallpaperImage =
+    WALLPAPERS[
+      wallpaper
+    ] ??
+    wallpaperDefault;
 
   const activeWindow =
     windows
-      .filter((windowItem) => !windowItem.minimized)
-      .sort((a, b) => b.zIndex - a.zIndex)[0] ?? null;
+      .filter(
+        (
+          windowItem,
+        ) =>
+          !windowItem.minimized,
+      )
+      .sort(
+        (
+          first,
+          second,
+        ) =>
+          second.zIndex -
+          first.zIndex,
+      )[
+        0
+      ] ??
+    null;
 
-  function handleDesktopClick() {
-    setSelectedIcon(null);
+  function getRuntimeApplicationIcon(
+    id:
+      WindowAppId,
+  ) {
+    if (
+      id ===
+      "recycle-bin"
+    ) {
+      return trashIcon;
+    }
 
-    setStartMenuOpen(false);
+    return getApplicationDefinition(
+      id,
+    ).icon;
   }
 
-  function handleOpenItem(id: WindowAppId) {
-    setStartMenuOpen(false);
+  function handleOpenItem(
+    id:
+      WindowAppId,
+  ) {
+    setStartMenuOpen(
+      false,
+    );
 
-    if (FOLDER_LIKE_APP_IDS.includes(id)) {
-      void playSound("ui-folder-open");
+    const application =
+      getApplicationDefinition(
+        id,
+      );
+
+    if (
+      application.folderLike
+    ) {
+      void playSound(
+        "ui-folder-open",
+      );
     }
 
-    if (id === "quick-view") {
-      openWindow({
-        appId: "quick-view",
+    openWindow({
+      appId:
+        id,
 
-        title: "Quick View - Anthony",
+      title:
+        application.windowTitle,
 
-        icon: profileAvatar,
-      });
-
-      return;
-    }
-
-    if (id === "computer") {
-      openWindow({
-        appId: "computer",
-
-        title: "Meu Computador",
-
-        icon: computerIcon,
-      });
-
-      return;
-    }
-
-    if (id === "documents") {
-      openWindow({
-        appId: "documents",
-
-        title: "Meus Documentos",
-
-        icon: documentsIcon,
-      });
-
-      return;
-    }
-
-    if (id === "projects") {
-      openWindow({
-        appId: "projects",
-
-        title: "Meus Projetos",
-
-        icon: projectsIcon,
-      });
-
-      return;
-    }
-
-    if (id === "recycle-bin") {
-      openWindow({
-        appId: "recycle-bin",
-
-        title: "Lixeira",
-
-        icon: trashIcon,
-      });
-
-      return;
-    }
-
-    if (id === "control-panel") {
-      openWindow({
-        appId: "control-panel",
-
-        title: "Painel de Controle",
-
-        icon: computerIcon,
-      });
-
-      return;
-    }
-
-    if (id === "browser") {
-      openWindow({
-        appId: "browser",
-
-        title: "HOSSOMII Web",
-
-        icon: browserIcon,
-      });
-
-      return;
-    }
-
-    if (id === "achievement-album") {
-      openWindow({
-        appId: "achievement-album",
-
-        title: "Álbum de Conquistas",
-
-        icon: achievementAlbumIcon,
-      });
-
-      return;
-    }
-
-    if (id === "terminal") {
-      openWindow({
-        appId: "terminal",
-
-        title: "Terminal - HOSSOMII OS",
-
-        icon: terminalIcon,
-      });
-
-      return;
-    }
+      icon:
+        getRuntimeApplicationIcon(
+          id,
+        ),
+    });
   }
 
-  function handleTaskbarWindowClick(id: (typeof windows)[number]["id"]) {
-    const windowItem = windows.find((item) => item.id === id);
+  function handleOpenAchievementInAlbum(
+    id:
+      AchievementId,
+  ) {
+    setAchievementAlbumPage(
+      getAchievementAlbumPage(
+        id,
+      ),
+    );
 
-    if (!windowItem) {
+    handleOpenItem(
+      "achievement-album",
+    );
+  }
+
+  function handleTaskbarWindowClick(
+    id:
+      (typeof windows)[number]["id"],
+  ) {
+    const windowItem =
+      windows.find(
+        (
+          item,
+        ) =>
+          item.id ===
+          id,
+      );
+
+    if (
+      !windowItem
+    ) {
       return;
     }
 
-    if (windowItem.minimized) {
-      restoreWindow(id);
+    if (
+      windowItem.minimized
+    ) {
+      restoreWindow(
+        id,
+      );
 
       return;
     }
 
-    if (activeWindow?.id === id) {
-      minimizeWindow(id);
+    if (
+      activeWindow?.id ===
+      id
+    ) {
+      minimizeWindow(
+        id,
+      );
 
       return;
     }
 
-    focusWindow(id);
+    focusWindow(
+      id,
+    );
   }
 
   function handleRestart() {
-    setStartMenuOpen(false);
+    setStartMenuOpen(
+      false,
+    );
 
-    setSelectedIcon(null);
+    setSelectedIcon(
+      null,
+    );
 
     resetWindows();
 
@@ -379,191 +413,188 @@ export function Desktop() {
   }
 
   function handleShutdown() {
-    setStartMenuOpen(false);
+    setStartMenuOpen(
+      false,
+    );
 
-    setSelectedIcon(null);
+    setSelectedIcon(
+      null,
+    );
 
-    void playSound("system-shutdown");
+    void playSound(
+      "system-shutdown",
+    );
 
     resetWindows();
 
     shutdownSystem();
   }
 
+  const desktopItems =
+    DESKTOP_APPLICATIONS.map(
+      (
+        application,
+      ) => ({
+        id:
+          application.id,
+
+        label:
+          application.desktopLabel ??
+          application.name,
+
+        icon:
+          getRuntimeApplicationIcon(
+            application.id,
+          ),
+      }),
+    );
+
+  const quickLaunchItems =
+    QUICK_LAUNCH_APPLICATIONS.map(
+      (
+        application,
+      ) => ({
+        id:
+          application.id,
+
+        title:
+          application.quickLaunchTitle ??
+          application.name,
+
+        icon:
+          getRuntimeApplicationIcon(
+            application.id,
+          ),
+
+        onOpen:
+          () =>
+            handleOpenItem(
+              application.id,
+            ),
+      }),
+    );
+
   return (
     <main
       className="desktop"
-      data-theme={theme}
-      data-wallpaper={wallpaper}
+      data-theme={
+        theme
+      }
+      data-wallpaper={
+        wallpaper
+      }
       style={{
-        backgroundImage: `url(${wallpaperImage})`,
+        backgroundImage:
+          `url(${wallpaperImage})`,
       }}
-      onClick={handleDesktopClick}
+      onClick={() => {
+        setSelectedIcon(
+          null,
+        );
+
+        setStartMenuOpen(
+          false,
+        );
+      }}
     >
       <div className="desktop-icons">
-        {desktopItems.map((item) => (
-          <DesktopIcon
-            key={item.id}
-            id={item.id}
-            label={item.label}
-            icon={item.icon}
-            selected={selectedIcon === item.id}
-            onSelect={setSelectedIcon}
-            onOpen={() => handleOpenItem(item.id)}
-          />
-        ))}
+        {desktopItems.map(
+          (
+            item,
+          ) => (
+            <DesktopIcon
+              key={
+                item.id
+              }
+              id={
+                item.id
+              }
+              label={
+                item.label
+              }
+              icon={
+                item.icon
+              }
+              selected={
+                selectedIcon ===
+                item.id
+              }
+              onSelect={
+                setSelectedIcon
+              }
+              onOpen={() =>
+                handleOpenItem(
+                  item.id,
+                )
+              }
+            />
+          ),
+        )}
       </div>
 
-      {windows.map((windowItem) => {
-        if (windowItem.appId === "quick-view") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <QuickViewApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "computer") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <ComputerApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "browser") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <BrowserApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "documents") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <DocumentsApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "projects") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <ProjectsApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "recycle-bin") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <RecycleBinApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "control-panel") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <ControlPanelApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "notepad") {
-          const fileId = windowItem.data?.fileId;
-
-          if (!fileId) {
-            return null;
-          }
-
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <NotepadApp fileId={fileId} />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "achievement-album") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <AchievementAlbumApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "terminal") {
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <TerminalApp />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "pdf-viewer") {
-          const fileId = windowItem.data?.fileId;
-
-          if (!fileId) {
-            return null;
-          }
-
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <PdfViewerApp fileId={fileId} />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "image-viewer") {
-          const fileId = windowItem.data?.fileId;
-
-          if (!fileId) {
-            return null;
-          }
-
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <ImageViewerApp fileId={fileId} />
-            </WindowFrame>
-          );
-        }
-
-        if (windowItem.appId === "project-viewer") {
-          const projectId = windowItem.data?.projectId;
-
-          if (!projectId) {
-            return null;
-          }
-
-          return (
-            <WindowFrame key={windowItem.id} windowItem={windowItem}>
-              <ProjectViewerApp projectId={projectId} />
-            </WindowFrame>
-          );
-        }
-
-        return null;
-      })}
+      {windows.map(
+        (
+          windowItem,
+        ) => (
+          <DesktopWindow
+            key={
+              windowItem.id
+            }
+            windowItem={
+              windowItem
+            }
+          />
+        ),
+      )}
 
       <CriticalDeleteFlow />
 
-      <AchievementNotification />
+      <AchievementNotification
+        onOpenInAlbum={
+          handleOpenAchievementInAlbum
+        }
+      />
 
       <StartMenu
-        open={startMenuOpen}
-        onRestart={handleRestart}
-        onShutdown={handleShutdown}
-        onOpenItem={handleOpenItem}
+        open={
+          startMenuOpen
+        }
+        onRestart={
+          handleRestart
+        }
+        onShutdown={
+          handleShutdown
+        }
+        onOpenItem={
+          handleOpenItem
+        }
       />
 
       <Taskbar
-        startMenuOpen={startMenuOpen}
-        windows={windows}
-        activeWindowId={activeWindow?.id ?? null}
-        quickLaunchItems={quickLaunchItems}
-        onStartToggle={() => setStartMenuOpen((currentState) => !currentState)}
-        onWindowClick={handleTaskbarWindowClick}
+        startMenuOpen={
+          startMenuOpen
+        }
+        windows={
+          windows
+        }
+        activeWindowId={
+          activeWindow?.id ??
+          null
+        }
+        quickLaunchItems={
+          quickLaunchItems
+        }
+        onStartToggle={() =>
+          setStartMenuOpen(
+            (
+              current,
+            ) =>
+              !current,
+          )
+        }
+        onWindowClick={
+          handleTaskbarWindowClick
+        }
       />
     </main>
   );

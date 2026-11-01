@@ -1,177 +1,215 @@
-import type { AchievementDefinition, AchievementId } from "./types";
+import type {
+  AchievementDefinition,
+  AchievementId,
+} from "./types";
 
-import firstTextFileIcon from "../../assets/achievements/icons/first-text-file.webp";
 import firstTextFileSticker from "../../assets/achievements/stickers/first-text-file.webp";
-
-import firstPdfFileIcon from "../../assets/achievements/icons/first-pdf-file.webp";
 import firstPdfFileSticker from "../../assets/achievements/stickers/first-pdf-file.webp";
-
-import firstDeleteIcon from "../../assets/achievements/icons/first-delete.webp";
 import firstDeleteSticker from "../../assets/achievements/stickers/first-delete.webp";
-
-import firstExternalLinkIcon from "../../assets/achievements/icons/first-external-link.webp";
 import firstExternalLinkSticker from "../../assets/achievements/stickers/first-external-link.webp";
-
-import iWarnedYouIcon from "../../assets/achievements/icons/i-warned-you.webp";
 import iWarnedYouSticker from "../../assets/achievements/stickers/i-warned-you.webp";
-
-import hiddenArchiveIcon from "../../assets/achievements/icons/hidden-archive.webp";
 import hiddenArchiveSticker from "../../assets/achievements/stickers/hidden-archive.webp";
-
-import operatorArchiveIcon from "../../assets/achievements/icons/operator-archive.webp";
 import operatorArchiveSticker from "../../assets/achievements/stickers/operator-archive.webp";
-
-import firstStickerPastedIcon from "../../assets/achievements/icons/first-sticker-pasted.webp";
 import firstStickerPastedSticker from "../../assets/achievements/stickers/first-sticker-pasted.webp";
 
-export const ACHIEVEMENTS: Record<AchievementId, AchievementDefinition> = {
-  "first-text-file": {
-    id: "first-text-file",
+export const ACHIEVEMENTS:
+  Record<
+    AchievementId,
+    AchievementDefinition
+  > = {
+    "first-text-file": {
+      id:
+        "first-text-file",
 
-    number: 1,
+      number:
+        1,
 
-    order: 1,
+      order:
+        1,
 
-    title: "Leitura obrigatória",
+      title:
+        "Leitura obrigatória",
 
-    description: "Abra um arquivo de texto pela primeira vez.",
+      description:
+        "Abra um arquivo de texto pela primeira vez.",
 
-    rarity: "common",
+      rarity:
+        "common",
 
-    icon: firstTextFileIcon,
+      stickerImage:
+        firstTextFileSticker,
+    },
 
-    stickerImage: firstTextFileSticker,
-  },
+    "first-pdf-file": {
+      id:
+        "first-pdf-file",
 
-  "first-pdf-file": {
-    id: "first-pdf-file",
+      number:
+        2,
 
-    number: 2,
+      order:
+        2,
 
-    order: 2,
+      title:
+        "Papelada digital",
 
-    title: "Papelada digital",
+      description:
+        "Abra um documento PDF pela primeira vez.",
 
-    description: "Abra um documento PDF pela primeira vez.",
+      rarity:
+        "common",
 
-    rarity: "common",
+      stickerImage:
+        firstPdfFileSticker,
+    },
 
-    icon: firstPdfFileIcon,
+    "first-delete": {
+      id:
+        "first-delete",
 
-    stickerImage: firstPdfFileSticker,
-  },
+      number:
+        3,
 
-  "first-delete": {
-    id: "first-delete",
+      order:
+        3,
 
-    number: 3,
+      title:
+        "Sem apego",
 
-    order: 3,
+      description:
+        "Mova seu primeiro arquivo para a Lixeira.",
 
-    title: "Sem apego",
+      rarity:
+        "common",
 
-    description: "Mova seu primeiro arquivo para a Lixeira.",
+      stickerImage:
+        firstDeleteSticker,
+    },
 
-    rarity: "common",
+    "first-external-link": {
+      id:
+        "first-external-link",
 
-    icon: firstDeleteIcon,
+      number:
+        4,
 
-    stickerImage: firstDeleteSticker,
-  },
+      order:
+        4,
 
-  "first-external-link": {
-    id: "first-external-link",
+      title:
+        "Saindo da rede",
 
-    number: 4,
+      description:
+        "Abra um link externo pela primeira vez.",
 
-    order: 4,
+      rarity:
+        "uncommon",
 
-    title: "Saindo da rede",
+      stickerImage:
+        firstExternalLinkSticker,
+    },
 
-    description: "Abra um link externo pela primeira vez.",
+    "i-warned-you": {
+      id:
+        "i-warned-you",
 
-    rarity: "uncommon",
+      number:
+        5,
 
-    icon: firstExternalLinkIcon,
+      order:
+        5,
 
-    stickerImage: firstExternalLinkSticker,
-  },
+      title:
+        "Eu avisei.",
 
-  "i-warned-you": {
-    id: "i-warned-you",
+      description:
+        "Recupere o HOSSOMII OS depois de excluir um arquivo crítico.",
 
-    number: 5,
+      rarity:
+        "special",
 
-    order: 5,
+      stickerImage:
+        iWarnedYouSticker,
+    },
 
-    title: "Eu avisei.",
+    "hidden-archive": {
+      id:
+        "hidden-archive",
 
-    description: "Recupere o HOSSOMII OS depois de excluir um arquivo crítico.",
+      number:
+        6,
 
-    rarity: "special",
+      order:
+        6,
 
-    icon: iWarnedYouIcon,
+      title:
+        "Fora do índice",
 
-    stickerImage: iWarnedYouSticker,
-  },
+      description:
+        "Encontre uma área que a interface gráfica prefere não mostrar.",
 
-  "hidden-archive": {
-    id: "hidden-archive",
+      rarity:
+        "secret",
 
-    number: 6,
+      stickerImage:
+        hiddenArchiveSticker,
+    },
 
-    order: 6,
+    "operator-archive": {
+      id:
+        "operator-archive",
 
-    title: "Fora do índice",
+      number:
+        7,
 
-    description:
-      "Encontre uma área que a interface gráfica prefere não mostrar.",
+      order:
+        7,
 
-    rarity: "secret",
+      title:
+        "Arquivo do Operador",
 
-    icon: hiddenArchiveIcon,
+      description:
+        "Descubra registros pessoais preservados no arquivo do sistema.",
 
-    stickerImage: hiddenArchiveSticker,
-  },
+      rarity:
+        "secret",
 
-  "operator-archive": {
-    id: "operator-archive",
+      stickerImage:
+        operatorArchiveSticker,
+    },
 
-    number: 7,
+    "first-sticker-pasted": {
+      id:
+        "first-sticker-pasted",
 
-    order: 7,
+      number:
+        8,
 
-    title: "Arquivo do Operador",
+      order:
+        8,
 
-    description:
-      "Descubra registros pessoais preservados no arquivo do sistema.",
+      title:
+        "Colecionador",
 
-    rarity: "secret",
+      description:
+        "Cole sua primeira figurinha no Álbum de Conquistas.",
 
-    icon: operatorArchiveIcon,
+      rarity:
+        "uncommon",
 
-    stickerImage: operatorArchiveSticker,
-  },
+      stickerImage:
+        firstStickerPastedSticker,
+    },
+  };
 
-  "first-sticker-pasted": {
-    id: "first-sticker-pasted",
-
-    number: 8,
-
-    order: 8,
-
-    title: "Colecionador",
-
-    description: "Cole sua primeira figurinha no Álbum de Conquistas.",
-
-    rarity: "uncommon",
-
-    icon: firstStickerPastedIcon,
-
-    stickerImage: firstStickerPastedSticker,
-  },
-};
-
-export const ACHIEVEMENT_LIST = Object.values(ACHIEVEMENTS).sort(
-  (first, second) => first.order - second.order,
-);
+export const ACHIEVEMENT_LIST =
+  Object.values(
+    ACHIEVEMENTS,
+  ).sort(
+    (
+      first,
+      second,
+    ) =>
+      first.order -
+      second.order,
+  );

@@ -14,6 +14,7 @@ import {
 } from "../../stores/achievementStore";
 
 import {
+  getAchievementAlbumPage,
   pasteAchievementSticker,
 } from "./achievementAlbumService";
 
@@ -46,15 +47,9 @@ describe(
           pasteAchievementSticker(
             "first-text-file",
           ),
-        ).toBe(false);
-
-        expect(
-          useAchievementAlbumStore
-            .getState()
-            .hasPasted(
-              "first-text-file",
-            ),
-        ).toBe(false);
+        ).toBe(
+          false,
+        );
       },
     );
 
@@ -71,7 +66,9 @@ describe(
           pasteAchievementSticker(
             "first-text-file",
           ),
-        ).toBe(true);
+        ).toBe(
+          true,
+        );
 
         expect(
           useAchievementAlbumStore
@@ -79,7 +76,9 @@ describe(
             .hasPasted(
               "first-text-file",
             ),
-        ).toBe(true);
+        ).toBe(
+          true,
+        );
       },
     );
 
@@ -92,22 +91,22 @@ describe(
             "first-text-file",
           );
 
-        expect(
-          pasteAchievementSticker(
-            "first-text-file",
-          ),
-        ).toBe(true);
+        pasteAchievementSticker(
+          "first-text-file",
+        );
 
         expect(
           pasteAchievementSticker(
             "first-text-file",
           ),
-        ).toBe(false);
+        ).toBe(
+          false,
+        );
       },
     );
 
     it(
-      "unlocks the collector achievement after the first paste",
+      "unlocks collector after the first paste",
       () => {
         useAchievementStore
           .getState()
@@ -125,7 +124,62 @@ describe(
             .hasUnlocked(
               "first-sticker-pasted",
             ),
-        ).toBe(true);
+        ).toBe(
+          true,
+        );
+      },
+    );
+
+    it(
+      "maps achievements to their album page",
+      () => {
+        expect(
+          getAchievementAlbumPage(
+            "first-text-file",
+          ),
+        ).toBe(
+          0,
+        );
+
+        expect(
+          getAchievementAlbumPage(
+            "first-delete",
+          ),
+        ).toBe(
+          0,
+        );
+
+        expect(
+          getAchievementAlbumPage(
+            "first-external-link",
+          ),
+        ).toBe(
+          1,
+        );
+
+        expect(
+          getAchievementAlbumPage(
+            "hidden-archive",
+          ),
+        ).toBe(
+          1,
+        );
+
+        expect(
+          getAchievementAlbumPage(
+            "operator-archive",
+          ),
+        ).toBe(
+          2,
+        );
+
+        expect(
+          getAchievementAlbumPage(
+            "first-sticker-pasted",
+          ),
+        ).toBe(
+          2,
+        );
       },
     );
   },

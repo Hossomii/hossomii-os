@@ -1,31 +1,29 @@
 .achievement-notification {
-  position: fixed;
+  position:
+    fixed;
 
-  right: 12px;
-  bottom: 48px;
+  right:
+    12px;
 
-  z-index: 25000;
+  bottom:
+    48px;
 
-  display: flex;
-  align-items: flex-start;
+  z-index:
+    25000;
 
-  gap: 10px;
-
-  box-sizing: border-box;
+  box-sizing:
+    border-box;
 
   width:
     min(
-      340px,
+      320px,
       calc(
         100vw - 24px
       )
     );
 
   padding:
-    11px
-    34px
-    11px
-    11px;
+    12px 34px 11px 13px;
 
   border:
     1px solid
@@ -36,21 +34,18 @@
 
   background:
     linear-gradient(
-      180deg,
-      #fffef2 0%,
-      #fff7c8 100%
+      #fffef2,
+      #fff7c8
     );
 
   box-shadow:
-    2px
-    3px
-    8px
-    rgba(
-      0,
-      0,
-      0,
-      0.35
-    );
+    2px 3px 8px
+      rgba(
+        0,
+        0,
+        0,
+        0.35
+      );
 
   color:
     #222;
@@ -61,81 +56,43 @@
     sans-serif;
 }
 
-.achievement-notification::after {
-  content: "";
+.achievement-notification::before {
+  content:
+    "";
 
-  position: absolute;
+  position:
+    absolute;
 
-  right: 24px;
-  bottom: -8px;
+  top:
+    0;
 
-  width: 14px;
-  height: 14px;
+  left:
+    0;
 
-  border-right:
-    1px solid
-    #1d4c92;
+  bottom:
+    0;
 
-  border-bottom:
-    1px solid
-    #1d4c92;
-
-  background:
-    #fff7c8;
-
-  transform:
-    rotate(
-      45deg
-    );
-}
-
-.achievement-notification-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex: 0 0 auto;
-
-  width: 32px;
-  height: 32px;
-
-  border:
-    1px solid
-    #b88b13;
+  width:
+    4px;
 
   border-radius:
-    50%;
+    7px 0 0 7px;
 
   background:
     linear-gradient(
-      180deg,
-      #fff0a1,
-      #e2ad24
-    );
-
-  color:
-    #704c00;
-
-  font-size:
-    18px;
-
-  text-shadow:
-    0
-    1px
-    rgba(
-      255,
-      255,
-      255,
-      0.75
+      #437ec9,
+      #1d55a1
     );
 }
 
 .achievement-notification-content {
-  min-width: 0;
+  min-width:
+    0;
 }
 
 .achievement-notification-label {
-  display: block;
+  display:
+    block;
 
   margin-bottom:
     3px;
@@ -151,7 +108,8 @@
 }
 
 .achievement-notification-content strong {
-  display: block;
+  display:
+    block;
 
   margin-bottom:
     4px;
@@ -164,7 +122,8 @@
 }
 
 .achievement-notification-content p {
-  margin: 0;
+  margin:
+    0;
 
   color:
     #444;
@@ -176,18 +135,67 @@
     1.45;
 }
 
+.achievement-notification-album-link {
+  margin-top:
+    7px;
+
+  padding:
+    0;
+
+  border:
+    0;
+
+  background:
+    transparent;
+
+  color:
+    #1e55a4;
+
+  font-family:
+    inherit;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+
+  text-decoration:
+    underline;
+
+  text-underline-offset:
+    2px;
+
+  cursor:
+    pointer;
+}
+
+.achievement-notification-album-link:hover {
+  color:
+    #0b387b;
+}
+
 .achievement-notification-close {
-  position: absolute;
+  position:
+    absolute;
 
-  top: 5px;
-  right: 6px;
+  top:
+    5px;
 
-  width: 20px;
-  height: 20px;
+  right:
+    6px;
 
-  padding: 0;
+  width:
+    20px;
 
-  border: 0;
+  height:
+    20px;
+
+  padding:
+    0;
+
+  border:
+    0;
 
   background:
     transparent;
@@ -195,29 +203,9 @@
   color:
     #555;
 
-  font-family:
-    Tahoma,
-    sans-serif;
-
   font-size:
     16px;
 
-  line-height:
-    20px;
-
   cursor:
     pointer;
-}
-
-.achievement-notification-close:hover,
-.achievement-notification-close:focus-visible {
-  color:
-    #000;
-
-  outline:
-    1px dotted
-    #555;
-
-  outline-offset:
-    -2px;
 }
