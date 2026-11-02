@@ -1093,6 +1093,21 @@
     filter;
 }
 
+.achievement-sticker-loose,
+.achievement-sticker-pressure-line {
+  transform-origin:
+    var(--sticker-hinge, 0%)
+    var(--sticker-hinge, 0%);
+
+  transform:
+    rotate3d(
+      0.8,
+      -1,
+      0,
+      var(--sticker-tilt, 0deg)
+    );
+}
+
 .achievement-sticker-mask {
   z-index:
     1;
@@ -1155,67 +1170,59 @@
   z-index:
     4;
 
-  top:
-    -30%;
-
-  left:
-    -30%;
-
-  width:
-    180%;
-
-  height:
-    10px;
+  inset:
+    0;
 
   pointer-events:
     none;
 
-  transform:
-    rotate(
-      45deg
-    );
+  -webkit-mask-image:
+    var(--sticker-mask);
 
-  transform-origin:
+  mask-image:
+    var(--sticker-mask);
+
+  -webkit-mask-repeat:
+    no-repeat;
+
+  mask-repeat:
+    no-repeat;
+
+  -webkit-mask-position:
     center;
 
-  border-radius:
-    50%;
+  mask-position:
+    center;
 
+  -webkit-mask-size:
+    contain;
+
+  mask-size:
+    contain;
+
+  /* Normal à mesma diagonal 4:5 das máscaras. */
   background:
     linear-gradient(
-      180deg,
-      transparent,
-      rgba(
-        255,
-        255,
-        255,
-        0.88
-      ),
-      rgba(
-        255,
-        255,
-        255,
-        0.35
-      ),
+      128.66deg,
       transparent
+        calc(var(--adhesion-front) - var(--crease-width)),
+      rgba(60, 40, 20, 0.18)
+        var(--adhesion-front),
+      rgba(255, 255, 255, 0.8)
+        calc(var(--adhesion-front) + 1.5%),
+      rgba(255, 255, 255, 0.12)
+        calc(var(--adhesion-front) + var(--crease-width)),
+      transparent
+        calc(var(--adhesion-front) + var(--crease-width) + 2%)
     );
 
   filter:
     blur(
-      1px
+      0.6px
     );
 
-  box-shadow:
-    0 2px 5px
-      rgba(
-        0,
-        0,
-        0,
-        0.12
-      );
-
   will-change:
-    transform,
+    background,
     opacity;
 }
 

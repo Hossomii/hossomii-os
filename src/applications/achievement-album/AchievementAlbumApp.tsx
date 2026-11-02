@@ -257,35 +257,99 @@ export function AchievementAlbumApp() {
       const album =
         albumRef.current;
 
-      if (!album) {
-        return;
+      const achievementId =
+        pastingAchievementId;
+
+      const motionQuery =
+        window.matchMedia(
+          "(prefers-reduced-motion: reduce)",
+        );
+
+      let active = true;
+      const context = gsap.context(() => {});
+      let timeline: gsap.core.Timeline | undefined = undefined;
+
+      function settlePaste(completed: boolean) {
+        if (!active) {
+          return;
+        }
+
+        active = false;
+
+        setPastingAchievementId(
+          (currentId) =>
+            currentId === achievementId
+              ? null
+              : currentId,
+        );
+
+        const displayedPage =
+          Math.min(
+            useAchievementAlbumStore.getState().currentPage,
+            maxPageIndex,
+          );
+
+        if (
+          completed &&
+          getAchievementAlbumPage(achievementId) === displayedPage
+        ) {
+          setSelectedAchievementId(
+            achievementId,
+          );
+        }
+      }
+
+      function handleMotionChange() {
+        if (
+          active &&
+          motionQuery.matches
+        ) {
+          timeline?.progress(
+            1,
+            false,
+          );
+        }
+      }
+
+      function cleanup() {
+        active = false;
+        motionQuery.removeEventListener(
+          "change",
+          handleMotionChange,
+        );
+        timeline?.revert();
+        context.revert();
       }
 
       const adheredSticker =
-        album.querySelector<HTMLImageElement>(
+        album?.querySelector<HTMLImageElement>(
           `[data-adhered-sticker-id="${pastingAchievementId}"]`,
         );
 
       const looseSticker =
-        album.querySelector<HTMLImageElement>(
+        album?.querySelector<HTMLImageElement>(
           `[data-loose-sticker-id="${pastingAchievementId}"]`,
         );
 
       const pressureLine =
-        album.querySelector<HTMLElement>(
+        album?.querySelector<HTMLElement>(
           `[data-pressure-line-id="${pastingAchievementId}"]`,
         );
 
       if (
+        getAchievementAlbumPage(achievementId) !== safeCurrentPage ||
+        !album ||
         !adheredSticker ||
         !looseSticker ||
         !pressureLine
       ) {
-        return;
-      }
+        // O cleanup também invalida esta finalização caso haja unmount.
+        queueMicrotask(() => {
+          settlePaste(false);
+        });
 
-      const achievementId =
-        pastingAchievementId;
+        return cleanup;
+      }
 
       gsap.killTweensOf(
         [
@@ -295,294 +359,272 @@ export function AchievementAlbumApp() {
         ],
       );
 
-      gsap.set(
-        adheredSticker,
-        {
-          clipPath:
-            "polygon(0% 0%, 0% 0%, 0% 0%)",
+      const pasteVisual = {
+        front: 0.55,
+        tilt: 32,
+      };
 
-          filter:
-            "drop-shadow(0 1px 1px rgba(0, 0, 0, 0.08))",
-        },
-      );
+      /*
+       * As duas máscaras compartilham a mesma diagonal.
+       * A faixa aderida avança 0,4% sob a camada solta
+       * para esconder a antialiasing da junção.
+       */
+      function renderPaste() {
+        if (!active) {
+          return;
+        }
 
-      gsap.set(
-        looseSticker,
-        {
-          clipPath:
-            "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+        const { front, tilt } =
+          pasteVisual;
 
-          transformOrigin:
-            "0% 0%",
+        const adheredFront =
+          Math.min(2, front + 0.004);
 
-          rotationX:
-            -9,
+        const adheredEdge =
+          Math.min(1, adheredFront) * 100;
 
-          rotationY:
-            15,
+        const adheredTail =
+          Math.max(0, adheredFront - 1) * 100;
 
-          rotationZ:
-            -1.8,
+        const looseEdge =
+          Math.min(1, front) * 100;
 
-          x:
-            -4,
+        const looseTail =
+          Math.max(0, front - 1) * 100;
 
-          y:
-            -5,
+        const lift =
+          tilt / 32;
 
-          z:
-            22,
+        adheredSticker!.style.clipPath =
+          front < 2
+            ? `polygon(0% 0%, ${adheredEdge}% 0%, ${adheredEdge}% ${adheredTail}%, ${adheredTail}% ${adheredEdge}%, 0% ${adheredEdge}%)`
+            : "";
 
-          scale:
-            1.018,
+        looseSticker!.style.clipPath =
+          `polygon(${looseEdge}% ${looseTail}%, 100% ${looseTail}%, 100% 100%, ${looseTail}% 100%, ${looseTail}% ${looseEdge}%)`;
 
-          filter:
-            "drop-shadow(10px 13px 9px rgba(0, 0, 0, 0.32))",
-        },
-      );
+        /*
+         * O eixo segue a diagonal do espaço 4:5.
+         * A junção fica no papel; a profundidade nasce
+         * da inclinação e diminui com a área solta.
+         */
+        looseSticker!.style.setProperty(
+          "--sticker-hinge",
+          `${front * 50}%`,
+        );
 
-      gsap.set(
-        pressureLine,
-        {
-          xPercent:
-            -110,
+        looseSticker!.style.setProperty(
+          "--sticker-tilt",
+          `${tilt}deg`,
+        );
 
-          yPercent:
-            -110,
+        looseSticker!.style.filter =
+          `drop-shadow(${6 * lift}px ${2 + 8 * lift}px ${2 + 6 * lift}px rgba(0, 0, 0, ${0.15 + 0.15 * lift}))`;
 
-          opacity:
-            0,
-        },
-      );
+        looseSticker!.style.visibility =
+          front < 2
+            ? "visible"
+            : "hidden";
 
-      const timeline =
+        pressureLine!.style.clipPath =
+          looseSticker!.style.clipPath;
+
+        pressureLine!.style.setProperty(
+          "--sticker-hinge",
+          `${front * 50}%`,
+        );
+
+        pressureLine!.style.setProperty(
+          "--sticker-tilt",
+          `${tilt}deg`,
+        );
+
+        pressureLine!.style.setProperty(
+          "--adhesion-front",
+          `${front * 50}%`,
+        );
+
+        pressureLine!.style.setProperty(
+          "--crease-width",
+          `${2 + tilt * 0.2}%`,
+        );
+
+        pressureLine!.style.opacity =
+          String(
+            Math.min(1, (2 - front) * 2) * 0.76,
+          );
+      }
+
+      /*
+       * Registrar as propriedades também no contexto
+       * mantém a restauração segura ao cancelar.
+       */
+      context.add(() => {
+        gsap.set(
+          adheredSticker,
+          {
+            clipPath:
+              "none",
+          },
+        );
+
+        gsap.set(
+          looseSticker,
+          {
+            clipPath:
+              "none",
+
+            "--sticker-hinge":
+              "0%",
+
+            "--sticker-tilt":
+              "0deg",
+
+            filter:
+              "none",
+
+            visibility:
+              "visible",
+          },
+        );
+
+        gsap.set(
+          pressureLine,
+          {
+            clipPath:
+              "none",
+
+            "--sticker-hinge":
+              "0%",
+
+            "--sticker-tilt":
+              "0deg",
+
+            "--adhesion-front":
+              "0%",
+
+            "--crease-width":
+              "2%",
+
+            opacity:
+              0,
+          },
+        );
+      });
+
+      renderPaste();
+
+      timeline =
         gsap.timeline({
+          onUpdate:
+            renderPaste,
+
           onComplete:
             () => {
-              setSelectedAchievementId(
-                achievementId,
-              );
-
-              setPastingAchievementId(
-                null,
+              settlePaste(
+                true,
               );
             },
         });
 
       /*
-       * O canto superior esquerdo toca
-       * primeiro no papel.
+       * Início (0–0,5s): 15–25% aderido.
+       * A maior parte ainda está elevada.
        */
       timeline.to(
-        looseSticker,
+        pasteVisual,
         {
-          rotationX:
-            -6,
+          front:
+            0.7,
 
-          rotationY:
-            11,
-
-          rotationZ:
-            -1.2,
-
-          x:
-            -2,
-
-          y:
-            -2,
-
-          z:
-            16,
+          tilt:
+            27,
 
           duration:
-            0.2,
+            0.5,
 
           ease:
-            "power2.out",
+            "power1.inOut",
+        },
+      );
+
+      /*
+       * Meio (0,5–1,8s): a pressão passa pelo
+       * centro (62% em 1,25s), deixando apenas
+       * o canto inferior direito levantado.
+       */
+      timeline.to(
+        pasteVisual,
+        {
+          front:
+            1.13,
+
+          tilt:
+            19,
+
+          duration:
+            0.75,
+
+          ease:
+            "none",
         },
       );
 
       timeline.to(
-        pressureLine,
+        pasteVisual,
         {
-          opacity:
-            0.82,
+          front:
+            1.55,
+
+          tilt:
+            8,
+
+          duration:
+            0.55,
+
+          ease:
+            "none",
+        },
+      );
+
+      /*
+       * Fim (1,8–2,4s): o último canto baixa,
+       * seguido de uma compressão mínima, sem rebote.
+       */
+      timeline.to(
+        pasteVisual,
+        {
+          front:
+            2,
+
+          tilt:
+            0,
+
+          duration:
+            0.36,
+
+          ease:
+            "power1.out",
+        },
+      );
+
+      timeline.to(
+        adheredSticker,
+        {
+          transformOrigin:
+            "75% 75%",
+
+          scaleX:
+            1.0015,
+
+          scaleY:
+            0.9985,
 
           duration:
             0.08,
-        },
-        "<",
-      );
-
-      /*
-       * Primeira metade da colagem.
-       * A região aderida forma um
-       * triângulo partindo do topo
-       * esquerdo.
-       */
-      timeline.to(
-        adheredSticker,
-        {
-          clipPath:
-            "polygon(0% 0%, 76% 0%, 0% 76%)",
-
-          duration:
-            0.52,
 
           ease:
             "power1.inOut",
-        },
-      );
-
-      timeline.to(
-        looseSticker,
-        {
-          clipPath:
-            "polygon(72% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 72%)",
-
-          rotationX:
-            -4.5,
-
-          rotationY:
-            7,
-
-          rotationZ:
-            -0.7,
-
-          z:
-            10,
-
-          filter:
-            "drop-shadow(7px 8px 6px rgba(0, 0, 0, 0.25))",
-
-          duration:
-            0.52,
-
-          ease:
-            "power1.inOut",
-        },
-        "<",
-      );
-
-      timeline.to(
-        pressureLine,
-        {
-          xPercent:
-            15,
-
-          yPercent:
-            15,
-
-          duration:
-            0.52,
-
-          ease:
-            "power1.inOut",
-        },
-        "<",
-      );
-
-      /*
-       * A dobra restante avança até
-       * o canto inferior direito.
-       */
-      timeline.to(
-        adheredSticker,
-        {
-          clipPath:
-            "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-
-          duration:
-            0.52,
-
-          ease:
-            "power1.inOut",
-        },
-      );
-
-      timeline.to(
-        looseSticker,
-        {
-          clipPath:
-            "polygon(100% 100%, 100% 100%, 100% 100%)",
-
-          rotationX:
-            0,
-
-          rotationY:
-            0,
-
-          rotationZ:
-            0,
-
-          x:
-            0,
-
-          y:
-            0,
-
-          z:
-            0,
-
-          filter:
-            "drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.12))",
-
-          duration:
-            0.52,
-
-          ease:
-            "power1.inOut",
-        },
-        "<",
-      );
-
-      timeline.to(
-        pressureLine,
-        {
-          xPercent:
-            120,
-
-          yPercent:
-            120,
-
-          duration:
-            0.52,
-
-          ease:
-            "power1.inOut",
-        },
-        "<",
-      );
-
-      timeline.to(
-        pressureLine,
-        {
-          opacity:
-            0,
-
-          duration:
-            0.1,
-        },
-      );
-
-      /*
-       * Pequena pressão final contra
-       * o papel.
-       */
-      timeline.to(
-        adheredSticker,
-        {
-          scaleX:
-            1.006,
-
-          scaleY:
-            0.986,
-
-          duration:
-            0.09,
-
-          ease:
-            "power2.in",
         },
       );
 
@@ -599,19 +641,27 @@ export function AchievementAlbumApp() {
             0.16,
 
           ease:
-            "back.out(1.8)",
+            "power1.inOut",
 
           clearProps:
-            "transform,filter,clipPath",
+            "transform,transformOrigin,filter,clipPath",
         },
       );
 
-      return () => {
-        timeline.kill();
-      };
+      motionQuery.addEventListener(
+        "change",
+        handleMotionChange,
+      );
+
+      // A preferência pode ter mudado entre o clique e este efeito.
+      handleMotionChange();
+
+      return cleanup;
     },
     [
       pastingAchievementId,
+      safeCurrentPage,
+      maxPageIndex,
     ],
   );
 
@@ -619,6 +669,12 @@ export function AchievementAlbumApp() {
     achievement:
       AchievementDefinition,
   ) {
+    if (
+      pastingAchievementId
+    ) {
+      return;
+    }
+
     const unlocked =
       unlockedAchievements.includes(
         achievement.id,
@@ -640,8 +696,7 @@ export function AchievementAlbumApp() {
     }
 
     if (
-      !unlocked ||
-      pastingAchievementId
+      !unlocked
     ) {
       return;
     }
@@ -651,14 +706,6 @@ export function AchievementAlbumApp() {
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
-    if (
-      !prefersReducedMotion
-    ) {
-      setPastingAchievementId(
-        achievement.id,
-      );
-    }
-
     const pastedNow =
       pasteAchievementSticker(
         achievement.id,
@@ -667,10 +714,6 @@ export function AchievementAlbumApp() {
     if (
       !pastedNow
     ) {
-      setPastingAchievementId(
-        null,
-      );
-
       return;
     }
 
@@ -678,6 +721,10 @@ export function AchievementAlbumApp() {
       prefersReducedMotion
     ) {
       setSelectedAchievementId(
+        achievement.id,
+      );
+    } else {
+      setPastingAchievementId(
         achievement.id,
       );
     }
@@ -929,17 +976,22 @@ export function AchievementAlbumApp() {
                       )
                     }
                     aria-disabled={
-                      !unlocked
+                      !unlocked ||
+                      Boolean(pastingAchievementId)
                     }
                     aria-busy={
                       isPasting
                     }
                     aria-label={
-                      pasted
-                        ? `Ver figurinha ${achievement.title}`
-                        : unlocked
-                          ? `Colar figurinha ${achievement.title}`
-                          : "Figurinha ainda não desbloqueada"
+                      isPasting
+                        ? `Colando figurinha ${achievement.title}`
+                        : !unlocked
+                          ? "Figurinha ainda não desbloqueada"
+                          : pastingAchievementId
+                            ? `Figurinha ${achievement.title}: aguarde a colagem em andamento`
+                            : pasted
+                              ? `Ver figurinha ${achievement.title}`
+                              : `Colar figurinha ${achievement.title}`
                     }
                   >
                     <div className="achievement-sticker-space">
@@ -990,6 +1042,9 @@ export function AchievementAlbumApp() {
 
                           <span
                             className="achievement-sticker-pressure-line"
+                            style={
+                              maskStyle
+                            }
                             data-pressure-line-id={
                               achievement.id
                             }
