@@ -1,3 +1,5 @@
+import { useAchievementStore } from "../../stores/achievementStore";
+
 import { useNarrativeStore } from "../../stores/narrativeStore";
 
 import { NARRATIVE_REGISTRY } from "./narrativeRegistry";
@@ -79,6 +81,20 @@ export function evaluateNarrative(
       effects.push(
         effect,
       );
+    }
+  }
+
+  const narrativeState =
+    useNarrativeStore.getState();
+
+  for (const event of NARRATIVE_REGISTRY) {
+    if (
+      event.achievementId &&
+      narrativeState.hasDiscovered(event.id)
+    ) {
+      useAchievementStore
+        .getState()
+        .unlockAchievement(event.achievementId);
     }
   }
 

@@ -1,3 +1,5 @@
+import type { AchievementId } from "../achievements/types";
+
 export type NarrativeTriggerId =
   | "terminal-command"
   | "file-opened"
@@ -7,6 +9,7 @@ export type NarrativeTriggerId =
   | "session-started";
 
 export type NarrativeEventId =
+  | "hidden-archive-discovered"
   | "operator-record-discovered"
   | "maintenance-record-discovered"
   | "operator-identity-acknowledged"
@@ -58,6 +61,9 @@ export type NarrativeEventDefinition = {
 
   once:
     boolean;
+
+  achievementId?:
+    AchievementId;
 
   condition: (
     context:

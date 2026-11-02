@@ -260,6 +260,14 @@ export function TerminalApp() {
         setCurrentDirectoryId(
           location,
         );
+
+        void evaluateNarrative({
+          trigger:
+            "directory-entered",
+
+          directoryId:
+            location,
+        });
       },
     });
 
@@ -681,6 +689,14 @@ export function TerminalApp() {
     setCurrentDirectoryId(
       target.id,
     );
+
+    void evaluateNarrative({
+      trigger:
+        "directory-entered",
+
+      directoryId:
+        target.id,
+    });
   }
 
   function handleType(
